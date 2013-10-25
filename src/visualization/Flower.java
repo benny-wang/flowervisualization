@@ -32,4 +32,18 @@ public class Flower {
 		this.y = y;
 		this.numMethods = numMethods;
 	}
+	
+	public void makeDarker(){
+		//Make darker
+		//HSB/HSV (Hue-Saturation-Brightness/Value )
+		
+		Color oColor = this.color;
+		
+	    float hsbVals[] = Color.RGBtoHSB( oColor.getRed(),
+	    		oColor.getGreen(),
+	    		oColor.getBlue(), null );
+		
+	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.99f * hsbVals[2] );
+	    this.color = darkerColor;
+	}
 }

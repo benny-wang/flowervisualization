@@ -1,21 +1,56 @@
 package visualization;
 
 import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.JPanel;
 
-class Surface extends JPanel {
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+class Surface extends JPanel implements ActionListener {
 	
-	Flower flower1 = new Flower(Color.BLUE, 70, 35, 35, 7);
+	Flower flower1 = new Flower(Color.BLUE, 50, 300, 250, 10);
+	Flower[] flowers  = {flower1};
+	
+	
+	private Timer timer;
+	
+	public Surface () {
+		Initialize();
+	}
+	
+	private void Initialize () {
+	       timer = new Timer(100, this);
+	       timer.start(); 
+	}
+	
+    @Override
+    public void actionPerformed (ActionEvent e) {
+    	for(int i=0;i<flowers.length;i++){
+			Flower flower = flowers[i];
+			
+				
+			flower.makeDarker();
+		    
+		    //System.out.println("Darker");
+		    
+		    repaint();
+		    
+    	}
+    	
+    }
+    
+    
 	
 	private void doDrawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;		
 		
-		Flower flower1 = new Flower(Color.BLUE, 50, 300, 250, 5);
-		Flower[] flowers  = {flower1};
+		
 				
 		drawFlowers(g2, flowers);
 		
