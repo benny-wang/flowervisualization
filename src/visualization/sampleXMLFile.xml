@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<Visualization>
+	<frame id="0">
+		<flower id="0">
+			<size>100</size>
+			<x>300</x>
+			<y>250</y>
+			<numMethods>10</numMethods>
+		</flower>
+	</frame>
+	<frame id="1">
+		<flower id="0">
+			<size>100</size>
+			<x>300</x>
+			<y>250</y>
+			<numMethods>10</numMethods>
+		</flower>
+		<flower id="1">
+			<size>100</size>
+			<x>500</x>
+			<y>150</y>
+			<numMethods>5</numMethods>
+		</flower>
+	</frame>
+</Visualization>

@@ -15,8 +15,15 @@ import java.awt.event.ActionListener;
 class Surface extends JPanel implements ActionListener {
 	
 	Flower flower1 = new Flower(Color.BLUE, 50, 300, 250, 10);
-	Flower[] flowers  = {flower1};
+	Flower flower2 = new Flower(Color.RED, 25, 500, 350, 10);
+	Flower[] flowers  = {flower1, flower2};
 	
+	int currentFrame = 0;
+	
+	int frameRate = 10;
+	int currentTFrame = 0;
+	
+	Repository repo;
 	
 	private Timer timer;
 	
@@ -27,10 +34,15 @@ class Surface extends JPanel implements ActionListener {
 	private void Initialize () {
 	       timer = new Timer(100, this);
 	       timer.start(); 
+	       
+	       repo = new Repository("src/visualization/sampleXMLFile.xml");
 	}
 	
     @Override
     public void actionPerformed (ActionEvent e) {
+    	
+    	Flower[] flowers = repo.frames[currentFrame].flowers;
+    	
     	for(int i=0;i<flowers.length;i++){
 			Flower flower = flowers[i];
 			
@@ -43,17 +55,26 @@ class Surface extends JPanel implements ActionListener {
 		    
     	}
     	
+    	if(currentTFrame > frameRate){
+    		currentTFrame = 0;
+    		
+    		if(currentFrame < repo.frames.length-1)
+    		currentFrame++;
+    	}
+    	
+    	currentTFrame++;
+    	
     }
     
     
 	
 	private void doDrawing(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;		
+		Graphics2D g2 = (Graphics2D) g;	
 		
+		Frame frame = repo.frames[currentFrame];
 		
-				
-		drawFlowers(g2, flowers);
-		
+		drawFlowers(g2, frame.flowers);		
+			
     }
 	
 	private void drawFlowers(Graphics2D g, Flower[] flowers) {
