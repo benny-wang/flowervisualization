@@ -21,16 +21,15 @@ public class Flower {
 	public int size;
 	public int x;
 	public int y;
-	public int methods;
 	public Contributor contributor;
 	public Commit commit;
 	public int numMethods;
 	
-	public Flower(Color color, int size, int x, int y, int methods){
+	public Flower(Color color, int size, int x, int y, int numMethods){
 		this.color = color;
 		this.size = size;
 		this.x = x;
 		this.y = y;
-		this.methods = methods;
+		this.numMethods = numMethods;
 	}
 }
