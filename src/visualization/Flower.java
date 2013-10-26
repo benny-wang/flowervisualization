@@ -21,16 +21,17 @@ public class Flower {
 	public int size;
 	public int x;
 	public int y;
-	public Contributor contributor;
+	public String contributor;
 	public Commit commit;
 	public int numMethods;
 	
-	public Flower(Color color, int size, int x, int y, int numMethods){
+	public Flower(Color color, int size, int x, int y, int numMethods, String contributor){
 		this.color = color;
 		this.size = size;
 		this.x = x;
 		this.y = y;
 		this.numMethods = numMethods;
+		this.contributor = contributor;
 	}
 	
 	public void makeDarker(){
@@ -43,7 +44,7 @@ public class Flower {
 	    		oColor.getGreen(),
 	    		oColor.getBlue(), null );
 		
-	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.99f * hsbVals[2] );
+	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.98f * hsbVals[2] );
 	    this.color = darkerColor;
 	}
 }

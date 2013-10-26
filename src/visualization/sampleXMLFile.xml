@@ -3,23 +3,26 @@
 	<frame id="0">
 		<flower id="0">
 			<size>100</size>
-			<x>300</x>
-			<y>250</y>
+			<x>400</x>
+			<y>300</y>
 			<numMethods>10</numMethods>
+			<contributor>Benny Wang</contributor>
 		</flower>
 	</frame>
 	<frame id="1">
 		<flower id="0">
-			<size>100</size>
-			<x>300</x>
-			<y>250</y>
+			<size>120</size>
+			<x>400</x>
+			<y>300</y>
 			<numMethods>10</numMethods>
+			<contributor>Benny Wang</contributor>
 		</flower>
 		<flower id="1">
 			<size>100</size>
 			<x>500</x>
 			<y>150</y>
 			<numMethods>5</numMethods>
+			<contributor>Ben Hsiao</contributor>
 		</flower>
 	</frame>
 </Visualization>

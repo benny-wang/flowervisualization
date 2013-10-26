@@ -14,10 +14,10 @@ import java.awt.event.ActionListener;
 
 class Surface extends JPanel implements ActionListener {
 	
-	Flower flower1 = new Flower(Color.BLUE, 50, 300, 250, 10);
-	Flower flower2 = new Flower(Color.RED, 25, 500, 350, 10);
-	Flower[] flowers  = {flower1, flower2};
-	
+//	Flower flower1 = new Flower(Color.BLUE, 50, 300, 250, 10, );
+//	Flower flower2 = new Flower(Color.RED, 25, 500, 350, 10);
+//	Flower[] flowers  = {flower1, flower2};
+//	
 	int currentFrame = 0;
 	
 	int frameRate = 10;
@@ -32,7 +32,7 @@ class Surface extends JPanel implements ActionListener {
 	}
 	
 	private void Initialize () {
-	       timer = new Timer(100, this);
+	       timer = new Timer(400, this);
 	       timer.start(); 
 	       
 	       repo = new Repository("src/visualization/sampleXMLFile.xml");
@@ -94,9 +94,6 @@ class Surface extends JPanel implements ActionListener {
 		int pedalSize = flower.size/2;
 		
 		for(int i=0;i<flower.numMethods;i++){
-			
-			
-			
 			g.fillOval(flower.x-pedalSize/2,flower.y + flower.size/2,pedalSize,pedalSize*2);
 //			g.draw(new Ellipse2D.Double(flower.x-pedalSize/2,flower.y + flower.size/2,pedalSize,pedalSize*2));
 			g.rotate(Math.toRadians(360/flower.numMethods),flower.x,flower.y);

@@ -7,6 +7,10 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import java.awt.Color;
 
@@ -25,12 +29,13 @@ Int - current commit number
 
 public class Repository {
 	public String name;
-	public Contributor[] contributors;
+	public Map<String, Color> contributorColor = new HashMap<String, Color>();
 	public Commit[] commits;
 	public ClassNode[] classes;
 	public MethodNode[] methods;
-	
 	public Frame[] frames;
+	public int classNum;
+	public int maxSize;
 	
 	public Repository(String xmlFilename) {
 		readXMLFile(xmlFilename);
@@ -76,7 +81,7 @@ public class Repository {
 										
 				
 					System.out.println("Flower id : " + eElement.getAttribute("id"));
-					Color color = Color.blue;
+					Color color = Color.BLUE;
 					int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
 					System.out.println("Size : " + size);
 					int x = Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent());
@@ -85,17 +90,35 @@ public class Repository {
 					System.out.println("Y : " + y);
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
 					System.out.println("Number of Methods : " + numMethods);
-										
-					Flower flower = new Flower(color,size,x,y,numMethods);
+					String contributor = eElement.getElementsByTagName("contributor").item(0).getTextContent();
+					System.out.println("Contributor : " + contributor);
+					if(contributorColor.get(contributor) == null){
+						int R = (int)(Math.random()*256);
+						int G = (int)(Math.random()*256);
+						int B= (int)(Math.random()*256);
+						contributorColor.put(contributor, new Color(R,G,B));
+					}
+					Flower flower = new Flower(contributorColor.get(contributor),size,x,y,numMethods, contributor);
 					this.frames[i].flowers[j] = flower;
 				}
 	 
 			}
 			
 			
+			setFields();
+			
 		    } catch (Exception e) {
 			e.printStackTrace();
 		    }
 		  }
+
+	private void setFields() {
+		Frame lastFrame = this.frames[this.frames.length-1];
+		classNum = lastFrame.flowers.length;
+		maxSize = 0;
+		for(int i = 0; i<lastFrame.flowers.length; i++){
+			maxSize = Math.max(maxSize, lastFrame.flowers[i].size);
+		}
+	}
 	
 }
