@@ -87,13 +87,16 @@ public class Repository {
 										
 					String methodName = eElement.getAttribute("id");
 					System.out.println("Flower id : " + methodName);
-					Color color = Color.BLUE;
+
 					int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
 					System.out.println("Size : " + size);
+					
 					int x = Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent());
 					System.out.println("X : " + x);
+					
 					int y = Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent());
 					System.out.println("Y : " + y);
+					
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
 					System.out.println("Number of Methods : " + numMethods);
 					
@@ -103,6 +106,15 @@ public class Repository {
 					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
 					Boolean changed = (strChanged.equals("true"))? true: false;					
 					System.out.println("Changed : " + changed);
+					
+					NodeList dependencyName = eElement.getElementsByTagName("denpendencyName");
+					for ( int k = 0; k < dependencyName.getLength(); k++ ) {
+						Node dependencyNameNode = dependencyName.item(k);													
+						Element dependencyNameElement = (Element) dependencyNameNode;
+						String methods = dependencyNameElement.getAttribute("name");
+						System.out.println("Dependency1 : " + methods);
+					}
+					
 					
 					if(contributorColor.get(contributor) == null){
 						int R = (int)(Math.random()*256);

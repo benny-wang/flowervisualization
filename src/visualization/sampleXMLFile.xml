@@ -9,6 +9,9 @@
 			<y>300</y>
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
+			<dependency>
+				<denpendencyName name="0"></denpendencyName>
+			</dependency>
 		</flower>
 	</frame>
 	<frame id="1">
@@ -20,6 +23,11 @@
 			<y>300</y>
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
+			<dependency>
+				<denpendencyName name="0"></denpendencyName>
+				<denpendencyName name="1"></denpendencyName>
+				<denpendencyName name="2"></denpendencyName>
+			</dependency>
 		</flower>
 		<flower id="1">
 			<name>generator</name>
