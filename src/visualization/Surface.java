@@ -32,7 +32,7 @@ class Surface extends JPanel implements ActionListener {
 	}
 	
 	private void Initialize () {
-	       timer = new Timer(400, this);
+	       timer = new Timer(100, this);
 	       timer.start(); 
 	       
 	       repo = new Repository("src/visualization/sampleXMLFile.xml");

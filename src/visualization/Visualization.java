@@ -15,6 +15,9 @@ import javax.swing.SwingUtilities;
 
 public class Visualization extends JFrame {
 
+	public static int width = 800;
+	public static int height = 600;
+	
     public Visualization() {
 
         initUI();
@@ -27,7 +30,7 @@ public class Visualization extends JFrame {
 
         add(new Surface());
 
-        setSize(800, 600);
+        setSize(width, height);
         setLocationRelativeTo(null);
     }
 

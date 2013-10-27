@@ -35,7 +35,9 @@ public class Repository {
 	public MethodNode[] methods;
 	public Frame[] frames;
 	public int classNum;
-	public int maxSize;
+	public int maxClassLines;
+	public int maxGridX;
+	public int maxGridY;
 	
 	public Repository(String xmlFilename) {
 		readXMLFile(xmlFilename);
@@ -115,10 +117,12 @@ public class Repository {
 	private void setFields() {
 		Frame lastFrame = this.frames[this.frames.length-1];
 		classNum = lastFrame.flowers.length;
-		maxSize = 0;
+		maxClassLines = 0;
 		for(int i = 0; i<lastFrame.flowers.length; i++){
-			maxSize = Math.max(maxSize, lastFrame.flowers[i].size);
+			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
 		}
+		maxGridX = Visualization.width / (int)Math.ceil(Math.sqrt(classNum));
+		maxGridY = Visualization.height / (int) Math.ceil(Math.sqrt(classNum));
 	}
 	
 }
