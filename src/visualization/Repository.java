@@ -34,10 +34,14 @@ public class Repository {
 	public ClassNode[] classes;
 	public MethodNode[] methods;
 	public Frame[] frames;
+	
 	public int classNum;
 	public int maxClassLines;
 	public int maxGridX;
 	public int maxGridY;
+	
+	public Map<String, Flower> flowers = new HashMap<String, Flower>();
+	public Contributor[] contributors;
 	
 	public Repository(String xmlFilename) {
 		readXMLFile(xmlFilename);
@@ -81,8 +85,8 @@ public class Repository {
 					Node flowerNode = flowerList.item(j);													
 					Element eElement = (Element) flowerNode;					
 										
-				
-					System.out.println("Flower id : " + eElement.getAttribute("id"));
+					String methodName = eElement.getAttribute("id");
+					System.out.println("Flower id : " + methodName);
 					Color color = Color.BLUE;
 					int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
 					System.out.println("Size : " + size);
@@ -92,18 +96,27 @@ public class Repository {
 					System.out.println("Y : " + y);
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
 					System.out.println("Number of Methods : " + numMethods);
+					
 					String contributor = eElement.getElementsByTagName("contributor").item(0).getTextContent();
 					System.out.println("Contributor : " + contributor);
+					
+					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
+					Boolean changed = (strChanged.equals("true"))? true: false;					
+					System.out.println("Changed : " + changed);
+					
 					if(contributorColor.get(contributor) == null){
 						int R = (int)(Math.random()*256);
 						int G = (int)(Math.random()*256);
 						int B= (int)(Math.random()*256);
 						contributorColor.put(contributor, new Color(R,G,B));
 					}
-					Flower flower = new Flower(contributorColor.get(contributor),size,x,y,numMethods, contributor);
+					Flower flower = new Flower(methodName, contributorColor.get(contributor),size,x,y,numMethods, contributor);
+					flower.changed = changed;
 					this.frames[i].flowers[j] = flower;
-				}
-	 
+					
+
+					
+				}	 
 			}
 			
 			
@@ -118,8 +131,14 @@ public class Repository {
 		Frame lastFrame = this.frames[this.frames.length-1];
 		classNum = lastFrame.flowers.length;
 		maxClassLines = 0;
+				
 		for(int i = 0; i<lastFrame.flowers.length; i++){
 			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
+			
+			if(this.flowers.get(lastFrame.flowers[i].methodName) == null){
+				this.flowers.put(lastFrame.flowers[i].methodName, new Flower(lastFrame.flowers[i]));
+			}
+			
 		}
 		maxGridX = Visualization.width / (int)Math.ceil(Math.sqrt(classNum));
 		maxGridY = Visualization.height / (int) Math.ceil(Math.sqrt(classNum));

@@ -1,16 +1,16 @@
 package visualization;
 
 import java.awt.Color;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.JPanel;
-
 import javax.swing.Timer;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 class Surface extends JPanel implements ActionListener {
 	
@@ -20,7 +20,7 @@ class Surface extends JPanel implements ActionListener {
 //	
 	int currentFrame = 0;
 	
-	int frameRate = 10;
+	int frameRate = 50;
 	int currentTFrame = 0;
 	
 	Repository repo;
@@ -39,21 +39,20 @@ class Surface extends JPanel implements ActionListener {
 	}
 	
     @Override
-    public void actionPerformed (ActionEvent e) {
+    public void actionPerformed (ActionEvent e) {    	
     	
-    	Flower[] flowers = repo.frames[currentFrame].flowers;
+    	Map<String, Flower> flowersMap = repo.flowers;    	
     	
-    	for(int i=0;i<flowers.length;i++){
-			Flower flower = flowers[i];
-			
-				
-			flower.makeDarker();
-		    
-		    //System.out.println("Darker");
-		    
-		    repaint();
-		    
-    	}
+    	   	
+    	repaint();
+    	
+    	
+//    	for(int i=0;i<flowers.length;i++){
+//			Flower flower = flowers[i];
+//						
+//			flower.makeDarker();		    
+//		    //System.out.println("Darker");
+//    	}
     	
     	if(currentTFrame > frameRate){
     		currentTFrame = 0;
@@ -71,21 +70,52 @@ class Surface extends JPanel implements ActionListener {
 	private void doDrawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	
 		
-		Frame frame = repo.frames[currentFrame];
+
 		
-		drawFlowers(g2, frame.flowers);		
+		drawFlowers(g2);		
 			
     }
 	
-	private void drawFlowers(Graphics2D g, Flower[] flowers) {
+	private void drawFlowers(Graphics2D g) {
 		
-		for(int i=0;i<flowers.length;i++){
-			Flower flower = flowers[i];
+		Frame frame = repo.frames[currentFrame];
+		Map<String, Flower> flowersMap = repo.flowers;
+		
+		Flower[] currentFlowers = frame.flowers;
+		
+    	for(int i=0;i<currentFlowers.length;i++){
+			Flower frameFlower = currentFlowers[i];
+						
+			Flower flower = flowersMap.get(frameFlower.methodName);
+			
+			
+			flower.size = frameFlower.size;
+			flower.numMethods = frameFlower.numMethods;
+			flower.contributor = frameFlower.contributor;
+			
+			
+			if(frameFlower.changed){
+				flower.color = frameFlower.color;
+				frameFlower.changed = false;
+
+			}
+			
+			flower.makeDarker();
 			
 			g.setColor(flower.color);
 			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
 			drawPedals(g, flower);
-		}
+    	}
+    	
+    	
+		
+//		for(int i=0;i<flowers.length;i++){
+//			Flower flower = flowers[i];
+//			
+//			g.setColor(flower.color);
+//			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
+//			drawPedals(g, flower);
+//		}
 		
 	}
 	
