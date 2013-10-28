@@ -29,8 +29,10 @@ public class Flower {
 	
 	public String methodName;
 	
+	public String[] dependencies;
 	
-	public Flower(String methodName, Color color, int size, int x, int y, int numMethods, String contributor){
+	
+	public Flower(String methodName, Color color, int size, int x, int y, int numMethods, String contributor, String[] dependencies){
 		this.color = color;
 		this.size = size;
 		this.x = x;
@@ -39,6 +41,7 @@ public class Flower {
 		this.contributor = contributor;
 		this.methodName = methodName;
 		this.changed = false;
+		this.dependencies = dependencies;
 	}
 	
 	public Flower(Flower flower){
@@ -65,5 +68,38 @@ public class Flower {
 		
 	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.98f * hsbVals[2] );
 	    this.color = darkerColor;
+	}
+	
+	public static boolean checkFlowerCollision (int x, int y, int radius, Flower[] flowers){
+		for (int i = 0; i < flowers.length; i++) {
+			Flower flower = flowers[i];
+			
+			
+			if(flower != null){
+			
+			if(checkCollision(x,y,(int) Math.ceil(radius*1.5),flower.x,flower.y,(int) Math.ceil(flower.size*1.5)))
+				return true;
+			}
+		}
+		
+		
+		return false;
+	}
+	
+	public static boolean checkCollision (int x1,int y1,int radius1,int x2,int y2,int radius2){
+		double xDif = x1 - x2;
+		double yDif = y1 - y2;
+		double distanceSquared = xDif * xDif + yDif * yDif;
+		boolean collision = distanceSquared < (radius1 + radius2) * (radius1 + radius2);
+
+		return collision;
+	}
+	
+	public static boolean inSurface (int x, int y, int radius){
+//		System.out.println("inSurface: "+(x+radius*5 < Visualization.width && x-radius*5 > 0
+//				&& y+radius*5 < Visualization.height && y-radius*5 > 0) + " x:" + x + " y:"+y + " radius:" + radius);
+		
+		return x+radius*3 < Visualization.width && x-radius*3 > 0
+				&& y+radius*3 < Visualization.height && y-radius*3 > 0;
 	}
 }

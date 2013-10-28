@@ -10,7 +10,7 @@
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
 			<dependency>
-				<denpendencyName name="0"></denpendencyName>
+				<method name="0"></method>
 			</dependency>
 		</flower>
 	</frame>
@@ -24,9 +24,7 @@
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
 			<dependency>
-				<denpendencyName name="0"></denpendencyName>
-				<denpendencyName name="1"></denpendencyName>
-				<denpendencyName name="2"></denpendencyName>
+				<method name="1"></method>
 			</dependency>
 		</flower>
 		<flower id="1">
@@ -48,6 +46,10 @@
 			<y>300</y>
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
+			<dependency>
+				<method name="1"></method>
+				<method name="2"></method>
+			</dependency>
 		</flower>
 		<flower id="1">
 			<name>generator</name>
@@ -77,6 +79,10 @@
 			<y>300</y>
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
+			<dependency>
+				<method name="1"></method>
+				<method name="2"></method>
+			</dependency>
 		</flower>
 		<flower id="1">
 			<name>generator</name>
@@ -88,6 +94,24 @@
 			<contributor>Benny Wang</contributor>
 		</flower>
 		<flower id="2">
+			<name>calculator</name>
+			<changed>false</changed>
+			<size>60</size>
+			<x>100</x>
+			<y>200</y>
+			<numMethods>10</numMethods>
+			<contributor>Majin Du</contributor>
+		</flower>
+		<flower id="3">
+			<name>calculator</name>
+			<changed>false</changed>
+			<size>60</size>
+			<x>100</x>
+			<y>200</y>
+			<numMethods>10</numMethods>
+			<contributor>Majin Du</contributor>
+		</flower>
+		<flower id="4">
 			<name>calculator</name>
 			<changed>false</changed>
 			<size>60</size>

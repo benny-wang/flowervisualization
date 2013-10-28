@@ -23,6 +23,8 @@ class Surface extends JPanel implements ActionListener {
 	int frameRate = 50;
 	int currentTFrame = 0;
 	
+	int maxFlowerSize;
+	
 	Repository repo;
 	
 	private Timer timer;
@@ -36,6 +38,8 @@ class Surface extends JPanel implements ActionListener {
 	       timer.start(); 
 	       
 	       repo = new Repository("src/visualization/sampleXMLFile.xml");
+	       
+	       maxFlowerSize = (Visualization.width) / (repo.classNum*2);
 	}
 	
     @Override
@@ -90,6 +94,13 @@ class Surface extends JPanel implements ActionListener {
 			
 			
 			flower.size = frameFlower.size;
+			
+			if(flower.size > maxFlowerSize){
+				flower.size = maxFlowerSize;
+			}else if(flower.size < maxFlowerSize*.3){
+				flower.size = (int) Math.ceil( maxFlowerSize * .3);
+			}
+			
 			flower.numMethods = frameFlower.numMethods;
 			flower.contributor = frameFlower.contributor;
 			

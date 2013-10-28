@@ -91,10 +91,16 @@ public class Repository {
 					int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
 					System.out.println("Size : " + size);
 					
-					int x = Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent());
+					int x,y;
+					do{
+						x = (int)(Math.random() * Visualization.width);
+						y = (int)(Math.random() * Visualization.height);
+					}while(Flower.checkFlowerCollision(x,y,size,this.frames[i].flowers) || !Flower.inSurface(x,y,size));
+					
+					//int x = Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent());
 					System.out.println("X : " + x);
 					
-					int y = Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent());
+					//int y = Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent());
 					System.out.println("Y : " + y);
 					
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
@@ -107,12 +113,16 @@ public class Repository {
 					Boolean changed = (strChanged.equals("true"))? true: false;					
 					System.out.println("Changed : " + changed);
 					
-					NodeList dependencyName = eElement.getElementsByTagName("denpendencyName");
+					NodeList dependencyName = eElement.getElementsByTagName("method");
+					String[] dependencies = new String[dependencyName.getLength()];
+					
 					for ( int k = 0; k < dependencyName.getLength(); k++ ) {
 						Node dependencyNameNode = dependencyName.item(k);													
 						Element dependencyNameElement = (Element) dependencyNameNode;
 						String methods = dependencyNameElement.getAttribute("name");
-						System.out.println("Dependency1 : " + methods);
+						System.out.println("Dependency : " + methods);
+						
+						dependencies[k] = methods;
 					}
 					
 					
@@ -122,10 +132,9 @@ public class Repository {
 						int B= (int)(Math.random()*256);
 						contributorColor.put(contributor, new Color(R,G,B));
 					}
-					Flower flower = new Flower(methodName, contributorColor.get(contributor),size,x,y,numMethods, contributor);
+					Flower flower = new Flower(methodName, contributorColor.get(contributor),size,x,y,numMethods, contributor, dependencies);
 					flower.changed = changed;
-					this.frames[i].flowers[j] = flower;
-					
+					this.frames[i].flowers[j] = flower;				
 
 					
 				}	 
@@ -152,8 +161,34 @@ public class Repository {
 			}
 			
 		}
+		
+		System.out.println("Most dependencies: " + mostDependencies(lastFrame.flowers).methodName);
+		
 		maxGridX = Visualization.width / (int)Math.ceil(Math.sqrt(classNum));
 		maxGridY = Visualization.height / (int) Math.ceil(Math.sqrt(classNum));
 	}
+	
+	private Flower mostDependencies (Flower[] flowers){
+		int highest = 0;
+		int highestIndex = -1;
+		
+		for(int i = 0; i<flowers.length; i++){
+			Flower flower = flowers[i];
+			
+//			System.out.println("Dependencies length: " + flower.dependencies.length );
+			
+			if(flower.dependencies.length > highest){
+				highest = flower.dependencies.length;
+				highestIndex = i;
+			}
+		}
+		
+		if(highestIndex == -1)
+			return null;
+		
+		return flowers[highestIndex];
+		
+	}
+	
 	
 }
