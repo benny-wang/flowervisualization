@@ -1,9 +1,11 @@
 package visualization;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -69,13 +71,41 @@ class Surface extends JPanel implements ActionListener {
     	
     }
     
+    private void drawContributorLegend (Graphics g){
+    	Contributor[] contributors = repo.contributors;
+    	
+    	Font font = Font.decode("Times New Roman");
+    	
+    	int x, y;
+    	x = 10;
+    	y = 10;
+    	
+    	for(Contributor contributor : repo.contributorColor.values()){
+	
+
+    		Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(contributor.name, g);
+    		double nameWidth = nameRect.getWidth();
+    		
+    		g.setColor(contributor.color);
+    		g.fillRect(x, y, 25,25);
+    		g.setColor(Color.black);
+    		g.drawString(contributor.name, x + 30, y + 25);
+    		
+    		x += 30 + 15 + nameWidth;
+    		
+    		if(x > Visualization.width){
+    			y += 25 + 20;
+    			x = 10;
+    		}
+    	}
+    }
     
 	
 	private void doDrawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	
 		
 
-		
+		drawContributorLegend(g2);
 		drawFlowers(g2);		
 			
     }
@@ -121,7 +151,7 @@ class Surface extends JPanel implements ActionListener {
 			
 			g.setColor(flower.color);
 			g.fillOval(flower.x-frameFlower.size/2,flower.y-frameFlower.size/2,frameFlower.size,frameFlower.size);
-			drawPedals(g, frameFlower);
+			drawPedals(g, flower);
     	}
     	
     	

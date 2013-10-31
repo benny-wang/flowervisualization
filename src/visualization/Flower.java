@@ -1,5 +1,6 @@
 package visualization;
 import java.awt.Color;
+import java.util.Map;
 
 /*
  * method - updateColor (updates color based on time elapsed since last commit)
@@ -70,12 +71,12 @@ public class Flower {
 	    this.color = darkerColor;
 	}
 	
-	public static boolean checkFlowerCollision (int x, int y, int radius, Flower[] flowers){
-		for (int i = 0; i < flowers.length; i++) {
-			Flower flower = flowers[i];
+	public static boolean checkFlowerCollision (int x, int y, int radius, Map<String, Flower> flowers){
+		for (Flower flower : flowers.values()) {
+//			Flower flower = flowers[i];
 			
 			
-			if(flower != null){
+			if(flower != null && !(flower.x == 0 && flower.y == 0)){
 			
 			if(checkCollision(x,y,(int) Math.ceil(radius*1.5),flower.x,flower.y,(int) Math.ceil(flower.size*1.5)))
 				return true;
@@ -99,7 +100,9 @@ public class Flower {
 //		System.out.println("inSurface: "+(x+radius*5 < Visualization.width && x-radius*5 > 0
 //				&& y+radius*5 < Visualization.height && y-radius*5 > 0) + " x:" + x + " y:"+y + " radius:" + radius);
 		
-		return x+radius*3 < Visualization.width && x-radius*3 > 0
-				&& y+radius*3 < Visualization.height && y-radius*3 > 0;
+		int wholeRadius = (int)(radius*2);
+		
+		return x+wholeRadius < Visualization.width && x-wholeRadius > 0
+				&& y+wholeRadius < Visualization.height && y-wholeRadius > 0;
 	}
 }

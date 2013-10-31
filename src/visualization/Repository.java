@@ -29,7 +29,7 @@ Int - current commit number
 
 public class Repository {
 	public String name;
-	public Map<String, Color> contributorColor = new HashMap<String, Color>();
+	public Map<String, Contributor> contributorColor = new HashMap<String, Contributor>();
 	public Commit[] commits;
 	public ClassNode[] classes;
 	public MethodNode[] methods;
@@ -89,19 +89,7 @@ public class Repository {
 					System.out.println("Flower id : " + methodName);
 
 					int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
-					System.out.println("Size : " + size);
-					
-//					int x,y;
-//					do{
-//						x = (int)(Math.random() * Visualization.width);
-//						y = (int)(Math.random() * Visualization.height);
-//					}while(Flower.checkFlowerCollision(x,y,size,this.frames[i].flowers) || !Flower.inSurface(x,y,size));
-//					
-					int x = Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent());
-					System.out.println("X : " + x);
-					
-					int y = Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent());
-					System.out.println("Y : " + y);
+					System.out.println("Size : " + size);	
 					
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
 					System.out.println("Number of Methods : " + numMethods);
@@ -130,9 +118,9 @@ public class Repository {
 						int R = (int)(Math.random()*256);
 						int G = (int)(Math.random()*256);
 						int B= (int)(Math.random()*256);
-						contributorColor.put(contributor, new Color(R,G,B));
+						contributorColor.put(contributor, new Contributor(contributor, new Color(R,G,B)));
 					}
-					Flower flower = new Flower(methodName, contributorColor.get(contributor),size,x,y,numMethods, contributor, dependencies);
+					Flower flower = new Flower(methodName, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies);
 					flower.changed = changed;
 					this.frames[i].flowers[j] = flower;				
 
@@ -168,6 +156,7 @@ public class Repository {
 		maxGridY = Visualization.height / (int) Math.ceil(Math.sqrt(classNum));
 		
 		setFlowerSize();
+		setFlowerPosition();
 		String i = "3";
 	}
 	
@@ -176,15 +165,55 @@ public class Repository {
 			Frame frame = frames[i];
 			for (int j = 0; j<frame.flowers.length; j++){
 				Flower flower = frame.flowers[j];
+				
 				int maxFlowerSize = (Visualization.width) / (classNum*2);
 				double size = ((double)flower.size / (double) maxClassLines) * ((double)maxFlowerSize - (double) maxFlowerSize*0.4) + (double)maxFlowerSize*0.4;
+				
 				if (size >= maxFlowerSize) {
 					flower.size = maxFlowerSize;
 				} else {
 					flower.size = (int) size;
-				}
+				}							
+				
 				System.out.println(flower.methodName + "---" + flower.size);
+				
+				
+
 			}
+		}
+	}
+	
+	private void setFlowerPosition(){
+		
+		Flower[] lastFlowers = frames[frames.length-1].flowers;
+		
+		if(lastFlowers == null)
+			return;
+		
+		for(int i=0;i<lastFlowers.length;i++){
+			Flower frameFlower = lastFlowers[i];
+						
+			Flower flower = this.flowers.get(frameFlower.methodName);
+			flower.size = frameFlower.size;
+			
+		int x,y;
+		do{
+			x = (int)(Math.random() * Visualization.width);
+			y = (int)(Math.random() * Visualization.height);
+			
+			System.out.println("Flower :" + flower.methodName);
+			System.out.println("X : " + x);
+			System.out.println("Y : " + y);
+
+		}while(Flower.checkFlowerCollision(x,y,flower.size, flowers) || !Flower.inSurface(x,y,flower.size));
+		
+		flower.x = x;
+		flower.y = y;
+		
+		System.out.println("Flower :" + flower.methodName);
+		System.out.println("X : " + x);
+		System.out.println("Y : " + y);
+		
 		}
 	}
 
