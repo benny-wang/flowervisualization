@@ -25,6 +25,7 @@ import java.util.List;
 
 
 
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -126,6 +127,9 @@ public class ParseMethod {
 	
 	private static ArrayList<FlowerObject> parseFlowers(File Directory)
 	{
+		
+		String parentFolderName = Directory.getName();
+		
 		ArrayList<FlowerObject> listOfFlowers = new ArrayList<FlowerObject>();
 		ArrayList<File> filelist = new ArrayList<File>();
 		filelist = traverseFolder(Directory, filelist);
@@ -172,7 +176,25 @@ public class ParseMethod {
 	       
 	       lineNumber = getLineNumber(file);
 	       
-	       name = file.getName().split("\\.")[0];
+
+	       String[] names = file.getPath().split("\\\\");
+	       int i = 0;
+	       for(; i<names.length;i++)
+	       {
+	    	   
+	    	   if(names[i].equals("src"))
+	    	   {
+	    		   //System.out.println(names[i]);
+	    		   break;
+	    	   }
+	       }
+	       while(i<names.length)
+	       {
+	    	   name+=("\\"+names[i]);
+	    	   i++;
+	       }
+	    	  
+	       
 
 	       FlowerObject fObj = new FlowerObject();
 	       fObj.setLineNumber(lineNumber);

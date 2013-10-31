@@ -87,7 +87,7 @@ public class XMLwritter {
 				TransformerFactory transformerFactory = TransformerFactory.newInstance();
 				Transformer transformer = transformerFactory.newTransformer();
 				DOMSource source = new DOMSource(doc);
-				StreamResult result = new StreamResult(new File("C:\\Users\\Majin\\Desktop\\cpsc410\\result\\result.xml"));
+				StreamResult result = new StreamResult(new File("result.xml"));
 		 
 
 		 
