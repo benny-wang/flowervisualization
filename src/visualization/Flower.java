@@ -67,7 +67,7 @@ public class Flower {
 	    		oColor.getGreen(),
 	    		oColor.getBlue(), null );
 		
-	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.98f * hsbVals[2] );
+	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.99f * hsbVals[2] );
 	    this.color = darkerColor;
 	}
 	

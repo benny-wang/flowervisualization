@@ -169,6 +169,7 @@ class Surface extends JPanel implements ActionListener {
 	private void drawPedals(Graphics2D g, Flower flower){			
 		
 		int pedalSize = flower.size/2;
+		flower.numMethods = Math.min(flower.numMethods, 10);
 		
 		for(int i=0;i<flower.numMethods;i++){
 			g.fillOval(flower.x-pedalSize/2,flower.y + flower.size/2,pedalSize,pedalSize*2);
