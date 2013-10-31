@@ -91,16 +91,16 @@ public class Repository {
 					int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
 					System.out.println("Size : " + size);
 					
-					int x,y;
-					do{
-						x = (int)(Math.random() * Visualization.width);
-						y = (int)(Math.random() * Visualization.height);
-					}while(Flower.checkFlowerCollision(x,y,size,this.frames[i].flowers) || !Flower.inSurface(x,y,size));
-					
-					//int x = Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent());
+//					int x,y;
+//					do{
+//						x = (int)(Math.random() * Visualization.width);
+//						y = (int)(Math.random() * Visualization.height);
+//					}while(Flower.checkFlowerCollision(x,y,size,this.frames[i].flowers) || !Flower.inSurface(x,y,size));
+//					
+					int x = Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent());
 					System.out.println("X : " + x);
 					
-					//int y = Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent());
+					int y = Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent());
 					System.out.println("Y : " + y);
 					
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
@@ -166,8 +166,28 @@ public class Repository {
 		
 		maxGridX = Visualization.width / (int)Math.ceil(Math.sqrt(classNum));
 		maxGridY = Visualization.height / (int) Math.ceil(Math.sqrt(classNum));
+		
+		setFlowerSize();
+		String i = "3";
 	}
 	
+	private void setFlowerSize() {
+		for (int i = 0; i<frames.length; i++){
+			Frame frame = frames[i];
+			for (int j = 0; j<frame.flowers.length; j++){
+				Flower flower = frame.flowers[j];
+				int maxFlowerSize = (Visualization.width) / (classNum*2);
+				double size = ((double)flower.size / (double) maxClassLines) * ((double)maxFlowerSize - (double) maxFlowerSize*0.4) + (double)maxFlowerSize*0.4;
+				if (size >= maxFlowerSize) {
+					flower.size = maxFlowerSize;
+				} else {
+					flower.size = (int) size;
+				}
+				System.out.println(flower.methodName + "---" + flower.size);
+			}
+		}
+	}
+
 	private Flower mostDependencies (Flower[] flowers){
 		int highest = 0;
 		int highestIndex = -1;

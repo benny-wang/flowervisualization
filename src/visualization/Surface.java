@@ -93,13 +93,19 @@ class Surface extends JPanel implements ActionListener {
 			Flower flower = flowersMap.get(frameFlower.methodName);
 			
 			
-			flower.size = frameFlower.size;
+//			flower.size = frameFlower.size;
 			
-			if(flower.size > maxFlowerSize){
-				flower.size = maxFlowerSize;
-			}else if(flower.size < maxFlowerSize*.3){
-				flower.size = (int) Math.ceil( maxFlowerSize * .3);
-			}
+//			if(flower.size > maxFlowerSize){
+//				flower.size = maxFlowerSize;
+//			}else if(flower.size < maxFlowerSize*.3){
+//				flower.size = (int) Math.ceil( maxFlowerSize * .3);
+//			}
+//			int size = (int) ((int) ((flower.size / repo.maxClassLines) * (maxFlowerSize - maxFlowerSize*0.4)) + maxFlowerSize*0.4);
+//			if (size > maxFlowerSize) {
+//				flower.size = maxFlowerSize;
+//			} else {
+//				flower.size = size;
+//			}
 			
 			flower.numMethods = frameFlower.numMethods;
 			flower.contributor = frameFlower.contributor;
@@ -114,8 +120,8 @@ class Surface extends JPanel implements ActionListener {
 			flower.makeDarker();
 			
 			g.setColor(flower.color);
-			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
-			drawPedals(g, flower);
+			g.fillOval(flower.x-frameFlower.size/2,flower.y-frameFlower.size/2,frameFlower.size,frameFlower.size);
+			drawPedals(g, frameFlower);
     	}
     	
     	
