@@ -18,13 +18,11 @@ Int - number of methods
 */
 
 public class Flower {
-	public ClassNode classNode;
 	public Color color;
 	public int size;
 	public int x;
 	public int y;
 	public String contributor;
-	public Commit commit;
 	public int numMethods;
 	
 	public boolean changed;

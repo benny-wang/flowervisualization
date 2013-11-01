@@ -28,11 +28,7 @@ Int - current commit number
  */
 
 public class Repository {
-	public String name;
 	public Map<String, Contributor> contributorColor = new HashMap<String, Contributor>();
-	public Commit[] commits;
-	public ClassNode[] classes;
-	public MethodNode[] methods;
 	public Frame[] frames;
 	
 	public int classNum;
