@@ -62,7 +62,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="6">
@@ -93,7 +93,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="9">
@@ -102,7 +102,7 @@
 			<size>60</size>
 			<x>680</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="10">
@@ -111,7 +111,7 @@
 			<size>60</size>
 			<x>500</x>
 			<y>500</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="11">
@@ -175,7 +175,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="17">
@@ -206,7 +206,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="20">
@@ -215,7 +215,7 @@
 			<size>60</size>
 			<x>680</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="21">
@@ -224,7 +224,7 @@
 			<size>60</size>
 			<x>500</x>
 			<y>500</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 	</frame>
@@ -290,7 +290,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="6">
@@ -321,7 +321,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="9">
@@ -330,7 +330,7 @@
 			<size>60</size>
 			<x>680</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="10">
@@ -339,7 +339,7 @@
 			<size>60</size>
 			<x>500</x>
 			<y>500</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="11">
@@ -403,7 +403,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="17">
@@ -434,7 +434,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="20">
@@ -443,7 +443,7 @@
 			<size>60</size>
 			<x>680</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="21">
@@ -452,7 +452,7 @@
 			<size>60</size>
 			<x>500</x>
 			<y>500</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 			<flower id="22">
@@ -461,7 +461,7 @@
 			<size>60</size>
 			<x>680</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="23">
@@ -470,7 +470,7 @@
 			<size>60</size>
 			<x>500</x>
 			<y>500</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="24">
@@ -534,7 +534,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="30">
@@ -565,7 +565,7 @@
 			<size>60</size>
 			<x>100</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="33">
@@ -574,7 +574,7 @@
 			<size>60</size>
 			<x>680</x>
 			<y>200</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 		<flower id="34">
@@ -583,7 +583,7 @@
 			<size>60</size>
 			<x>500</x>
 			<y>500</y>
-			<numMethods>20</numMethods>
+			<numMethods>10</numMethods>
 			<contributor>Majin Du</contributor>
 		</flower>
 	</frame>

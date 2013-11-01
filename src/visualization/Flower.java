@@ -67,7 +67,7 @@ public class Flower {
 	    		oColor.getGreen(),
 	    		oColor.getBlue(), null );
 		
-	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.99f * hsbVals[2] );
+	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.98f * hsbVals[2] );
 	    this.color = darkerColor;
 	}
 	
@@ -78,7 +78,9 @@ public class Flower {
 			
 			if(flower != null && !(flower.x == 0 && flower.y == 0)){
 			
-			if(checkCollision(x,y,(int) Math.ceil(radius*1.5),flower.x,flower.y,(int) Math.ceil(flower.size*1.5)))
+				System.out.println("Checking radius: " + radius + " ---Size:" + flower.size);
+				
+			if(checkCollision(x,y, radius,flower.x,flower.y,flower.size/2 * 3))
 				return true;
 			}
 		}
@@ -87,9 +89,9 @@ public class Flower {
 		return false;
 	}
 	
-	public static boolean checkCollision (int x1,int y1,int radius1,int x2,int y2,int radius2){
-		double xDif = x1 - x2;
-		double yDif = y1 - y2;
+	public static boolean checkCollision (int x1,int y1,double radius1,int x2,int y2,double radius2){
+		double xDif = x2 - x1;
+		double yDif = y2 - y1;
 		double distanceSquared = xDif * xDif + yDif * yDif;
 		boolean collision = distanceSquared < (radius1 + radius2) * (radius1 + radius2);
 
@@ -100,7 +102,7 @@ public class Flower {
 //		System.out.println("inSurface: "+(x+radius*5 < Visualization.width && x-radius*5 > 0
 //				&& y+radius*5 < Visualization.height && y-radius*5 > 0) + " x:" + x + " y:"+y + " radius:" + radius);
 		
-		int wholeRadius = (int)(radius*2);
+		int wholeRadius = (int)(radius*1.5);
 		
 		return x+wholeRadius < Visualization.width && x-wholeRadius > 0
 				&& y+wholeRadius < Visualization.height && y-wholeRadius > 0;

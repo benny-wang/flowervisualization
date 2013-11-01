@@ -60,6 +60,18 @@ public class ParseMethod {
 	}
 	
 	
+	public static ArrayList<String> getDependencies(CompilationUnit cu)
+	{
+		ArrayList<String> dependencies = new ArrayList<String>();
+		
+		//TODO
+		
+		return dependencies;
+		
+		
+	}
+	
+	
 	
 	public static int getMethodNumber(CompilationUnit cu)
 	{

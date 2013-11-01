@@ -39,7 +39,7 @@ class Surface extends JPanel implements ActionListener {
 	       timer = new Timer(100, this);
 	       timer.start(); 
 	       
-	       repo = new Repository("src/visualization/sampleXMLFile.xml");
+	       repo = new Repository("result_t1.xml");
 	       
 	       maxFlowerSize = (Visualization.width) / (repo.classNum*2);
 	}
@@ -104,11 +104,43 @@ class Surface extends JPanel implements ActionListener {
 	private void doDrawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	
 		
+		//testCollision(g2);
 
 		drawContributorLegend(g2);
 		drawFlowers(g2);		
 			
     }
+	
+	private void testCollision (Graphics2D g){
+//		int radius1 = 50;
+//		int radius2 = 50;
+//		int x1 = 20;
+//		int y1 = 20;
+//		int x2 = 150;
+//		int y2 = 150;
+//		
+//			
+//		g.setColor(Color.blue);
+//		g.fillOval(x1,y1,radius1*2,radius1*2);
+//		
+//		g.setColor(Color.red);
+//		g.fillOval(x2,y2,radius2*2,radius2*2);
+//		
+		Flower flower1 = new Flower(null, Color.BLUE, 100, 100, 250, 10, null, null );
+		Flower flower2 = new Flower(null, Color.RED, 100, 390, 350, 10, null, null);
+		double radius1 = flower1.size/2 * 3;
+		double radius2 = flower2.size/2 * 3;
+		
+		g.setColor(flower1.color);
+		g.fillOval(flower1.x-flower1.size/2,flower1.y-flower1.size/2,flower1.size,flower1.size);
+		drawPedals(g, flower1);
+		
+		g.setColor(flower2.color);
+		g.fillOval(flower2.x-flower2.size/2,flower2.y-flower2.size/2,flower2.size,flower2.size);
+		drawPedals(g, flower2);
+		
+		System.out.println("Collision Test: " + Flower.checkCollision(flower1.x,flower1.y,radius1,flower2.x,flower2.y,radius2));
+	}
 	
 	private void drawFlowers(Graphics2D g) {
 		
@@ -123,7 +155,7 @@ class Surface extends JPanel implements ActionListener {
 			Flower flower = flowersMap.get(frameFlower.methodName);
 			
 			
-//			flower.size = frameFlower.size;
+			flower.size = frameFlower.size;
 			
 //			if(flower.size > maxFlowerSize){
 //				flower.size = maxFlowerSize;
@@ -150,7 +182,7 @@ class Surface extends JPanel implements ActionListener {
 			flower.makeDarker();
 			
 			g.setColor(flower.color);
-			g.fillOval(flower.x-frameFlower.size/2,flower.y-frameFlower.size/2,frameFlower.size,frameFlower.size);
+			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
 			drawPedals(g, flower);
     	}
     	
@@ -169,6 +201,7 @@ class Surface extends JPanel implements ActionListener {
 	private void drawPedals(Graphics2D g, Flower flower){			
 		
 		int pedalSize = flower.size/2;
+		
 		flower.numMethods = Math.min(flower.numMethods, 10);
 		
 		for(int i=0;i<flower.numMethods;i++){
