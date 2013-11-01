@@ -1,5 +1,6 @@
 package visualization;
 import java.awt.Color;
+import java.util.Iterator;
 import java.util.Map;
 
 /*
@@ -71,19 +72,42 @@ public class Flower {
 	    this.color = darkerColor;
 	}
 	
-	public static boolean checkFlowerCollision (int x, int y, int radius, Map<String, Flower> flowers){
-		for (Flower flower : flowers.values()) {
-//			Flower flower = flowers[i];
-			
-			
+	public static boolean checkFlowerCollision (int x, int y, int diameter, Map<String, Flower> flowers){
+		
+//		for (Flower flower : flowers.values()) {
+////			Flower flower = flowers[i];
+//			
+//			System.out.println("Checking radius: " + radius + " ---Size:" + flower.size/2 * 3 + "--x: " + flower.x + " y: " + flower.y);
+//			
+//			if(flower != null && !(flower.x == 0 && flower.y == 0)){
+//			
+//				double flower2Radius = flower.size/2 * 3;
+//				
+//				
+//			if(checkCollision(x,y, radius,flower.x,flower.y, flower2Radius)){				
+//				return true;
+//			}
+//			
+//			}
+//		}
+		
+	    Iterator it = flowers.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pairs = (Map.Entry)it.next();
+	        Flower flower = (Flower) pairs.getValue();
+	        
 			if(flower != null && !(flower.x == 0 && flower.y == 0)){
-			
-				System.out.println("Checking radius: " + radius + " ---Size:" + flower.size);
 				
-			if(checkCollision(x,y, radius,flower.x,flower.y,flower.size/2 * 3))
+				
+				
+			if(Flower.checkCollision(x,y, ((double)diameter)/2 * 3,flower.x,flower.y, ((double)flower.size)/2 *3)){				
 				return true;
 			}
-		}
+			
+			}
+	        
+	        //it.remove(); // avoids a ConcurrentModificationException
+	    }
 		
 		
 		return false;

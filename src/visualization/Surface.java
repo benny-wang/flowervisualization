@@ -25,8 +25,6 @@ class Surface extends JPanel implements ActionListener {
 	int frameRate = 50;
 	int currentTFrame = 0;
 	
-	int maxFlowerSize;
-	
 	Repository repo;
 	
 	private Timer timer;
@@ -39,16 +37,12 @@ class Surface extends JPanel implements ActionListener {
 	       timer = new Timer(100, this);
 	       timer.start(); 
 	       
-	       repo = new Repository("result_t1.xml");
-	       
-	       maxFlowerSize = (Visualization.width) / (repo.classNum*2);
+	       repo = new Repository("src/visualization/sampleXMLFile.xml");
 	}
 	
     @Override
     public void actionPerformed (ActionEvent e) {    	
-    	
-    	Map<String, Flower> flowersMap = repo.flowers;    	
-    	
+    	    	
     	   	
     	repaint();
     	
@@ -86,6 +80,11 @@ class Surface extends JPanel implements ActionListener {
     		Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(contributor.name, g);
     		double nameWidth = nameRect.getWidth();
     		
+    		if(x+30+15+nameWidth > Visualization.width){
+    			y += 25 + 20;
+    			x = 10;
+    		}
+    		
     		g.setColor(contributor.color);
     		g.fillRect(x, y, 25,25);
     		g.setColor(Color.black);
@@ -93,10 +92,7 @@ class Surface extends JPanel implements ActionListener {
     		
     		x += 30 + 15 + nameWidth;
     		
-    		if(x > Visualization.width){
-    			y += 25 + 20;
-    			x = 10;
-    		}
+
     	}
     }
     
@@ -126,8 +122,8 @@ class Surface extends JPanel implements ActionListener {
 //		g.setColor(Color.red);
 //		g.fillOval(x2,y2,radius2*2,radius2*2);
 //		
-		Flower flower1 = new Flower(null, Color.BLUE, 100, 100, 250, 10, null, null );
-		Flower flower2 = new Flower(null, Color.RED, 100, 390, 350, 10, null, null);
+		Flower flower1 = new Flower(null, Color.BLUE, 100, 0, 0, 10, null, null );
+		Flower flower2 = new Flower(null, Color.RED, 100, 20, 250, 10, null, null);
 		double radius1 = flower1.size/2 * 3;
 		double radius2 = flower2.size/2 * 3;
 		
@@ -181,8 +177,13 @@ class Surface extends JPanel implements ActionListener {
 			
 			flower.makeDarker();
 			
+			g.setColor(Color.black);
+			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
 			g.setColor(flower.color);
 			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
+			
+			
+			
 			drawPedals(g, flower);
     	}
     	
