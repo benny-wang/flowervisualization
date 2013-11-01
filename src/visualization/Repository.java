@@ -97,9 +97,9 @@ public class Repository {
 					String contributor = eElement.getElementsByTagName("contributor").item(0).getTextContent();
 					System.out.println("Contributor : " + contributor);
 					
-					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
-					Boolean changed = (strChanged.equals("true"))? true: false;					
-					System.out.println("Changed : " + changed);
+//					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
+//					Boolean changed = (strChanged.equals("true"))? true: false;					
+//					System.out.println("Changed : " + changed);
 					
 					NodeList dependencyName = eElement.getElementsByTagName("method");
 					String[] dependencies = new String[dependencyName.getLength()];
@@ -121,7 +121,7 @@ public class Repository {
 						contributorColor.put(contributor, new Contributor(contributor, new Color(R,G,B)));
 					}
 					Flower flower = new Flower(methodName, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies);
-					flower.changed = changed;
+					flower.changed = false;
 					this.frames[i].flowers[j] = flower;				
 
 					
@@ -140,42 +140,64 @@ public class Repository {
 		Frame lastFrame = this.frames[this.frames.length-1];
 		classNum = lastFrame.flowers.length;
 		maxClassLines = 0;
+		
+		double combinedflowerArea = 0;
 				
 		for(int i = 0; i<lastFrame.flowers.length; i++){
+			Flower flower = lastFrame.flowers[i];
+			
 			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
-
+			
 			if(this.flowers.get(lastFrame.flowers[i].methodName) == null){
 				this.flowers.put(lastFrame.flowers[i].methodName, new Flower(lastFrame.flowers[i]));
 			}
 			
+			combinedflowerArea = Math.PI * Math.pow(flower.size * 3, 2);
+			
 		}
 		
-		System.out.println("Most dependencies: " + mostDependencies(lastFrame.flowers).methodName);
+		//System.out.println("Most dependencies: " + mostDependencies(lastFrame.flowers).methodName);
 		
 		maxGridX = Visualization.width / (int)Math.ceil(Math.sqrt(classNum));
 		maxGridY = Visualization.height / (int) Math.ceil(Math.sqrt(classNum));
 		
-		setFlowerSize();
+		setFlowerSize(combinedflowerArea);
 		setFlowerPosition();
 		String i = "3";
 	}
 	
-	private void setFlowerSize() {
+	private void setFlowerSize(double combinedArea) {
+		
+		double ratio;
+		double panelArea = ((Visualization.width * Visualization.height)*.9 );
+		
+		if(combinedArea > panelArea){
+			ratio = panelArea/combinedArea;
+		}else{
+			ratio = combinedArea/panelArea;
+		}
+		
+		double maxFlowerSize = Math.sqrt(panelArea/classNum)/2;
+		
 		for (int i = 0; i<frames.length; i++){
 			Frame frame = frames[i];
 			for (int j = 0; j<frame.flowers.length; j++){
 				Flower flower = frame.flowers[j];
 				
-				int maxFlowerSize = ((int)(Visualization.width*.9) / classNum);
-				double size = ((double)flower.size / (double) maxClassLines) * ((double)maxFlowerSize - (double) maxFlowerSize*0.4) + (double)maxFlowerSize*0.4;
+				flower.size = (int) (flower.size*ratio);
+				
+//				int maxFlowerSize = (int) (Visualization.width * .9) / (classNum);
+				double size = ((double)flower.size / (double) maxClassLines) * (maxFlowerSize - maxFlowerSize*0.4) + maxFlowerSize*0.4;
 				
 				if (size >= maxFlowerSize) {
-					flower.size = maxFlowerSize;
+					flower.size = (int) maxFlowerSize;
 				} else {
 					flower.size = (int) size;
-				}							
+				}
 				
-				System.out.println(flower.methodName + "---" + flower.size);
+				
+				
+				System.out.println(flower.methodName + "---" + flower.size + "---Ratio---" + maxFlowerSize);
 				
 				
 
@@ -199,21 +221,15 @@ public class Repository {
 		int x,y;
 		do{
 			x = (int)(Math.random() * Visualization.width);
-			y = (int)(Math.random() * Visualization.height);
+			y = (int)(Math.random() * Visualization.height); // + legend
 			
-			System.out.println("Flower :" + flower.methodName);
-			System.out.println("X : " + x);
-			System.out.println("Y : " + y);
+			System.out.println("Flower :" + flower.methodName + "---Diameter--" + flower.size);
 
-		}while(Flower.checkFlowerCollision(x,y,flower.size, flowers) || !Flower.inSurface(x,y,flower.size));
+
+		}while(Flower.checkFlowerCollision(x,y,flower.size/2 * 3, flowers) || !Flower.inSurface(x,y,flower.size));
 		
 		flower.x = x;
-		flower.y = y;
-		
-		System.out.println("Flower :" + flower.methodName);
-		System.out.println("X : " + x);
-		System.out.println("Y : " + y);
-		
+		flower.y = y;		
 		}
 	}
 
