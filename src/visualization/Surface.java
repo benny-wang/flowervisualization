@@ -209,6 +209,8 @@ class Surface extends JPanel implements ActionListener {
 		
 		int pedalSize = flower.size/2;
 		
+		AffineTransform oldXForm = g.getTransform();
+		
 		flower.numMethods = Math.min(flower.numMethods, 10);
 		
 		for(int i=0;i<flower.numMethods;i++){
@@ -216,6 +218,8 @@ class Surface extends JPanel implements ActionListener {
 //			g.draw(new Ellipse2D.Double(flower.x-pedalSize/2,flower.y + flower.size/2,pedalSize,pedalSize*2));
 			g.rotate(Math.toRadians(360/flower.numMethods),flower.x,flower.y);
 		}
+		
+		g.setTransform(oldXForm); // Restore transform
 	}
 
     @Override

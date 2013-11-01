@@ -177,7 +177,7 @@ public class Repository {
 			ratio = combinedArea/panelArea;
 		}
 		
-		double maxFlowerSize = Math.sqrt(panelArea/classNum)/3;
+		double maxFlowerSize = Math.sqrt(panelArea/classNum)/2;
 		
 		for (int i = 0; i<frames.length; i++){
 			Frame frame = frames[i];
@@ -223,11 +223,9 @@ public class Repository {
 			x = (int)(Math.random() * Visualization.width);
 			y = (int)(Math.random() * (Visualization.height)); // + legend
 			
-			System.out.println("Flower :" + flower.methodName + "---Diameter--" + flower.size + "--RealSize:" + frameFlower.size);
-
-
+			//System.out.println("Flower :" + flower.methodName + "---Diameter--" + flower.size + "--RealSize:" + frameFlower.size);
 			
-		}while(Flower.checkFlowerCollision(x,y, flower.size , this.flowers));
+		}while(Flower.checkFlowerCollision(x,y, flower.size , this.flowers) || !Flower.inSurface(x,y,flower.size/2 * 3));
 		
 		flower.x = x;
 		flower.y = y;		
