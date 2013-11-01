@@ -68,7 +68,7 @@ public class Flower {
 	    		oColor.getGreen(),
 	    		oColor.getBlue(), null );
 		
-	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.98f * hsbVals[2] );
+	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.99f * hsbVals[2] );
 	    this.color = darkerColor;
 	}
 	
@@ -100,7 +100,7 @@ public class Flower {
 				
 				
 				
-			if(Flower.checkCollision(x,y, ((double)diameter)/2 * 3,flower.x,flower.y, ((double)flower.size)/2 *3)){				
+			if(checkCollision(x,y, ((double)diameter)/2*3,flower.x,flower.y, ((double)flower.size)/2*3)){				
 				return true;
 			}
 			
@@ -113,7 +113,7 @@ public class Flower {
 		return false;
 	}
 	
-	public static boolean checkCollision (int x1,int y1,double radius1,int x2,int y2,double radius2){
+	public static boolean checkCollision (double x1,double y1,double radius1,double x2,double y2,double radius2){
 		double xDif = x2 - x1;
 		double yDif = y2 - y1;
 		double distanceSquared = xDif * xDif + yDif * yDif;

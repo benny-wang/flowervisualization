@@ -221,7 +221,7 @@ public class Repository {
 		int x,y;
 		do{
 			x = (int)(Math.random() * Visualization.width);
-			y = (int)(Math.random() * Visualization.height); // + legend
+			y = (int)(Math.random() * (Visualization.height)); // + legend
 			
 			System.out.println("Flower :" + flower.methodName + "---Diameter--" + flower.size + "--RealSize:" + frameFlower.size);
 

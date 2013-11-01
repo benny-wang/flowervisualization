@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
@@ -22,7 +23,7 @@ class Surface extends JPanel implements ActionListener {
 //	
 	int currentFrame = 0;
 	
-	int frameRate = 50;
+	int frameRate = 10;
 	int currentTFrame = 0;
 	
 	Repository repo;
@@ -37,7 +38,7 @@ class Surface extends JPanel implements ActionListener {
 	       timer = new Timer(100, this);
 	       timer.start(); 
 	       
-	       repo = new Repository("src/visualization/sampleXMLFile.xml");
+	       repo = new Repository("sampleXMLFile.xml");
 	}
 	
     @Override
@@ -84,7 +85,9 @@ class Surface extends JPanel implements ActionListener {
     			y += 25 + 20;
     			x = 10;
     		}
-    		
+    		g.setColor(Color.white);
+    	    g.fillRect(x, y,30 + 15 + (int) nameWidth,25);
+    	    
     		g.setColor(contributor.color);
     		g.fillRect(x, y, 25,25);
     		g.setColor(Color.black);
@@ -99,12 +102,15 @@ class Surface extends JPanel implements ActionListener {
 	
 	private void doDrawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	
-		
-		//testCollision(g2);
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, Visualization.width,Visualization.height);
+		AffineTransform at = g2.getTransform();
 
+		drawFlowers(g2);
+		
+		g2.setTransform(at);
 		drawContributorLegend(g2);
-		drawFlowers(g2);		
-			
+
     }
 	
 	private void testCollision (Graphics2D g){
@@ -177,8 +183,8 @@ class Surface extends JPanel implements ActionListener {
 			
 			flower.makeDarker();
 			
-			g.setColor(Color.black);
-			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
+//			g.setColor(Color.black);
+//			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
 			g.setColor(flower.color);
 			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
 			
