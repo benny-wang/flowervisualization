@@ -37,7 +37,9 @@ public class XMLwritter {
 				Attr attr = doc.createAttribute("id");
 				attr.setValue("0");
 				frame.setAttributeNode(attr);
-		 
+				
+				Element time = doc.createElement("time");
+				frame.appendChild(time);
 				
 				for(int i = 0; i<flor.size();i++)
 				{
@@ -52,10 +54,6 @@ public class XMLwritter {
 					Element name = doc.createElement("name");
 					name.appendChild(doc.createTextNode(temp.getName()));
 					flower.appendChild(name);
-					
-					Element changed = doc.createElement("changed");
-					changed.appendChild(doc.createTextNode("true"));
-					flower.appendChild(changed);
 					
 					Element size = doc.createElement("size");
 					size.appendChild(doc.createTextNode(""+temp.getLineNumber()));
@@ -72,10 +70,6 @@ public class XMLwritter {
 					Element numMethods = doc.createElement("numMethods");
 					numMethods.appendChild(doc.createTextNode(""+temp.getMethodNumber()));
 					flower.appendChild(numMethods);
-					
-					Element contributor = doc.createElement("contributor");
-					contributor.appendChild(doc.createTextNode(""));
-					flower.appendChild(contributor);
 					
 					Element dependency = doc.createElement("dependency");
 					flower.appendChild(dependency);

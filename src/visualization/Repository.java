@@ -143,7 +143,7 @@ public class Repository {
 				
 		for(int i = 0; i<lastFrame.flowers.length; i++){
 			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
-			
+
 			if(this.flowers.get(lastFrame.flowers[i].methodName) == null){
 				this.flowers.put(lastFrame.flowers[i].methodName, new Flower(lastFrame.flowers[i]));
 			}
@@ -166,7 +166,7 @@ public class Repository {
 			for (int j = 0; j<frame.flowers.length; j++){
 				Flower flower = frame.flowers[j];
 				
-				int maxFlowerSize = (Visualization.width) / (classNum*2);
+				int maxFlowerSize = ((int)(Visualization.width*.9) / classNum);
 				double size = ((double)flower.size / (double) maxClassLines) * ((double)maxFlowerSize - (double) maxFlowerSize*0.4) + (double)maxFlowerSize*0.4;
 				
 				if (size >= maxFlowerSize) {

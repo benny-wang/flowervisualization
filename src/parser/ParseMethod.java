@@ -65,11 +65,13 @@ public class ParseMethod {
 	{
 		int methodNumber =0;
 		
-	
+		
 	
 		 List<TypeDeclaration> types = cu.getTypes();
+		 //System.out.println("Import Name is: " + cu.getImports());
 	        for (TypeDeclaration type : types) {
 	            List<BodyDeclaration> members = type.getMembers();
+	           // System.out.println("Type Name is: "+type.getName());
 	            if(members == null)
 	            	continue;
 	            for (BodyDeclaration member : members) {
