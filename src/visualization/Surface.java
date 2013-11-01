@@ -38,7 +38,7 @@ class Surface extends JPanel implements ActionListener {
 	       timer = new Timer(100, this);
 	       timer.start(); 
 	       
-	       repo = new Repository("sampleXMLFile.xml");
+	       repo = new Repository("result_t1.xml");
 	}
 	
     @Override
