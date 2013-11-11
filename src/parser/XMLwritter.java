@@ -51,9 +51,16 @@ public class XMLwritter {
 					floId.setValue(""+i);
 					flower.setAttributeNode(floId);
 					
+					
+					
+					
 					Element name = doc.createElement("name");
 					name.appendChild(doc.createTextNode(temp.getName()));
 					flower.appendChild(name);
+					
+					Element packages = doc.createElement("package");
+					packages.appendChild(doc.createTextNode(temp.getPackname()));
+					flower.appendChild(packages);
 					
 					Element size = doc.createElement("size");
 					size.appendChild(doc.createTextNode(""+temp.getLineNumber()));
@@ -71,7 +78,13 @@ public class XMLwritter {
 					numMethods.appendChild(doc.createTextNode(""+temp.getMethodNumber()));
 					flower.appendChild(numMethods);
 					
-					Element dependency = doc.createElement("dependency");
+					Element dependency = doc.createElement("dependencies");
+					for(String s : temp.getImportClasses())
+					{
+						Element dep = doc.createElement("dependency");
+						dep.appendChild(doc.createTextNode(s));
+						dependency.appendChild(dep);
+					}
 					flower.appendChild(dependency);
 					
 					frame.appendChild(flower);

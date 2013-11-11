@@ -72,11 +72,25 @@ public class ParseMethod {
 	}
 	
 	
+	public static ArrayList<String> getImports(CompilationUnit cu)
+	{
+		ArrayList<String> iypes = new ArrayList<String>();
+		List<ImportDeclaration> dypes = cu.getImports();
+		if(dypes!=null){
+		for(ImportDeclaration im : dypes)
+		{
+			String name = im.toString();
+			iypes.add(name);
+		}
+		}
+		
+		return iypes;
+	}
+	
 	
 	public static int getMethodNumber(CompilationUnit cu)
 	{
 		int methodNumber =0;
-		
 		
 		
 		 List<TypeDeclaration> types = cu.getTypes();
@@ -149,15 +163,15 @@ public class ParseMethod {
 		ArrayList<File> filelist = new ArrayList<File>();
 		filelist = traverseFolder(Directory, filelist);
 		System.out.println(filelist.size());
-		
+
 		for(File file : filelist)
 		{
 		int methodNumber = 0;
 		int lineNumber = 0;
 		String pack = "";
 		String name = "";
-		ArrayList<String> imports = new ArrayList<String>();
-		
+		ArrayList<String> imports;
+
 		
 		FileInputStream in=null;
 		CompilationUnit cu=null;
@@ -184,6 +198,8 @@ public class ParseMethod {
 	        if(cu==null)
 	        	continue;
 	        
+	        
+	        
 	       methodNumber = getMethodNumber(cu);
 	       
 	       if(methodNumber==0)
@@ -209,13 +225,17 @@ public class ParseMethod {
 	    	   i++;
 	       }
 	    	  
+	       pack = cu.getPackage().getName().toString();
+	   
+	       imports = getImports(cu);
 	       
 
 	       FlowerObject fObj = new FlowerObject();
 	       fObj.setLineNumber(lineNumber);
 	       fObj.setMethodNumber(methodNumber);
 	       fObj.setName(name);
-	       fObj.setPackname(cu.getPackage().getName().toString());
+	       fObj.setPackname(pack);
+	       fObj.setImportClasses(imports);
 	       listOfFlowers.add(fObj);
 	       
 		}
