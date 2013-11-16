@@ -1,12 +1,15 @@
 package parser;
 
+
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.body.BodyDeclaration;
+import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
+import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.expr.NameExpr;
 
 import java.lang.reflect.*;
@@ -16,28 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
-
-
-
-
-
-
-
-
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 
 
@@ -94,17 +75,30 @@ public class ParseMethod {
 		
 		
 		 List<TypeDeclaration> types = cu.getTypes();
+		 
 		 //System.out.println("Import Name is: " + cu.getImports());
 	        for (TypeDeclaration type : types) {
+	        
+	        	
 	            List<BodyDeclaration> members = type.getMembers();
 	            
-	           // System.out.println("Type Name is: "+type.getName());
+	
 	            if(members == null)
 	            	continue;
 	            for (BodyDeclaration member : members) {
+	            	
+	            	
+	            	if (member instanceof FieldDeclaration)
+                    {
+                        FieldDeclaration myType = (FieldDeclaration) member;
+                        List <VariableDeclarator> myFields = myType.getVariables();
+                        System.out.println("Fields: " + myType.getType() + ":" + myFields.toString());
+                    }
+	            	
 	                if (member instanceof MethodDeclaration) {
 	                    MethodDeclaration method = (MethodDeclaration) member;
 	                    methodNumber++;
+	                    
 	                }
 	            }
 	        }
@@ -224,7 +218,7 @@ public class ParseMethod {
 	    	   name+=("\\"+names[i]);
 	    	   i++;
 	       }
-	    	  
+	    	 System.out.println(name+"============");
 	       pack = cu.getPackage().getName().toString();
 	   
 	       imports = getImports(cu);
@@ -237,15 +231,8 @@ public class ParseMethod {
 	       fObj.setPackname(pack);
 	       fObj.setImportClasses(imports);
 	       listOfFlowers.add(fObj);
-	       
-		}
-		
-		
+  
+		}	
 		return listOfFlowers;
 	}
-	
-	
-	
-	
-	
 }
