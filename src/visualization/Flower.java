@@ -52,7 +52,7 @@ public class Flower {
 		this.numMethods = flower.numMethods;
 		this.contributor = flower.contributor;
 		this.methodName = flower.methodName;
-		
+		this.dependencies = flower.dependencies;
 		this.changed = false;
 	}
 	
@@ -69,7 +69,23 @@ public class Flower {
 	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.99f * hsbVals[2] );
 	    this.color = darkerColor;
 	}
-	
+
+	public static Flower getCollidedFlower(int x, int y, int diameter,
+			Map<String, Flower> flowers) {
+		Iterator it = flowers.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry) it.next();
+			Flower flower = (Flower) pairs.getValue();
+			if (flower != null && !(flower.x == 0 && flower.y == 0)) {
+				if (checkCollision(x, y, ((double) diameter) / 2 * 3, flower.x,
+						flower.y, ((double) flower.size) / 2 * 3)) {
+					return flower;
+				}
+			}
+		}
+
+		return null;
+	}
 	public static boolean checkFlowerCollision (int x, int y, int diameter, Map<String, Flower> flowers){
 		
 //		for (Flower flower : flowers.values()) {

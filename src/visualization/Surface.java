@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
@@ -13,9 +14,16 @@ import javax.swing.Timer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.Map;
 
-class Surface extends JPanel implements ActionListener {
+class Surface extends JPanel implements ActionListener, MouseListener, MouseWheelListener, MouseMotionListener  {
 	
 //	Flower flower1 = new Flower(Color.BLUE, 50, 300, 250, 10, );
 //	Flower flower2 = new Flower(Color.RED, 25, 500, 350, 10);
@@ -29,6 +37,21 @@ class Surface extends JPanel implements ActionListener {
 	Repository repo;
 	
 	private Timer timer;
+
+	private Flower hitFlower;
+
+	private double zoom = 1;
+	private int zoomX = 0;
+	private int zoomY = 0;
+	private int preZoomX = 0;
+	private int preZoomY = 0;
+	private int wheelMoved = 0;
+	private int maxZoomX = 50;
+	private int maxZoomY = 50;
+
+	private int zoomWidth = getWidth();
+
+	private int zoomHeight = getHeight();
 	
 	public Surface () {
 		Initialize();
@@ -37,8 +60,10 @@ class Surface extends JPanel implements ActionListener {
 	private void Initialize () {
 	       timer = new Timer(100, this);
 	       timer.start(); 
-	       
-	       repo = new Repository("result_t1.xml");
+	       addMouseListener(this);
+	       addMouseWheelListener(this);
+	       addMouseMotionListener(this);
+	       repo = new Repository("result.xml");
 	}
 	
     @Override
@@ -99,20 +124,44 @@ class Surface extends JPanel implements ActionListener {
     	}
     }
     
-	
 	private void doDrawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	
+		drawZoomIn(g2);
+
+
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, Visualization.width,Visualization.height);
+		g.setColor(Color.BLACK);
+
+		drawDependencies(g2);
+
 		AffineTransform at = g2.getTransform();
 
 		drawFlowers(g2);
 		
 		g2.setTransform(at);
-		drawContributorLegend(g2);
 
+
+		drawContributorLegend(g2);
+		
+		drawZoomIn(g2);
     }
 	
+	private void drawZoomIn(Graphics2D g2) {
+		AffineTransform old = g2.getTransform();
+		AffineTransform tr2 = new AffineTransform(old);
+		tr2.translate(zoomX - zoomX * zoom, zoomY - zoomY * zoom);
+		tr2.scale(zoom, zoom);
+		g2.setTransform(tr2);
+
+	}
+
+	private void drawDependencies(Graphics2D g2) {
+		if(hitFlower != null){
+			drawLinesToDependencies(hitFlower, g2);
+		}		
+	}
+
 	private void testCollision (Graphics2D g){
 //		int radius1 = 50;
 //		int radius2 = 50;
@@ -228,4 +277,78 @@ class Surface extends JPanel implements ActionListener {
         super.paintComponent(g);
         doDrawing(g);
     }
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int xpos = e.getX(); 
+		int ypos = e.getY();
+		hitFlower = checkHit(xpos,ypos);
+
+	}
+
+	private void drawLinesToDependencies(Flower hitFlower, Graphics2D g2) {
+		String[] dependencies = hitFlower.dependencies;
+		Flower flower;
+		for(int i=0; i<dependencies.length; i++){
+			flower = repo.flowers.get(dependencies[i]);
+			g2.draw(new Line2D.Double((double) hitFlower.x,(double) hitFlower.y,(double) flower.x, (double)flower.y));
+		}
+	}
+
+	private Flower checkHit(int xpos, int ypos) {
+		return Flower.getCollidedFlower(xpos, ypos, 1, repo.flowers);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+
+		if((e.getModifiers() & KeyEvent.CTRL_MASK) == KeyEvent.CTRL_MASK ){
+			wheelMoved  = 1;
+			zoomX = e.getX();
+			zoomY = e.getY();
+			int notches = e.getWheelRotation();
+
+            if (notches < 0) {
+            	zoom+=0.1;
+            } else if (notches> 0){
+            	zoom-=0.1;
+            }
+    		System.out.println("zoom: " + zoom);
+    		System.out.println("zoomX: " + zoomX + "zoomY: " +  zoomY);
+
+
+        } 
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+	}
 }
