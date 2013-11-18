@@ -38,6 +38,7 @@ public class Repository {
 	
 	public Map<String, Flower> flowers = new HashMap<String, Flower>();
 	public Contributor[] contributors;
+	private int maxDependenciesNumber;
 	
 	public Repository(String xmlFilename) {
 		readXMLFile(xmlFilename);
@@ -81,15 +82,14 @@ public class Repository {
 					Node flowerNode = flowerList.item(j);													
 					Element eElement = (Element) flowerNode;					
 										
-					String methodName = eElement.getAttribute("id");
-					System.out.println("Flower id : " + methodName);
+					String methodName = eElement.getElementsByTagName("name").item(0).getTextContent();
+					//System.out.println("Flower id : " + methodName);
 
 					int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
-					System.out.println("Size : " + size);	
+					//System.out.println("Size : " + size);	
 					
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
-					System.out.println("Number of Methods : " + numMethods);
-					
+					//System.out.println("Number of Methods : " + numMethods);
 					String contributor = eElement.getElementsByTagName("contributor").item(0).getTextContent();
 					System.out.println("Contributor : " + contributor);
 					
@@ -97,14 +97,14 @@ public class Repository {
 //					Boolean changed = (strChanged.equals("true"))? true: false;					
 //					System.out.println("Changed : " + changed);
 					
-					NodeList dependencyName = eElement.getElementsByTagName("method");
+					NodeList dependencyName = eElement.getElementsByTagName("dependency");
 					String[] dependencies = new String[dependencyName.getLength()];
-					
+					System.out.println("Dependency : " + dependencyName.getLength());
 					for ( int k = 0; k < dependencyName.getLength(); k++ ) {
 						Node dependencyNameNode = dependencyName.item(k);													
 						Element dependencyNameElement = (Element) dependencyNameNode;
-						String methods = dependencyNameElement.getAttribute("name");
-						System.out.println("Dependency : " + methods);
+						String methods = dependencyNameElement.getTextContent();
+						//System.out.println("Dependency : " + methods);
 						
 						dependencies[k] = methods;
 					}
@@ -136,14 +136,14 @@ public class Repository {
 		Frame lastFrame = this.frames[this.frames.length-1];
 		classNum = lastFrame.flowers.length;
 		maxClassLines = 0;
-		
+		maxDependenciesNumber = 0;
 		double combinedflowerArea = 0;
 				
 		for(int i = 0; i<lastFrame.flowers.length; i++){
 			Flower flower = lastFrame.flowers[i];
 			
 			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
-			
+			maxDependenciesNumber = Math.max(maxDependenciesNumber, lastFrame.flowers[i].dependencies.length);
 			if(this.flowers.get(lastFrame.flowers[i].methodName) == null){
 				this.flowers.put(lastFrame.flowers[i].methodName, new Flower(lastFrame.flowers[i]));
 			}
