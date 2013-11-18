@@ -41,13 +41,16 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	private Flower hitFlower;
 
 	private double zoom = 1;
-	private int zoomX = 0;
-	private int zoomY = 0;
-	private int preZoomX = 0;
-	private int preZoomY = 0;
+	private double zoomX = 0;
+	private double zoomY = 0;
+	private double preZoomX = 0;
+	private double preZoomY = 0;
+	private double preZoom = 1;
+	private double maxZoom = .1;
+	
 	private int wheelMoved = 0;
-	private int maxZoomX = 50;
-	private int maxZoomY = 50;
+	private double maxZoomX = 25;
+	private double maxZoomY = 25;
 
 	private int zoomWidth = getWidth();
 
@@ -58,12 +61,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	}
 	
 	private void Initialize () {
-	       timer = new Timer(100, this);
+	       timer = new Timer(frameRate, this);
 	       timer.start(); 
 	       addMouseListener(this);
 	       addMouseWheelListener(this);
 	       addMouseMotionListener(this);
-	       repo = new Repository("result.xml");
+	       repo = new Repository("SampleXMLFile.xml");
 	}
 	
     @Override
@@ -148,10 +151,32 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     }
 	
 	private void drawZoomIn(Graphics2D g2) {
+		
+		double diffX = preZoomX - (zoomX - zoomX * zoom);
+		double diffY = preZoomY - (zoomY - zoomY * zoom);
+		double diffZoom = preZoom - (zoom);
+		
+		if(Math.abs(diffX) > maxZoomX){
+			preZoomX = preZoomX - diffX  / 50;			
+		}
+		
+		if(Math.abs(diffY) > maxZoomY){
+			preZoomY = preZoomY - diffY  / 50;	
+		}
+		
+		if(Math.abs(diffZoom) > maxZoom){
+			preZoom = preZoom - diffZoom / 50;
+		}
+		
+		//zoomX = preZoomX;
+		//zoomY = preZoomY;
+		
 		AffineTransform old = g2.getTransform();
 		AffineTransform tr2 = new AffineTransform(old);
-		tr2.translate(zoomX - zoomX * zoom, zoomY - zoomY * zoom);
-		tr2.scale(zoom, zoom);
+		
+		tr2.translate(preZoomX, preZoomY);
+		tr2.scale(preZoom, preZoom);
+		
 		g2.setTransform(tr2);
 
 	}
