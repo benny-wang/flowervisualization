@@ -79,7 +79,7 @@ public class Flower {
 			Map.Entry pairs = (Map.Entry) it.next();
 			Flower flower = (Flower) pairs.getValue();
 			if (flower != null && !(flower.x == 0 && flower.y == 0)) {
-				if (checkCollision(x, y, ((double) diameter) / 2 * 3, flower.x,
+				if (checkCollision(x, y, 1, flower.x,
 						flower.y, ((double) flower.size) / 2 * 3)) {
 					return flower;
 				}
@@ -155,21 +155,27 @@ public class Flower {
 		for (Flower attrFlower : flowers.values()) {
 		
 		if(flower != null && !flower.methodName.equals(attrFlower.methodName)){
-			if(flower.dependencies.get(attrFlower.methodName) != null)
-				return;
+//			if(flower.dependencies.get(attrFlower.methodName) != null)
+//				return;
 			
 			double attrFlowerRadius = attrFlower.size/2 * 3;
-	
+			
+			int mass = flower.dependencies.size() + 1;			
+			int repulMass = attrFlower.dependencies.size() + 1;
+			
+//			if(mass > repulMass)
+//				continue;
+
 			double xDiff = flower.x - attrFlower.x;
 			double yDiff = flower.y - attrFlower.y;	
 			
 			double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
 			double distance = getDistance(attrFlower);
 			
-			double speed = .5 * bflowerRadius * 3 - distance;
+			double speed = .5 * ( flower.size / 2 * 3  * 3 - distance) * (repulMass/mass);
 			
 			//speed = speed * speed;
-			System.out.println( speed);
+			//System.out.println( speed);
 			
 			double xRepul = flower.size/2 * 3 - xDiff;
 			double yRepul = flower.size/2 * 3 - yDiff;
@@ -192,10 +198,10 @@ public class Flower {
 			
 			//System.out.println(speed * Math.cos(Math.toRadians(getAngle(attrFlower))) / framesPerSecond);
 			
-			if(true){//inSurface (x, y, flower.size)){			
+			//if(inSurface (x, y, flower.size)){			
 			flower.x = x;
 			flower.y = y;
-			}
+			//}
 		}
 		
 		}
@@ -217,27 +223,36 @@ public class Flower {
 
 			attrFlower = flowers.get(methodName);
 					
-			if(attrFlower != null){
-				double distance = getDistance(attrFlower);
-				double speed = 5 * distance/5;
+			if(attrFlower != null && !flower.methodName.equals(attrFlower.methodName)){
+				double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
+				double distance = getDistance(attrFlower) - bflowerRadius;
+				
+
 				
 				double xDiff = flower.x - attrFlower.x;
 				double yDiff = flower.y - attrFlower.y;			
 				
+				int mass = flower.dependencies.size() + 1;			
+				int attrMass = attrFlower.dependencies.size() + 1;
 				
+//				if(attrMass > mass){
+//				continue;
+//			}
 				
-				double x = flower.x + speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
-				double y = flower.y + speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
+				double speed = distance * (mass/attrMass);
+				
+				double x = attrFlower.x - speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
+				double y = attrFlower.y - speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
+				
+
 				
 				//System.out.println("X: " + speed * xDiff / framesPerSecond + " Y: " + speed * yDiff / framesPerSecond);
 								
 				double flower2Radius = attrFlower.size/2 * 3;				
 				
-//				if(checkCollision(x,y, flower.size/2 * 3,attrFlower.x,attrFlower.y, flower2Radius)){				
-//					continue;
-//				}else{
-					flower.x = x;
-					flower.y = y;
+				///if(!checkEveryCollision(x,y, flower.size,flower,flowers)){	
+					attrFlower.x = x;
+					attrFlower.y = y;
 				//}
 			}			
 		}
@@ -264,6 +279,18 @@ public class Flower {
 		boolean collision = distanceSquared < (radius1 + radius2) * (radius1 + radius2);
 
 		return collision;
+	}
+	
+	public static boolean checkEveryCollision (double x1,double y1,double radius1, Flower currentFlower, Map<String, Flower> flowers){
+		
+		for (Flower attrFlower : flowers.values()) {
+			if(!attrFlower.methodName.equals(currentFlower.methodName)){
+				
+			if(checkCollision(x1,y1,radius1/2*3,attrFlower.x,attrFlower.y,attrFlower.size/2*3))
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static boolean inSurface (double x, double y, int radius){
