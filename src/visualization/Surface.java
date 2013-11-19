@@ -66,7 +66,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       addMouseListener(this);
 	       addMouseWheelListener(this);
 	       addMouseMotionListener(this);
-	       repo = new Repository("SampleXMLFile.xml");
+	       repo = new Repository("result.xml");
+	       this.setBackground(Color.WHITE);
 	}
 	
     @Override
@@ -131,9 +132,6 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		Graphics2D g2 = (Graphics2D) g;	
 		drawZoomIn(g2);
 
-
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, Visualization.width,Visualization.height);
 		g.setColor(Color.BLACK);
 
 		drawDependencies(g2);
