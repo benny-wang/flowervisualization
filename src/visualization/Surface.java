@@ -69,6 +69,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       addMouseWheelListener(this);
 	       addMouseMotionListener(this);
 	       repo = new Repository("SampleXMLFile.xml");
+	       setBackground(Color.white);
 	}
 	
     @Override
@@ -96,8 +97,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     	
     }
     
-    private void drawContributorLegend (Graphics g){
-    	Contributor[] contributors = repo.contributors;
+    private void drawContributorLegend (Graphics2D g){
     	
     	Font font = Font.decode("Times New Roman");
     	
@@ -115,6 +115,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     			y += 25 + 20;
     			x = 10;
     		}
+    		
+
     		g.setColor(Color.white);
     	    g.fillRect(x, y,30 + 15 + (int) nameWidth,25);
     	    
@@ -124,14 +126,14 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     		g.drawString(contributor.name, x + 30, y + 25);
     		
     		x += 30 + 15 + nameWidth;
-    		
 
     	}
     }
     
 	private void doDrawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	
-		
+		AffineTransform at1 = g2.getTransform();
+
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		drawZoomIn(g2);
@@ -148,11 +150,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		drawFlowers(g2);
 		
 		g2.setTransform(at);
+		g2.setTransform(at1);
 
 
 		drawContributorLegend(g2);
+		g2.setTransform(at1);
 		
-		drawZoomIn(g2);
     }
 	
 	private void drawZoomIn(Graphics2D g2) {
@@ -230,7 +233,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			}
 			
 			flower.makeDarker();
-			flower.attraction(repo.flowers, framesPerSecond);
+			//flower.attraction(repo.flowers, framesPerSecond);
 			
 //			g.setColor(Color.black);
 //			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
