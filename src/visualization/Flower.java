@@ -129,22 +129,6 @@ public class Flower {
 		return false;
 	}
 	
-	public static void reuplusion(Flower flower, Map<String, Flower> flowers ){
-		
-		for (Flower attrFlower : flowers.values()) {
-		
-		if(flower != null && !(flower.x == 0 && flower.y == 0)){
-		
-			double flower2Radius = attrFlower.size/2 * 3;
-	
-		
-		}
-		
-		}
-	
-		
-	}
-	
 	public double getAngle(Flower target) {
 	    double theta = Math.atan2(target.y - y, target.x - x);
 	    
@@ -154,13 +138,41 @@ public class Flower {
 	        angle += 360;
 	    }
 	    
-	    System.out.println(angle);
+	    //System.out.println(angle);
 	    
 	    return theta;
 	}
 	
 	public double getDistance(Flower target) {
 	    return Math.sqrt((target.y - y) * (target.y - y) + (target.x - x) * (target.x - x));
+	}
+	
+	public void repulsion(Map<String, Flower> flowers, double framesPerSecond ){
+		
+		Flower flower = this;
+		
+		for (Flower attrFlower : flowers.values()) {
+		
+		if(flower != null){		
+			double attrFlowerRadius = attrFlower.size/2 * 3;
+	
+			double xDiff = flower.x - attrFlower.x;
+			double yDiff = flower.y - attrFlower.y;	
+			
+			double speed = -.1;
+			
+			double x = flower.x - speed * xDiff / framesPerSecond;
+			double y = flower.y - speed * yDiff / framesPerSecond;
+			
+			if(inSurface (x, y, flower.size)){			
+			flower.x = x;
+			flower.y = y;
+			}
+		}
+		
+		}
+	
+		
 	}
 	
 	public void attraction(Map<String, Flower> flowers, double framesPerSecond){
@@ -189,7 +201,7 @@ public class Flower {
 				double x = flower.x - speed * xDiff / framesPerSecond;
 				double y = flower.y - speed * yDiff / framesPerSecond;
 				
-				System.out.println("X: " + speed * xDiff / framesPerSecond + " Y: " + speed * yDiff / framesPerSecond);
+				//System.out.println("X: " + speed * xDiff / framesPerSecond + " Y: " + speed * yDiff / framesPerSecond);
 								
 				double flower2Radius = attrFlower.size/2 * 3;				
 				
@@ -226,7 +238,7 @@ public class Flower {
 		return collision;
 	}
 	
-	public static boolean inSurface (int x, int y, int radius){
+	public static boolean inSurface (double x, double y, int radius){
 //		System.out.println("inSurface: "+(x+radius*5 < Visualization.width && x-radius*5 > 0
 //				&& y+radius*5 < Visualization.height && y-radius*5 > 0) + " x:" + x + " y:"+y + " radius:" + radius);
 		

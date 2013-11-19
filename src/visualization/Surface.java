@@ -233,7 +233,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			}
 			
 			flower.makeDarker();
-			//flower.attraction(repo.flowers, framesPerSecond);
+			flower.attraction(repo.flowers, framesPerSecond);
+			flower.repulsion(repo.flowers, framesPerSecond);
 			
 //			g.setColor(Color.black);
 //			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
