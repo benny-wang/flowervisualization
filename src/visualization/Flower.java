@@ -132,7 +132,7 @@ public class Flower {
 	public double getAngle(Flower target) {
 	    double theta = Math.atan2(target.y - y, target.x - x);
 	    
-	    theta += Math.PI/2.0;
+	    //theta += Math.PI/2.0;
 	    double angle = Math.toDegrees(theta);
 	    if (angle < 0) {
 	        angle += 360;
@@ -141,6 +141,7 @@ public class Flower {
 	    //System.out.println(angle);
 	    
 	    return theta;
+	    //return angle;
 	}
 	
 	public double getDistance(Flower target) {
@@ -153,18 +154,45 @@ public class Flower {
 		
 		for (Flower attrFlower : flowers.values()) {
 		
-		if(flower != null){		
+		if(flower != null && !flower.methodName.equals(attrFlower.methodName)){
+			if(flower.dependencies.get(attrFlower.methodName) != null)
+				return;
+			
 			double attrFlowerRadius = attrFlower.size/2 * 3;
 	
 			double xDiff = flower.x - attrFlower.x;
 			double yDiff = flower.y - attrFlower.y;	
 			
-			double speed = -.1;
+			double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
+			double distance = getDistance(attrFlower);
 			
-			double x = flower.x - speed * xDiff / framesPerSecond;
-			double y = flower.y - speed * yDiff / framesPerSecond;
+			double speed = .5 * bflowerRadius * 3 - distance;
 			
-			if(inSurface (x, y, flower.size)){			
+			//speed = speed * speed;
+			System.out.println( speed);
+			
+			double xRepul = flower.size/2 * 3 - xDiff;
+			double yRepul = flower.size/2 * 3 - yDiff;
+			
+			if(xRepul < 0){
+				xRepul = 0;
+			}
+			
+			if(yRepul < 0){
+				xRepul = 0;
+			}
+			
+			if(speed < 0){
+				speed = 0;
+			}
+			
+			
+			double x = flower.x - speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
+			double y = flower.y - speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
+			
+			//System.out.println(speed * Math.cos(Math.toRadians(getAngle(attrFlower))) / framesPerSecond);
+			
+			if(true){//inSurface (x, y, flower.size)){			
 			flower.x = x;
 			flower.y = y;
 			}
@@ -190,16 +218,16 @@ public class Flower {
 			attrFlower = flowers.get(methodName);
 					
 			if(attrFlower != null){
-				double distance = 1;//getDistance(attrFlower);
-				double speed = 1;
+				double distance = getDistance(attrFlower);
+				double speed = 5 * distance/5;
 				
 				double xDiff = flower.x - attrFlower.x;
 				double yDiff = flower.y - attrFlower.y;			
 				
 				
 				
-				double x = flower.x - speed * xDiff / framesPerSecond;
-				double y = flower.y - speed * yDiff / framesPerSecond;
+				double x = flower.x + speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
+				double y = flower.y + speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
 				
 				//System.out.println("X: " + speed * xDiff / framesPerSecond + " Y: " + speed * yDiff / framesPerSecond);
 								
