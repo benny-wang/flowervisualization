@@ -11,6 +11,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import java.awt.event.ActionEvent;
@@ -68,8 +69,10 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       addMouseListener(this);
 	       addMouseWheelListener(this);
 	       addMouseMotionListener(this);
-	       repo = new Repository("SampleXMLFile.xml");
+	       repo = new Repository("result.xml");
 	       setBackground(Color.white);
+	       setOpaque(true);
+	       setDoubleBuffered(true);
 	}
 	
     @Override
@@ -130,17 +133,18 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     	}
     }
     
-	private void doDrawing(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;	
+    private void doDrawing(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
 		AffineTransform at1 = g2.getTransform();
+		drawDragged(g2);
 
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 
 		drawZoomIn(g2);
 
-
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, Visualization.width,Visualization.height);
+		g.fillRect(0, 0, Visualization.width, Visualization.height);
 		g.setColor(Color.BLACK);
 
 		drawDependencies(g2);
@@ -148,16 +152,75 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		AffineTransform at = g2.getTransform();
 
 		drawFlowers(g2);
-		
+
 		g2.setTransform(at);
 		g2.setTransform(at1);
 
-
 		drawContributorLegend(g2);
 		g2.setTransform(at1);
-		
+
+		drawFlowerInformation(g2);
+		g2.setTransform(at1);
     }
 	
+	private void drawDragged(Graphics2D g2) {
+		AffineTransform old = g2.getTransform();
+		AffineTransform tx = new AffineTransform(old);
+		tx.translate(draggedX, draggedY);
+		g2.setColor(Color.WHITE);
+		g2.fillRect(0, 0, getWidth(), getHeight());
+		
+		g2.setTransform(tx);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);	
+	}
+
+	private void drawFlowerInformation(Graphics2D g) {
+		if (hitFlower!=null) {
+			Font font = Font.decode("Times New Roman");
+
+			int x, y;
+			x = 0;
+			y = getHeight()-30;
+
+			// for(Contributor contributor : repo.contributorColor.values()){
+
+			Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds("Contributor: " + hitFlower.contributor, g);
+			double nameWidth = nameRect.getWidth();
+			String contributor = "Dependency: ";
+			boolean first = true;
+			for (Map.Entry<String, Integer> entry : hitFlower.dependencies.entrySet()) {
+				if(!first){
+					contributor+=", ";
+				} else first = false;
+				String methodName = entry.getKey();
+				contributor += methodName;
+			}
+			Rectangle2D dependRect = g.getFontMetrics(font).getStringBounds(contributor, g);
+			g.setColor(Color.white);
+			double width = Math.max(nameWidth,  dependRect.getWidth());
+			g.fillRect( x,  y, 60 + (int) width,20 + (int) width);
+
+			// g.setColor(contributor.color);
+			g.fillRect( x, (int) y, 25, 25);
+			g.setColor(Color.black);
+			g.drawString("Contributor: " + hitFlower.contributor,  x,  y+15);
+			//g.drawString(hitFlower.contributor,  x,  y );
+
+			//g.fillRect( x, (int) y, 25, 25);
+			g.setColor(Color.black);
+			g.drawString(contributor,  x,  y+25);
+
+			}
+
+
+		}
+		// x += 30 + 15 + nameWidth;
+
+		// }
+
 	private void drawZoomIn(Graphics2D g2) {
 		
 		double diffX = preZoomX - (zoomX - zoomX * zoom);
@@ -291,7 +354,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	public void mouseClicked(MouseEvent e) {
 		int xpos = e.getX(); 
 		int ypos = e.getY();
-		hitFlower = checkHit(xpos,ypos);
+		hitFlower = checkHit(xpos-draggedX,ypos-draggedY);
 
 	}
 
@@ -325,17 +388,39 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		// TODO Auto-generated method stub
 		
 	}
-
+	int pressedX;
+	int pressedY;
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		//if(e.getModifiers() == 14 ){
+			
+			pressedX = e.getX();
+			pressedY = e.getY();
+			//System.out.println("Pressed  "+e.getX() + "   " + e.getY());
+
+			//repaint();
+	//	}
+//		if((SwingUtilities.isRightMouseButton(e) & KeyEvent.CTRL_MASK) == KeyEvent.CTRL_MASK ){
+//			last_x = rect.x - e.getX();
+//		    last_y = rect.y - e.getY();
+//		 
+//		    // Checks whether or not the cursor is inside of the rectangle while the
+//		    // user is pressing the mouse.
+//		    if (rect.contains(e.getX(), e.getY())) {
+//		      pressOut = false;
+//		      updateLocation(e);
+//		    } else {
+//		      ShapeMover.label.setText("First position the cursor on the rectangle "
+//		        + "and then drag.");
+//		      pressOut = true;
+//		    }
+//		}
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -359,13 +444,27 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
         } 
 		
 	}
-
+	boolean dragged = false;
+	int draggedX;
+	int draggedY;
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		
+		int newX = e.getX() - pressedX;
+		int newY = e.getY() - pressedY;
+
+		// increment last offset to last processed by drag event.
+		pressedX += newX;
+		pressedY += newY;
+
+		// update the canvas locations
+		draggedX += newX;
+		draggedY += newY;
+
+		repaint();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+
 	}
 }
