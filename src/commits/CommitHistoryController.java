@@ -112,8 +112,8 @@ public class CommitHistoryController {
 //			git.revert().include(rev).call();
 			
 			// Flowers
-			File folder = new File("C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\src\\net\\java\\sip\\communicator\\impl\\protocol");
-			ArrayList<FlowerObject> objs = ParseMethod.parseFlowers(folder);
+//			File folder = new File("C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\src\\net\\java\\sip\\communicator\\impl\\protocol");
+//			ArrayList<FlowerObject> objs = ParseMethod.parseFlowers(folder);
 			
 			count++;
 			System.out.println("Reverted: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
