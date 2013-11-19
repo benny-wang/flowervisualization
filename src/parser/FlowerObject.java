@@ -1,6 +1,7 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class FlowerObject {
@@ -10,7 +11,7 @@ public class FlowerObject {
 	private int lineNumber;
 	private String name;
 	private String packname;
-	private ArrayList<String> importClasses = new ArrayList<String>();
+	private HashMap<String,Integer> importClasses = new HashMap<String,Integer>();
 	private double xCoord;
 	private double yCoord;
 	
@@ -51,10 +52,10 @@ public class FlowerObject {
 	public void setLineNumber(int lineNumber) {
 		this.lineNumber = lineNumber;
 	}
-	public ArrayList<String> getImportClasses() {
+	public HashMap<String,Integer> getImportClasses() {
 		return importClasses;
 	}
-	public void setImportClasses(ArrayList<String> importClasses) {
+	public void setImportClasses(HashMap<String,Integer> importClasses) {
 		this.importClasses = importClasses;
 	}
 	
