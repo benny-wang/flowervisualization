@@ -1,6 +1,8 @@
 package commits;
 
+import java.io.File;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Date;
@@ -22,6 +24,9 @@ import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 
+import parser.FlowerObject;
+import parser.ParseMethod;
+
 /* placeholder class for the commit history controller/iterator
   This class is supposed to iterate through a list of commits,
   and for each one, revert the codebase to version of when the
@@ -34,30 +39,22 @@ public class CommitHistoryController {
 		Repository repository = JGitHelper.openRepository();
         System.out.println("Having repository: " + repository.getDirectory());
         
-//        Iterable<RevCommit> logs = new Git(repository).log()
-//                .all()
-//                .call();
-        
         Iterator<RevCommit> iter = new Git(repository).log()
 	              .addPath("src/net/java/sip/communicator/impl/protocol")
 	              .call()
 	              .iterator();
         
+        ArrayList<Commit> commits = new ArrayList<Commit>();
 		int count = 0;
-		boolean first = true;
-		long refDate = 0;
-		
 		while(iter.hasNext()) {
+			ArrayList<String> files = new ArrayList<String>();
 			RevCommit rev = iter.next();
-//			Date commitDate = new Date(((long) rev.getCommitTime())*1000);
+
 			int commitDate = rev.getCommitTime();
-			if (first) {
-				first = false;
-				refDate = commitDate;
-			}
-			long age = refDate - commitDate;
-	        System.out.printf("Commit: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
-	        System.out.printf(" Date: %s Age: %s \n", new Date(((long) commitDate)*1000), age);
+			String hash = rev.getName();
+			
+//	        System.out.printf("Commit: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
+//	        System.out.printf(" Date: %s\n", new Date(((long) commitDate)*1000));
 	        RevWalk rw = new RevWalk(repository);
 	        if (rev.getParentCount() == 0) {
 			  TreeWalk tw = new TreeWalk(repository);
@@ -65,7 +62,8 @@ public class CommitHistoryController {
 			  tw.setRecursive(true);
 			  tw.addTree(rev.getTree());
 			  while (tw.next()) {
-        		System.out.println(MessageFormat.format("({0} {1} {2}", ChangeType.ADD, tw.getRawMode(0), tw.getPathString()));
+//        		System.out.println(MessageFormat.format("({0} {1} {2}", ChangeType.ADD, tw.getRawMode(0), tw.getPathString()));
+				files.add(tw.getPathString());
 			  }
 			  tw.release();
 	        } else {
@@ -76,32 +74,49 @@ public class CommitHistoryController {
 	        	df.setDetectRenames(true);
 	        	List<DiffEntry> diffs = df.scan(parent.getTree(), rev.getTree());
 	        	for (DiffEntry diff : diffs) {
-	        		System.out.println(MessageFormat.format("({0} {1} {2}", diff.getChangeType().name(), diff.getNewMode().getBits(), diff.getNewPath()));
+//	        		System.out.println(MessageFormat.format("({0} {1} {2}", diff.getChangeType().name(), diff.getNewMode().getBits(), diff.getNewPath()));
+	        		switch (diff.getChangeType()) {
+	        		case ADD:
+	        		case MODIFY:
+	        		case RENAME:
+	        			files.add(diff.getNewPath());
+	        			break;
+	        		default:
+	        			break;
+	        		}
 	        	}
 	        }
-	        
+	        commits.add(new Commit(commitDate,hash,files));
 	        count++;
 	        rw.dispose();
-		    }
+	    }
 		System.out.println("Had " + count + " commits overall on current branch");
+		FileAgeTool fat = new FileAgeTool(commits);
+		
+		for(Commit commit : commits) {
+			commit.print();
+		}
 		
 		iter = new Git(repository).log()
 				.addPath("src/net/java/sip/communicator/impl/protocol")
 	            .call()
 	            .iterator();
-		// Restore to original
-//		Git git = new Git(repository);
-//		git.reset().setMode(ResetType.HARD).call();
-//		git.checkout().call();
 		
 		// Do the reverts
 		count = 0;
 		Git git = new Git(repository);
-		while(count < 2 && iter.hasNext()) {
+		while(count < 10 && iter.hasNext()) {
 			RevCommit rev = iter.next();
-			git.revert().include(rev).call();
+			int commitDate = rev.getCommitTime();
+			fat.setRefDate(commitDate);
+//			git.revert().include(rev).call();
+			
+			// Flowers
+			File folder = new File("C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\src\\net\\java\\sip\\communicator\\impl\\protocol");
+			ArrayList<FlowerObject> objs = ParseMethod.parseFlowers(folder);
+			
 			count++;
-			System.out.println("Commit: " + rev + "Time: " + rev.getCommitTime() /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
+			System.out.println("Reverted: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
 		}
 		System.out.println("Done");
 		repository.close();
