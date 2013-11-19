@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -31,7 +32,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //	
 	int currentFrame = 0;
 	
-	int frameRate = 10;
+	int frameRate = 10; //millseconds
+	double framesPerSecond = 1/(((double)frameRate)/1000);
 	int currentTFrame = 0;
 	
 	Repository repo;
@@ -66,8 +68,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       addMouseListener(this);
 	       addMouseWheelListener(this);
 	       addMouseMotionListener(this);
-	       repo = new Repository("result.xml");
-	       this.setBackground(Color.WHITE);
+	       repo = new Repository("SampleXMLFile.xml");
 	}
 	
     @Override
@@ -84,7 +85,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //		    //System.out.println("Darker");
 //    	}
     	
-    	if(currentTFrame > frameRate){
+    	if(currentTFrame > framesPerSecond){
     		currentTFrame = 0;
     		
     		if(currentFrame < repo.frames.length-1)
@@ -130,8 +131,14 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     
 	private void doDrawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	
+		
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
 		drawZoomIn(g2);
 
+
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, Visualization.width,Visualization.height);
 		g.setColor(Color.BLACK);
 
 		drawDependencies(g2);
@@ -155,15 +162,15 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		double diffZoom = preZoom - (zoom);
 		
 		if(Math.abs(diffX) > maxZoomX){
-			preZoomX = preZoomX - diffX  / 50;			
+			preZoomX = preZoomX - diffX  / (framesPerSecond/2);			
 		}
 		
 		if(Math.abs(diffY) > maxZoomY){
-			preZoomY = preZoomY - diffY  / 50;	
+			preZoomY = preZoomY - diffY  / (framesPerSecond/2);	
 		}
 		
 		if(Math.abs(diffZoom) > maxZoom){
-			preZoom = preZoom - diffZoom / 50;
+			preZoom = preZoom - diffZoom / (framesPerSecond/2);
 		}
 		
 		//zoomX = preZoomX;
@@ -183,37 +190,6 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		if(hitFlower != null){
 			drawLinesToDependencies(hitFlower, g2);
 		}		
-	}
-
-	private void testCollision (Graphics2D g){
-//		int radius1 = 50;
-//		int radius2 = 50;
-//		int x1 = 20;
-//		int y1 = 20;
-//		int x2 = 150;
-//		int y2 = 150;
-//		
-//			
-//		g.setColor(Color.blue);
-//		g.fillOval(x1,y1,radius1*2,radius1*2);
-//		
-//		g.setColor(Color.red);
-//		g.fillOval(x2,y2,radius2*2,radius2*2);
-//		
-		Flower flower1 = new Flower(null, Color.BLUE, 100, 0, 0, 10, null, null );
-		Flower flower2 = new Flower(null, Color.RED, 100, 20, 250, 10, null, null);
-		double radius1 = flower1.size/2 * 3;
-		double radius2 = flower2.size/2 * 3;
-		
-		g.setColor(flower1.color);
-		g.fillOval(flower1.x-flower1.size/2,flower1.y-flower1.size/2,flower1.size,flower1.size);
-		drawPedals(g, flower1);
-		
-		g.setColor(flower2.color);
-		g.fillOval(flower2.x-flower2.size/2,flower2.y-flower2.size/2,flower2.size,flower2.size);
-		drawPedals(g, flower2);
-		
-		System.out.println("Collision Test: " + Flower.checkCollision(flower1.x,flower1.y,radius1,flower2.x,flower2.y,radius2));
 	}
 	
 	private void drawFlowers(Graphics2D g) {
@@ -254,15 +230,18 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			}
 			
 			flower.makeDarker();
+			flower.attraction(repo.flowers, framesPerSecond);
 			
 //			g.setColor(Color.black);
 //			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
 			g.setColor(flower.color);
-			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
+			
+			Ellipse2D.Double flowerShape = new Ellipse2D.Double(flower.x-flower.size/2, flower.y-flower.size/2, flower.size, flower.size);
+//			g.fillOval((int)(flower.x-flower.size/2),(int)(flower.y-flower.size/2),flower.size,flower.size);
+			g.fill(flowerShape);
 			
 			
-			
-			drawPedals(g, flower);
+			drawPetals(g, flower);
     	}
     	
     	
@@ -272,22 +251,25 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //			
 //			g.setColor(flower.color);
 //			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
-//			drawPedals(g, flower);
+//			drawPetals(g, flower);
 //		}
 		
 	}
 	
-	private void drawPedals(Graphics2D g, Flower flower){			
+	private void drawPetals(Graphics2D g, Flower flower){			
 		
-		int pedalSize = flower.size/2;
+		int petalSize = flower.size/2;
 		
 		AffineTransform oldXForm = g.getTransform();
 		
 		flower.numMethods = Math.min(flower.numMethods, 10);
 		
 		for(int i=0;i<flower.numMethods;i++){
-			g.fillOval(flower.x-pedalSize/2,flower.y + flower.size/2,pedalSize,pedalSize*2);
-//			g.draw(new Ellipse2D.Double(flower.x-pedalSize/2,flower.y + flower.size/2,pedalSize,pedalSize*2));
+			Ellipse2D.Double petalShape = new Ellipse2D.Double(flower.x-petalSize/2, flower.y + flower.size/2, petalSize, petalSize*2);
+			//g.fillOval((int)(flower.x-petalSize/2),(int)(flower.y + flower.size/2),petalSize,petalSize*2);
+			g.fill(petalShape);
+			
+//			g.draw(new Ellipse2D.Double(flower.x-petalSize/2,flower.y + flower.size/2,petalSize,petalSize*2));
 			g.rotate(Math.toRadians(360/flower.numMethods),flower.x,flower.y);
 		}
 		
@@ -310,14 +292,22 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	}
 
 	private void drawLinesToDependencies(Flower hitFlower, Graphics2D g2) {
-		String[] dependencies = hitFlower.dependencies;
+		Map<String, Integer> dependencies = hitFlower.dependencies;
+		
 		Flower flower;
-		for(int i=0; i<dependencies.length; i++){
-			flower = repo.flowers.get(dependencies[i]);
-			g2.draw(new Line2D.Double((double) hitFlower.x,(double) hitFlower.y,(double) flower.x, (double)flower.y));
+		
+		for (Map.Entry<String, Integer> entry : dependencies.entrySet()) {
+		    String methodName = entry.getKey();
+		    int callCount = entry.getValue();
+
+			flower = repo.flowers.get(methodName);
+					
+			if(flower != null){				
+			g2.draw(new Line2D.Double(hitFlower.x,hitFlower.y,flower.x,flower.y));
+			}
 		}
 	}
-
+	
 	private Flower checkHit(int xpos, int ypos) {
 		return Flower.getCollidedFlower(xpos, ypos, 1, repo.flowers);
 	}

@@ -97,16 +97,21 @@ public class Repository {
 //					Boolean changed = (strChanged.equals("true"))? true: false;					
 //					System.out.println("Changed : " + changed);
 					
-					NodeList dependencyName = eElement.getElementsByTagName("dependency");
-					String[] dependencies = new String[dependencyName.getLength()];
+					NodeList dependencyName = eElement.getElementsByTagName("method");
+//					String[] dependencies = new String[dependencyName.getLength()];
+					Map<String, Integer> dependencies = new HashMap<String, Integer>();
 					System.out.println("Dependency : " + dependencyName.getLength());
 					for ( int k = 0; k < dependencyName.getLength(); k++ ) {
 						Node dependencyNameNode = dependencyName.item(k);													
 						Element dependencyNameElement = (Element) dependencyNameNode;
 						String methods = dependencyNameElement.getTextContent();
-						//System.out.println("Dependency : " + methods);
+						int callCount = Integer.parseInt(dependencyNameElement.getAttribute("count"));
+						System.out.println("Dependency : " + methods);
 						
-						dependencies[k] = methods;
+//						dependencies[k].name = methods;
+//						dependencies[k].count = callCount;
+						
+						dependencies.put(methods, new Integer(callCount));
 					}
 					
 					
@@ -143,7 +148,7 @@ public class Repository {
 			Flower flower = lastFrame.flowers[i];
 			
 			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
-			maxDependenciesNumber = Math.max(maxDependenciesNumber, lastFrame.flowers[i].dependencies.length);
+			//maxDependenciesNumber = Math.max(maxDependenciesNumber, lastFrame.flowers[i].dependencies.size());
 			if(this.flowers.get(lastFrame.flowers[i].methodName) == null){
 				this.flowers.put(lastFrame.flowers[i].methodName, new Flower(lastFrame.flowers[i]));
 			}
@@ -237,8 +242,8 @@ public class Repository {
 			
 //			System.out.println("Dependencies length: " + flower.dependencies.length );
 			
-			if(flower.dependencies.length > highest){
-				highest = flower.dependencies.length;
+			if(flower.dependencies.size() > highest){
+				highest = flower.dependencies.size();
 				highestIndex = i;
 			}
 		}
