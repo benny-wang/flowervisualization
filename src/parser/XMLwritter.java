@@ -90,7 +90,7 @@ public class XMLwritter {
 						dep.appendChild(doc.createTextNode(tempvalue));
 						
 						
-						Attr tempattr = doc.createAttribute("name");
+						Attr tempattr = doc.createAttribute("count");
 						tempattr.setValue(entry.getValue()+"");
 						dep.setAttributeNode(tempattr);
 						
