@@ -2,6 +2,7 @@ package parser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,9 +48,7 @@ public class XMLwritter {
 					Element flower = doc.createElement("flower");
 					
 					
-					Attr floId = doc.createAttribute("id");
-					floId.setValue(""+i);
-					flower.setAttributeNode(floId);
+
 					
 					
 					
@@ -79,10 +78,22 @@ public class XMLwritter {
 					flower.appendChild(numMethods);
 					
 					Element dependency = doc.createElement("dependencies");
-					for(String s : temp.getImportClasses())
+					for(Map.Entry<String, Integer> entry : temp.getImportClasses().entrySet())
 					{
+						String tempvalue = entry.getKey();
+						if(tempvalue=="MethodNumber")
+						{
+							continue;
+						}
+						
 						Element dep = doc.createElement("dependency");
-						dep.appendChild(doc.createTextNode(s));
+						dep.appendChild(doc.createTextNode(entry.getValue()+""));
+						
+						
+						Attr tempattr = doc.createAttribute("name");
+						tempattr.setValue(tempvalue);
+						dep.setAttributeNode(tempattr);
+						
 						dependency.appendChild(dep);
 					}
 					flower.appendChild(dependency);

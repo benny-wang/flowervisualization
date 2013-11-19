@@ -1,22 +1,31 @@
 package parser;
 
 
-import japa.parser.JavaParser;
-import japa.parser.ParseException;
-import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.body.BodyDeclaration;
-import japa.parser.ast.body.FieldDeclaration;
-import japa.parser.ast.body.MethodDeclaration;
-import japa.parser.ast.body.TypeDeclaration;
-import japa.parser.ast.body.VariableDeclarator;
-import japa.parser.ast.expr.NameExpr;
+
 
 import java.lang.reflect.*;
 import java.io.*;
 import java.lang.String.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.TypeLiteral;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 
 
@@ -41,69 +50,13 @@ public class ParseMethod {
 	}
 	
 	
-	public static ArrayList<String> getDependencies(CompilationUnit cu)
-	{
-		ArrayList<String> dependencies = new ArrayList<String>();
-		
-		//TODO
-		
-		return dependencies;
-		
-		
-	}
+
 	
 	
-	public static ArrayList<String> getImports(CompilationUnit cu)
-	{
-		ArrayList<String> iypes = new ArrayList<String>();
-		List<ImportDeclaration> dypes = cu.getImports();
-		if(dypes!=null){
-		for(ImportDeclaration im : dypes)
-		{
-			String name = im.toString();
-			iypes.add(name);
-		}
-		}
-		
-		return iypes;
-	}
+
 	
 	
-	public static int getMethodNumber(CompilationUnit cu)
-	{
-		int methodNumber =0;
-		
-		
-		 List<TypeDeclaration> types = cu.getTypes();
-		 
-		 //System.out.println("Import Name is: " + cu.getImports());
-	        for (TypeDeclaration type : types) {
-	        
-	        	
-	            List<BodyDeclaration> members = type.getMembers();
-	            
-	
-	            if(members == null)
-	            	continue;
-	            for (BodyDeclaration member : members) {
-	            	
-	            	
-	            	if (member instanceof FieldDeclaration)
-                    {
-                        FieldDeclaration myType = (FieldDeclaration) member;
-                        List <VariableDeclarator> myFields = myType.getVariables();
-                        System.out.println("Fields: " + myType.getType() + ":" + myFields.toString());
-                    }
-	            	
-	                if (member instanceof MethodDeclaration) {
-	                    MethodDeclaration method = (MethodDeclaration) member;
-	                    methodNumber++;
-	                    
-	                }
-	            }
-	        }
-	      return methodNumber;
-	}
+
 	
 	public static int getLineNumber(File file)
 	{
@@ -147,36 +100,176 @@ public class ParseMethod {
 		
 	}
 	
+
+	
 	
 	private static ArrayList<FlowerObject> parseFlowers(File Directory)
 	{
+		Date date = new Date();
+		String sourceDirectory = "";
+		String[] rootPathElements =Directory.getAbsolutePath().split("\\\\");
 		
-		String parentFolderName = Directory.getName();
-		
-		ArrayList<FlowerObject> listOfFlowers = new ArrayList<FlowerObject>();
-		ArrayList<File> filelist = new ArrayList<File>();
-		filelist = traverseFolder(Directory, filelist);
-		System.out.println(filelist.size());
-
-		for(File file : filelist)
+		for(String s : rootPathElements)
 		{
-		int methodNumber = 0;
-		int lineNumber = 0;
+			if(s.equals("src"))
+			{
+				sourceDirectory+=s;
+				break;
+			}
+			sourceDirectory=sourceDirectory+s+"\\";
+		}
+		
+		System.out.println(sourceDirectory);
+
+		ArrayList<FlowerObject> listOfFlowers = new ArrayList<FlowerObject>();
+		
+		ArrayList<File> filePaths = new ArrayList<File>();
+		
+		filePaths = traverseFolder(Directory, filePaths);
+		System.out.println(filePaths.size());
+
+		final Set<String> dependencies = new HashSet<String>();	
+		
+		
+		
+		for(File file : filePaths)
+		{
+			dependencies.add(file.getName().split("\\.")[0]);
+		}
+		
+		
+		for(File file : filePaths)
+		{
+		
+	
 		String pack = "";
 		String name = "";
-		ArrayList<String> imports;
+		int LineNumber = 0;
+		BufferedReader in=null;
 
+		final HashMap<String, Integer> map = new HashMap<String,Integer>(25); 
+		map.put("MethodNumber", 0);
 		
-		FileInputStream in=null;
-		CompilationUnit cu=null;
-	        try {
-	        	
-	        	in = new FileInputStream(file);
+		 
+		try {
+	        	ASTParser parser = ASTParser.newParser(AST.JLS3);
+	        	in = new BufferedReader(new FileReader(file));
 	            // parse the file
-	            cu = JavaParser.parse(in);
-	        } catch (ParseException e) {
+	        	String fi = "";
+	        	String sCurrentLine;
+	        	while ((sCurrentLine = in.readLine()) != null) {
+					fi=fi+"\n"+sCurrentLine;
+					LineNumber++;
+				}
+	            
+	           parser.setSource(fi.toCharArray());
+	           parser.setKind(ASTParser.K_COMPILATION_UNIT);
+	        
+	   			parser.setResolveBindings(true); // we need bindings later on
+	   			parser.setUnitName(file.getName());
+	   			String[] srcPath = {sourceDirectory};
+	   			parser.setEnvironment(null, srcPath, new String[] {"UTF-8"}, true);
+	      
+	         final CompilationUnit cu = (CompilationUnit) parser.createAST(null); 
+	        if(cu==null)
 	        	continue;
-			} catch (FileNotFoundException e) {
+	        if(cu.getPackage()!=null) {
+	        String[] temp=cu.getPackage().toString().split("\\.");
+	        pack = temp[temp.length-1];
+	        pack = pack.substring(0,pack.length()-2);
+	        }
+	        
+	        name=file.getName().split("\\.")[0]; 
+	        cu.accept(new ASTVisitor() {
+	        	
+	   			public boolean visit(FieldDeclaration node){
+	   				String value = node.getType().toString();
+	   				if(!dependencies.contains(value))
+	   					return true;
+	   				if(map.containsKey(value))
+	   				{
+	   					map.put(value,map.get(value)+1);
+	   				}
+	   				else
+	   				{
+	   					map.put(value, 1);
+	   				}
+	   				return true;
+	   			}
+	   			
+	   			public boolean visit(MethodDeclaration node){
+	   				
+	   				if(map.containsKey("MethodNumber"))
+	   				{
+	   					map.put("MethodNumber",map.get("MethodNumber")+1);
+	   				}
+	   
+	   				return true;
+	   			}
+	   			
+	   			public boolean visit(TypeLiteral node){
+	   					String value = node.getType().toString();
+	   					if(!dependencies.contains(value))
+		   					return true;
+		   				if(map.containsKey(value))
+		   				{
+		   					map.put(value,map.get(value)+1);
+		   				}
+		   				else
+		   				{
+		   					map.put(value, 1);
+		   				}
+	   				return true;
+	   			}
+	   			
+	   				
+	   			public boolean visit(VariableDeclarationStatement node){
+	   				String value = node.getType().toString();
+	   				if(!dependencies.contains(value))
+	   					return true;
+	   				if(map.containsKey(value))
+	   				{
+	   					map.put(value,map.get(value)+1);
+	   				}
+	   				else
+	   				{
+	   					map.put(value, 1);
+	   				}
+	   				return true;
+	   			}
+	   			public boolean visit(MethodInvocation node) {
+					
+					Expression expression = node.getExpression();
+	                if (expression != null) {
+	                    ITypeBinding typeBinding = expression.resolveTypeBinding();
+	                    if (typeBinding != null) {
+	                    	
+	                        String value = typeBinding.getName();
+	                        if(dependencies.contains(value))
+	                        {
+	    	   				if(map.containsKey(value))
+	    	   				{
+	    	   					map.put(value,map.get(value)+1);
+	    	   				}
+	    	   				else
+	    	   				{
+	    	   					map.put(value, 1);
+	    	   				}
+	                        }
+	                    }
+	                }
+					return true;
+				}
+	   		});
+	   		
+	   		
+	       
+	   		
+	   		
+	        }  catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -188,51 +281,33 @@ public class ParseMethod {
 					e.printStackTrace();
 				}
 	        }
-	        
-	        if(cu==null)
-	        	continue;
-	        
-	        
-	        
-	       methodNumber = getMethodNumber(cu);
-	       
-	       if(methodNumber==0)
-	    	   continue;
-	       
-	       lineNumber = getLineNumber(file);
-	       
+		
 
-	       String[] names = file.getPath().split("\\\\");
-	       int i = 0;
-	       for(; i<names.length;i++)
-	       {
-	    	   
-	    	   if(names[i].equals("src"))
-	    	   {
-	    		   //System.out.println(names[i]);
-	    		   break;
-	    	   }
-	       }
-	       while(i<names.length)
-	       {
-	    	   name+=("\\"+names[i]);
-	    	   i++;
-	       }
-	    	 System.out.println(name+"============");
-	       pack = cu.getPackage().getName().toString();
-	   
-	       imports = getImports(cu);
-	       
+		
 
 	       FlowerObject fObj = new FlowerObject();
-	       fObj.setLineNumber(lineNumber);
-	       fObj.setMethodNumber(methodNumber);
+	       fObj.setLineNumber(LineNumber);
+	       fObj.setMethodNumber(map.get("MethodNumber"));
 	       fObj.setName(name);
 	       fObj.setPackname(pack);
-	       fObj.setImportClasses(imports);
+	       fObj.setImportClasses(map);
+	       if(map.get("MethodNumber")==0)
+	       {
+	    	   continue;
+	       }
 	       listOfFlowers.add(fObj);
-  
+	       
+//	       System.out.println("Line Number is: "+LineNumber);
+//	       System.out.println(map.get("MethodNumber"));
+//	       System.out.println("Name is : "+name);
+//	       System.out.println("Package is: "+pack);
+//	       System.out.println("Depenedency: ");
+//	       for(Map.Entry<String, Integer> entry : map.entrySet())
+//	    	   System.out.println(entry.getKey()+" "+entry.getValue());
+	       
 		}	
+//		System.out.println(filePaths.size());
+//		System.out.println((new Date()).getTime()-date.getTime());
 		return listOfFlowers;
 	}
 }

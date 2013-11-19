@@ -70,7 +70,7 @@
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
 			<dependency>
-				<method count="1">parser</method>
+				<method count="1">calculator</method>
 				<method count="15">generator</method>
 			</dependency>
 		</flower>

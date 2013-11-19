@@ -63,7 +63,7 @@ public class Test {
 	public static void main(String args[]){
 		
 		
-		File folder = new File("C:\\Users\\Hsiao\\Documents\\GitHub\\jitsi\\src\\net\\java\\sip\\communicator\\impl\\protocol");
+		File folder = new File("C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\src\\net\\java\\sip\\communicator\\impl\\protocol");
 		//"C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\src\\net\\java\\sip\\communicator\\impl\\protocol\\icq\\IcqAccountID.java"
 		
 		
@@ -124,8 +124,8 @@ public class Test {
 		
 	   
 		parser.setUnitName("jitsi/src/net/java/sip/communicator/impl/protocol/dict/ContactDictImpl.java");
-		String[] classPath = {"C:\\Users\\Hsiao\\Documents\\GitHub\\jitsi\\lib"};
-		String[] srcPath = {"C:\\Users\\Hsiao\\Documents\\GitHub\\jitsi\\src"};
+		String[] classPath = {"C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\lib"};
+		String[] srcPath = {"C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\src"};
 		parser.setEnvironment(null, srcPath, new String[] {"UTF-8"}, true);
 	
 		
@@ -133,15 +133,9 @@ public class Test {
  
 		cu.accept(new ASTVisitor() {
  
-//			Set names = new HashSet();
-// 
-//			public boolean visit(VariableDeclarationFragment node) {
-//				SimpleName name = node.getName();
-//				this.names.add(name.getIdentifier());
-//				System.out.println("Declaration of '"+name+"' at line"+cu.getLineNumber(name.getStartPosition()));
-//				return false; // do not continue to avoid usage info
-//			}
-// 
+
+
+ 
 //			public boolean visit(SimpleName node) {
 //				if (this.names.contains(node.getIdentifier())) {
 //				System.out.println("Usage of '" + node + "' at line " +	cu.getLineNumber(node.getStartPosition()));
@@ -164,16 +158,7 @@ public class Test {
                 	System.out.println("Method: " + node.getName().getIdentifier());
                 }
                 
-//                IMethodBinding binding = node.resolveMethodBinding();
-//                if (binding != null) {
-//                    ITypeBinding type = binding.getDeclaringClass();
-//                    if (type != null) {
-//                        System.out.print(" Decl: " + type.getName());
-//                    }
-//                }
-				
-				
-					//System.out.println("Method name: "+ node.getName().getIdentifier() + " Type: " + node.resolveTypeBinding());
+
 				return true;
 			}
  
