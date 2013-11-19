@@ -172,7 +172,7 @@ public class Flower {
 			double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
 			double distance = getDistance(attrFlower);
 			
-			double speed = .5 * ( flower.size / 2 * 3  * 3 - distance) * (repulMass/mass);
+			double speed = 1 * ( flower.size / 2 * 3  * 3 - distance) * (repulMass/mass);
 			
 			//speed = speed * speed;
 			//System.out.println( speed);
@@ -239,7 +239,7 @@ public class Flower {
 //				continue;
 //			}
 				
-				double speed = distance * (mass/attrMass);
+				double speed = distance * (mass/attrMass) * Math.sqrt(callCount);
 				
 				double x = attrFlower.x - speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
 				double y = attrFlower.y - speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;

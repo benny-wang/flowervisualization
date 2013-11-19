@@ -90,14 +90,14 @@ public class Repository {
 					
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
 					//System.out.println("Number of Methods : " + numMethods);
-					String contributor = eElement.getElementsByTagName("contributor").item(0).getTextContent();
+					String contributor = "Ben";//eElement.getElementsByTagName("contributor").item(0).getTextContent();
 					System.out.println("Contributor : " + contributor);
 					
 //					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
 //					Boolean changed = (strChanged.equals("true"))? true: false;					
 //					System.out.println("Changed : " + changed);
 					
-					NodeList dependencyName = eElement.getElementsByTagName("method");
+					NodeList dependencyName = eElement.getElementsByTagName("dependency");
 //					String[] dependencies = new String[dependencyName.getLength()];
 					Map<String, Integer> dependencies = new HashMap<String, Integer>();
 					System.out.println("Dependency : " + dependencyName.getLength());
