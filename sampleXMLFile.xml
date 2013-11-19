@@ -9,9 +9,6 @@
 			<y>300</y>
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
-			<dependency>
-				<method name="0"></method>
-			</dependency>
 		</flower>
 	</frame>
 	<frame id="1">
@@ -23,9 +20,6 @@
 			<y>300</y>
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
-			<dependency>
-				<method name="1"></method>
-			</dependency>
 		</flower>
 		<flower id="1">
 			<name>generator</name>
@@ -46,10 +40,6 @@
 			<y>300</y>
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
-			<dependency>
-				<method name="1"></method>
-				<method name="2"></method>
-			</dependency>
 		</flower>
 		<flower id="1">
 			<name>generator</name>
@@ -80,8 +70,8 @@
 			<numMethods>7</numMethods>
 			<contributor>Ben Hsiao</contributor>
 			<dependency>
-				<method name="1"></method>
-				<method name="2"></method>
+				<method count="1">parser</method>
+				<method count="15">generator</method>
 			</dependency>
 		</flower>
 		<flower id="1">
