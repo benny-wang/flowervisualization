@@ -178,6 +178,9 @@ public class Flower {
 			
 			double speed = 1 * ( flower.size / 2 * 3  * 3 - distance) * (repulMass/mass);
 			
+//			if(attrFlower.packageName != flower.packageName)
+//				speed *= 15;
+			
 			//speed = speed * speed;
 			//System.out.println( speed);
 			
@@ -213,6 +216,25 @@ public class Flower {
 		
 	}
 	
+	public void biDirectionAttraction (Flower attrFlower, int callCount, double framesPerSecond){
+		Flower flower = this;
+		
+		double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
+		double distance = getDistance(attrFlower) - bflowerRadius;
+		
+		int mass = flower.dependencies.size() + 1;			
+		int attrMass = attrFlower.dependencies.size() + 1;
+		
+		double speed = distance * (attrMass/mass) * Math.sqrt(callCount);
+		
+		double x = flower.x + speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
+		double y = flower.y + speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
+		
+		flower.x = x;
+		flower.y = y;
+		
+	}
+	
 	public void attraction(Map<String, Flower> flowers, double framesPerSecond){
 		
 		Flower flower = this;
@@ -245,10 +267,13 @@ public class Flower {
 				
 				double speed = distance * (mass/attrMass) * Math.sqrt(callCount);
 				
+//				if(attrFlower.packageName == flower.packageName)
+//					speed *= 5;
+				
 				double x = attrFlower.x - speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
 				double y = attrFlower.y - speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
 				
-
+				
 				
 				//System.out.println("X: " + speed * xDiff / framesPerSecond + " Y: " + speed * yDiff / framesPerSecond);
 								
@@ -258,6 +283,8 @@ public class Flower {
 					attrFlower.x = x;
 					attrFlower.y = y;
 				//}
+					
+					biDirectionAttraction(attrFlower,callCount,framesPerSecond);
 			}			
 		}
 		
