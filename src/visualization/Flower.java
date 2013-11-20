@@ -74,14 +74,14 @@ public class Flower {
 	    this.color = darkerColor;
 	}
 
-	public static Flower getCollidedFlower(int x, int y, int diameter, Map<String, Flower> flowers, double zoom, double zoomX, double zoomY, double draggedX, double draggedY) {
+	public static Flower getCollidedFlower(double x, double y, Map<String, Flower> flowers, double zoom, double zoomX, double zoomY, double draggedX, double draggedY) {
 		
 		Iterator it = flowers.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry pairs = (Map.Entry) it.next();
 			Flower flower = (Flower) pairs.getValue();
 			if (flower != null && !(flower.x == 0 && flower.y == 0)) {
-				if (checkCollision(x, y, 1, flower.x+(zoomX-zoomX*zoom), flower.y+(zoomY-zoomY*zoom), ((double) flower.size*zoom) / 2 * 3)) {
+				if (checkCollision((x - draggedX - zoomX)/zoom, (y - draggedY - zoomY)/zoom, 1, flower.x, flower.y, ((double) flower.size) / 2 * 3)) {
 					return flower;
 				}
 			}

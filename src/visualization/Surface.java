@@ -161,6 +161,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 		drawFlowerInformation(g2);
 		g2.setTransform(at1);
+		
+		
     }
 	
 	private void drawDragged(Graphics2D g2) {
@@ -245,8 +247,10 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		AffineTransform old = g2.getTransform();
 		AffineTransform tr2 = new AffineTransform(old);
 		
-		tr2.translate(preZoomX, preZoomY);
-		tr2.scale(preZoom, preZoom);
+		tr2.translate(preZoomX, preZoomY);		
+		tr2.scale(preZoom, preZoom);	
+		
+		//System.out.println(preZoomX + " a:" + preZoom);
 		
 		g2.setTransform(tr2);
 
@@ -355,7 +359,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		int xpos = e.getX(); 
 		int ypos = e.getY();
 		System.out.println(xpos+ "  -  " + ypos);
-		hitFlower = checkHit(xpos-draggedX,ypos-draggedY);
+		hitFlower = checkHit(xpos,ypos);
 
 	}
 
@@ -377,7 +381,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	}
 	
 	private Flower checkHit(int xpos, int ypos) {
-		return Flower.getCollidedFlower(xpos, ypos, 1, repo.flowers, preZoom, zoomX, zoomY, draggedX, draggedY);
+		return Flower.getCollidedFlower(xpos, ypos, repo.flowers, preZoom, preZoomX, preZoomY, draggedX, draggedY);
 	}
 
 	@Override
