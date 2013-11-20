@@ -468,8 +468,17 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	int draggedY;
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		
 		int newX = e.getX() - pressedX;
 		int newY = e.getY() - pressedY;
+		
+		if((e.getModifiers() & KeyEvent.CTRL_MASK) == KeyEvent.CTRL_MASK ){
+			 //hitFlower = checkHit(e.getX(),e.getY());
+			if(hitFlower != null){
+				hitFlower.x = (e.getX() - draggedX - preZoomX)/preZoom;
+				hitFlower.y = (e.getY() - draggedY - preZoomY)/preZoom;
+			}
+		}else{		
 
 		// increment last offset to last processed by drag event.
 		pressedX += newX;
@@ -479,7 +488,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		draggedX += newX;
 		draggedY += newY;
 
-		repaint();
+		//repaint();
+		}
 	}
 
 	@Override
