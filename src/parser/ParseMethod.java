@@ -289,6 +289,9 @@ public class ParseMethod {
 	       fObj.setLineNumber(LineNumber);
 	       fObj.setMethodNumber(map.get("MethodNumber"));
 	       fObj.setName(name);
+	       map.remove(name);
+	       
+	       
 	       fObj.setPackname(pack);
 	       fObj.setImportClasses(map);
 	       if(map.get("MethodNumber")==0)
