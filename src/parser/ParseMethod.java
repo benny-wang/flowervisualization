@@ -40,11 +40,13 @@ public class ParseMethod {
 		int Mcount=0,MthdLen=0;
 		
 		String FolderPath = "";
-		File folder = new File("C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\src\\net\\java\\sip\\communicator\\impl\\protocol");
+		File folder = new File("../jitsi/src/net/java/sip/communicator/impl/protocol");
 		
 		
 		ArrayList<FlowerObject> objs = parseFlowers(folder);
-		
+		for(FlowerObject flower : objs) {
+			System.out.println(flower.getName());
+		}
 		XMLwritter.GenerateXML(objs);
 
 	}
@@ -103,7 +105,7 @@ public class ParseMethod {
 
 	
 	
-	private static ArrayList<FlowerObject> parseFlowers(File Directory)
+	public static ArrayList<FlowerObject> parseFlowers(File Directory)
 	{
 		Date date = new Date();
 		String sourceDirectory = "";

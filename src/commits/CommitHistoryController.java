@@ -26,6 +26,8 @@ import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 
 import parser.FlowerObject;
 import parser.ParseMethod;
+import parser.XMLwritter;
+import parser.XMLwritter2;
 
 /* placeholder class for the commit history controller/iterator
   This class is supposed to iterate through a list of commits,
@@ -52,6 +54,7 @@ public class CommitHistoryController {
 
 			int commitDate = rev.getCommitTime();
 			String hash = rev.getName();
+			String author = rev.getCommitterIdent().getName();
 			
 //	        System.out.printf("Commit: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
 //	        System.out.printf(" Date: %s\n", new Date(((long) commitDate)*1000));
@@ -63,7 +66,14 @@ public class CommitHistoryController {
 			  tw.addTree(rev.getTree());
 			  while (tw.next()) {
 //        		System.out.println(MessageFormat.format("({0} {1} {2}", ChangeType.ADD, tw.getRawMode(0), tw.getPathString()));
-				files.add(tw.getPathString());
+				String path = tw.getPathString();
+//				files.add(path);
+				int start = path.lastIndexOf('/');
+				int end = path.lastIndexOf(".java");
+    			if (start > 0 && end > 0) {
+    				path = path.substring(path.lastIndexOf('/')+1,end);
+    			}
+				files.add(path);
 			  }
 			  tw.release();
 	        } else {
@@ -79,14 +89,20 @@ public class CommitHistoryController {
 	        		case ADD:
 	        		case MODIFY:
 	        		case RENAME:
-	        			files.add(diff.getNewPath());
+	        			String path = diff.getNewPath();
+	    				int start = path.lastIndexOf('/');
+	    				int end = path.lastIndexOf(".java");
+	        			if (start > 0 && end > 0) {
+	        				path = path.substring(path.lastIndexOf('/')+1,end);
+	        			}
+	    				files.add(path);
 	        			break;
 	        		default:
 	        			break;
 	        		}
 	        	}
 	        }
-	        commits.add(new Commit(commitDate,hash,files));
+	        commits.add(new Commit(commitDate,hash,author,files));
 	        count++;
 	        rw.dispose();
 	    }
@@ -105,15 +121,33 @@ public class CommitHistoryController {
 		// Do the reverts
 		count = 0;
 		Git git = new Git(repository);
-		while(count < 10 && iter.hasNext()) {
+		while(count < 1 && iter.hasNext()) {
 			RevCommit rev = iter.next();
 			int commitDate = rev.getCommitTime();
 			fat.setRefDate(commitDate);
 //			git.revert().include(rev).call();
 			
 			// Flowers
-//			File folder = new File("C:\\Users\\Majin\\Documents\\GitHub\\jitsi\\src\\net\\java\\sip\\communicator\\impl\\protocol");
-//			ArrayList<FlowerObject> objs = ParseMethod.parseFlowers(folder);
+			File folder = new File("../jitsi/src/net/java/sip/communicator/impl/protocol");
+			ArrayList<FlowerObject> flowers = ParseMethod.parseFlowers(folder);
+			for(FlowerObject flower : flowers) {
+//				String path = flower.getName().replaceAll("\\","/");
+				String path = flower.getName();
+				Commit commit = fat.getCommit(path);
+				
+				if (commit != null) {
+					int age = commitDate - commit.getDate();
+					flower.setAge(age);
+					flower.setLastCommitter(commit.getAuthor());
+				} else {
+					flower.setAge(-1);
+					flower.setLastCommitter("N/A");
+				}
+			}
+			XMLwritter2.GenerateXML(flowers,commitDate,count);
+			for(FlowerObject flower : flowers) {
+				System.out.printf("Committer:  %s Age: %s \n", flower.getLastCommitter(), flower.getAge());
+			}
 			
 			count++;
 			System.out.println("Reverted: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);

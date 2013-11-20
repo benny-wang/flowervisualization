@@ -14,7 +14,8 @@ public class FlowerObject {
 	private HashMap<String,Integer> importClasses = new HashMap<String,Integer>();
 	private double xCoord;
 	private double yCoord;
-	
+	private int	age;
+	private String lastCommitter;
 	
 	public double getxCoord() {
 		return xCoord;
@@ -57,6 +58,18 @@ public class FlowerObject {
 	}
 	public void setImportClasses(HashMap<String,Integer> importClasses) {
 		this.importClasses = importClasses;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setLastCommitter(String lastCommitter) {
+		this.lastCommitter = lastCommitter;
+	}
+	public String getLastCommitter() {
+		return lastCommitter;
 	}
 	
 	

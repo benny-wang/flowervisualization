@@ -17,7 +17,7 @@ public class FileAgeTool {
 			}
 		});
 		this.commits = commits;
-		refDate = 0;
+		refDate = commits.get(0).getDate();
 	}
 	
 //	public void addCommit(Commit commit) {
@@ -38,5 +38,17 @@ public class FileAgeTool {
 			}
 		}
 		return -1;
+	}
+	
+	public Commit getCommit(String file) {
+		Iterator<Commit> iter = commits.iterator();
+		while(iter.hasNext()) {
+			Commit commit = iter.next();
+			int date = commit.getDate();
+			if (date <= refDate && commit.containsFile(file)) {
+				return commit;
+			}
+		}
+		return null;
 	}
 }

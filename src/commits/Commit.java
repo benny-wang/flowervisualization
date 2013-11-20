@@ -8,10 +8,12 @@ public class Commit {
 	private int date; // seconds since epoch
 	private String hash;
 	private ArrayList<String> files;
+	private String author;
 	
-	public Commit(int date, String hash, ArrayList<String> changedFiles) {
+	public Commit(int date, String hash, String author, ArrayList<String> changedFiles) {
 		this.date = date;
 		this.hash = hash;
+		this.author = author;
 		this.files = changedFiles;
 	}
 	
@@ -23,6 +25,10 @@ public class Commit {
 		return hash;
 	}
 	
+	public String getAuthor() {
+		return author;
+	}
+	
 	public ArrayList<String> getFiles() {
 		return files;
 	}
@@ -32,7 +38,7 @@ public class Commit {
 	}
 	
 	public void print() {
-		System.out.printf("Commit: %s Date: %s\n", hash, new Date(((long) date)*1000));
+		System.out.printf("Author: %s Commit: %s Date: %s\n", author, hash, new Date(((long) date)*1000));
 		for(String file : files) {
 			System.out.println("  -" + file);
 		}
