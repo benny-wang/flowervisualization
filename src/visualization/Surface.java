@@ -69,7 +69,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       addMouseListener(this);
 	       addMouseWheelListener(this);
 	       addMouseMotionListener(this);
-	       repo = new Repository("result.xml");
+	       repo = new Repository("sampleXMLFile.xml");
 	       setBackground(Color.white);
 	       setOpaque(true);
 	       setDoubleBuffered(true);
@@ -132,9 +132,9 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
     	}
     }
-    
+    Graphics2D g2;
     private void doDrawing(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
+		g2 = (Graphics2D) g;
 		AffineTransform at1 = g2.getTransform();
 		drawDragged(g2);
 
@@ -296,8 +296,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			}
 			
 			flower.makeDarker();
-			flower.attraction(repo.flowers, framesPerSecond);
-			flower.repulsion(repo.flowers, framesPerSecond);
+			//flower.attraction(repo.flowers, framesPerSecond);
+		//	flower.repulsion(repo.flowers, framesPerSecond);
 			
 //			g.setColor(Color.black);
 //			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
@@ -354,6 +354,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	public void mouseClicked(MouseEvent e) {
 		int xpos = e.getX(); 
 		int ypos = e.getY();
+		System.out.println(xpos+ "  -  " + ypos);
 		hitFlower = checkHit(xpos-draggedX,ypos-draggedY);
 
 	}
@@ -376,7 +377,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	}
 	
 	private Flower checkHit(int xpos, int ypos) {
-		return Flower.getCollidedFlower(xpos, ypos, 1, repo.flowers);
+		return Flower.getCollidedFlower(xpos, ypos, 1, repo.flowers, preZoom, zoomX, zoomY, draggedX, draggedY);
 	}
 
 	@Override
