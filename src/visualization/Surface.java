@@ -59,6 +59,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 	private int zoomHeight = getHeight();
 	
+	private boolean setPackageColor = true;
+	
 	public Surface () {
 		Initialize();
 	}
@@ -189,7 +191,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 			// for(Contributor contributor : repo.contributorColor.values()){
 
-			Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds("Contributor: " + hitFlower.contributor, g);
+			Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds("Class name: " + hitFlower.methodName, g);
 			double nameWidth = nameRect.getWidth();
 			String contributor = "Dependency: ";
 			boolean first = true;
@@ -208,12 +210,14 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			// g.setColor(contributor.color);
 			g.fillRect( x, (int) y, 25, 25);
 			g.setColor(Color.black);
-			g.drawString("Contributor: " + hitFlower.contributor,  x,  y+15);
+			g.drawString("Class: " + hitFlower.methodName,  x,  y+15);
 			//g.drawString(hitFlower.contributor,  x,  y );
 
 			//g.fillRect( x, (int) y, 25, 25);
 			g.setColor(Color.black);
-			g.drawString(contributor,  x,  y+25);
+			//g.drawString(contributor,  x,  y+25);
+			g.drawString("Package: " + hitFlower.packageName,  x,  y+25);
+			
 
 			}
 
@@ -305,7 +309,17 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			
 //			g.setColor(Color.black);
 //			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
-			g.setColor(flower.color);
+			
+			if(setPackageColor){
+				
+				FlowerPackage fPackage = repo.packageColor.get(flower.packageName);			
+				
+				if(fPackage != null)
+					g.setColor(fPackage.color);
+				else
+					g.setColor(flower.color);
+			}else
+				g.setColor(flower.color);
 			
 			Ellipse2D.Double flowerShape = new Ellipse2D.Double(flower.x-flower.size/2, flower.y-flower.size/2, flower.size, flower.size);
 //			g.fillOval((int)(flower.x-flower.size/2),(int)(flower.y-flower.size/2),flower.size,flower.size);

@@ -29,6 +29,8 @@ public class Flower {
 	public String contributor;
 	public int numMethods;
 	
+	public String packageName;
+	
 	public boolean changed;
 	
 	public String methodName;
@@ -58,6 +60,7 @@ public class Flower {
 		this.methodName = flower.methodName;
 		this.dependencies = flower.dependencies;
 		this.changed = false;
+		this.packageName = flower.packageName;
 	}
 	
 	public void makeDarker(){

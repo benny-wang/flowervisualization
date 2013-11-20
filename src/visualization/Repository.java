@@ -29,6 +29,7 @@ Int - current commit number
 
 public class Repository {
 	public Map<String, Contributor> contributorColor = new HashMap<String, Contributor>();
+	public Map<String, FlowerPackage> packageColor = new HashMap<String, FlowerPackage>();
 	public Frame[] frames;
 	
 	public int classNum;
@@ -92,6 +93,9 @@ public class Repository {
 					//System.out.println("Number of Methods : " + numMethods);
 					String contributor = "Ben";//eElement.getElementsByTagName("contributor").item(0).getTextContent();
 					System.out.println("Contributor : " + contributor);
+										
+					String packageName = eElement.getElementsByTagName("package").item(0).getTextContent();
+					System.out.println("Package : " + packageName);
 					
 //					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
 //					Boolean changed = (strChanged.equals("true"))? true: false;					
@@ -121,8 +125,17 @@ public class Repository {
 						int B= (int)(Math.random()*256);
 						contributorColor.put(contributor, new Contributor(contributor, new Color(R,G,B)));
 					}
+										
+					if(packageColor.get(packageName) == null){
+						int R = (int)(Math.random()*256);
+						int G = (int)(Math.random()*256);
+						int B= (int)(Math.random()*256);
+						packageColor.put(packageName, new FlowerPackage(packageName, new Color(R,G,B)));
+					}
+					
 					Flower flower = new Flower(methodName, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies);
 					flower.changed = false;
+					flower.packageName = packageName;
 					this.frames[i].flowers[j] = flower;				
 
 					
