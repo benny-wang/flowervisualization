@@ -87,11 +87,11 @@ public class XMLwritter {
 						}
 						
 						Element dep = doc.createElement("dependency");
-						dep.appendChild(doc.createTextNode(entry.getValue()+""));
+						dep.appendChild(doc.createTextNode(tempvalue));
 						
 						
-						Attr tempattr = doc.createAttribute("name");
-						tempattr.setValue(tempvalue);
+						Attr tempattr = doc.createAttribute("count");
+						tempattr.setValue(entry.getValue()+"");
 						dep.setAttributeNode(tempattr);
 						
 						dependency.appendChild(dep);

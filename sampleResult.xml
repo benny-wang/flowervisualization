@@ -78,6 +78,8 @@
          <numMethods>31</numMethods>
          <dependencies>
             <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\ProtocolIconDictImpl.java</dependency>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\DictStatusEnum.java</dependency>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\OperationSetBasicInstantMessagingDictImpl.java</dependency>
          </dependencies>
       </flower>
       <flower id="7">
