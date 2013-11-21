@@ -1,5 +1,6 @@
 package visualization;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -121,9 +122,10 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 					y += 25 + 20;
 					x = 10;
 				}
-
 				g.setColor(Color.white);
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 				g.fillRect(x, y, 30 + 15 + (int) nameWidth, 25);
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
 				g.setColor(contributor.color);
 				g.fillRect(x, y, 25, 25);
@@ -230,7 +232,9 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			Rectangle2D dependRect = g.getFontMetrics(font).getStringBounds(contributor, g);
 			g.setColor(Color.white);
 			double width = Math.max(nameWidth,  dependRect.getWidth());
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 			g.fillRect( x,  y, 60 + (int) width,20 + (int) width);
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
 			// g.setColor(contributor.color);
 			g.fillRect( x, (int) y, 25, 25);
