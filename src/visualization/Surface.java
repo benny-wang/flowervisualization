@@ -104,6 +104,40 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     	
     }
     
+    private void drawPackageLegend (Graphics2D g){
+		if (contributorLegend) {
+			Font font = Font.decode("Times New Roman");
+
+			int x, y;
+			x = 10;
+			y = 10;
+
+			for (FlowerPackage flowerPackage : repo.packageColor.values()) {
+
+				Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(
+						flowerPackage.name, g);
+				double nameWidth = nameRect.getWidth();
+
+				if (x + 30 + 15 + nameWidth > Visualization.width) {
+					y += 25 + 20;
+					x = 10;
+				}
+				g.setColor(Color.white);
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+				g.fillRect(x, y, 30 + 15 + (int) nameWidth, 25);
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+				g.setColor(flowerPackage.color);
+				g.fillRect(x, y, 25, 25);
+				g.setColor(Color.black);
+				g.drawString(flowerPackage.name, x + 30, y + 25);
+
+				x += 30 + 15 + nameWidth;
+
+			}
+		}
+    }
+    
     private void drawContributorLegend (Graphics2D g){
 		if (contributorLegend) {
 			Font font = Font.decode("Times New Roman");
@@ -164,8 +198,13 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		g2.setTransform(at);
 		g2.setTransform(at1);
 
-		drawContributorLegend(g2);
-		g2.setTransform(at1);
+		if(setPackageColor){
+			drawPackageLegend(g2);
+			g2.setTransform(at1);
+		}else{
+			drawContributorLegend(g2);
+			g2.setTransform(at1);
+		}		
 
 		drawFlowerInformation(g2);
 		g2.setTransform(at1);
