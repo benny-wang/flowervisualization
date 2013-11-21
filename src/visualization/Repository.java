@@ -2,16 +2,17 @@ package visualization;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 import java.awt.Color;
 
 /*
@@ -170,6 +171,15 @@ public class Repository {
 			
 		}
 		
+		int contributorSize = contributorColor.size();
+		
+		for (Map.Entry<String, Contributor> entry : contributorColor.entrySet()) {
+		    String contributorName = entry.getKey();
+		    Contributor contributor = entry.getValue();
+		    
+		    //Color.HSBtoRGB(hue, 240, 120);
+		}
+		
 		//System.out.println("Most dependencies: " + mostDependencies(lastFrame.flowers).methodName);
 		
 		maxGridX = Visualization.width / (int)Math.ceil(Math.sqrt(classNum));
@@ -203,11 +213,13 @@ public class Repository {
 //				int maxFlowerSize = (int) (Visualization.width * .9) / (classNum);
 				double size = ((double)flower.size / (double) maxClassLines) * (maxFlowerSize - maxFlowerSize*0.4) + maxFlowerSize*0.4;
 				
-				if (size >= maxFlowerSize) {
-					flower.size = (int) maxFlowerSize;
-				} else {
-					flower.size = (int) size;
-				}
+//				if (size >= maxFlowerSize) {
+//					flower.size = (int) maxFlowerSize;
+//				} else {
+//					flower.size = (int) size;
+//				}
+				
+				flower.size = (int)(.5 * Math.sqrt(flower.size));
 				
 				
 				
@@ -239,7 +251,7 @@ public class Repository {
 			
 			//System.out.println("Flower :" + flower.methodName + "---Diameter--" + flower.size + "--RealSize:" + frameFlower.size);
 			
-		}while(Flower.checkFlowerCollision(x,y, flower.size , this.flowers) || !Flower.inSurface(x,y,flower.size/2 * 3));
+		}while(false);
 		
 		flower.x = x;
 		flower.y = y;		
