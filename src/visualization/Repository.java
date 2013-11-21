@@ -92,7 +92,7 @@ public class Repository {
 					
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
 					//System.out.println("Number of Methods : " + numMethods);
-					String contributor = "Ben";//eElement.getElementsByTagName("contributor").item(0).getTextContent();
+					String contributor = eElement.getElementsByTagName("committer").item(0).getTextContent();
 					System.out.println("Contributor : " + contributor);
 										
 					String packageName = eElement.getElementsByTagName("package").item(0).getTextContent();
@@ -171,13 +171,28 @@ public class Repository {
 			
 		}
 		
-		int contributorSize = contributorColor.size();
+		int contributorSize = contributorColor.size();	
+		float contributorCount = 0;
 		
 		for (Map.Entry<String, Contributor> entry : contributorColor.entrySet()) {
 		    String contributorName = entry.getKey();
 		    Contributor contributor = entry.getValue();
 		    
-		    //Color.HSBtoRGB(hue, 240, 120);
+		    contributor.color = new Color(Color.HSBtoRGB(contributorCount/contributorSize, 1.0f, 1.0f));
+		    
+		    contributorCount += 1;
+		}
+		
+		int packageSize = packageColor.size();	
+		float packageCount = 0;
+		
+		for (Map.Entry<String, FlowerPackage> entry : packageColor.entrySet()) {
+		    String contributorName = entry.getKey();
+		    FlowerPackage flowerPackage = entry.getValue();
+		    
+		    flowerPackage.color = new Color(Color.HSBtoRGB(packageCount/packageSize, 1.0f, (float) (Math.random() * (1 - .5) + .5)));
+		    
+		    packageCount += 1;
 		}
 		
 		//System.out.println("Most dependencies: " + mostDependencies(lastFrame.flowers).methodName);

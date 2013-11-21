@@ -61,7 +61,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 	private int zoomHeight = getHeight();
 	
-	public boolean setPackageColor = true;
+	public boolean setPackageColor = false;
 	
 	public Surface () {
 		Initialize();
@@ -73,7 +73,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       addMouseListener(this);
 	       addMouseWheelListener(this);
 	       addMouseMotionListener(this);
-	       repo = new Repository("result.xml");
+	       repo = new Repository("frames/frame0.xml");
 	       setBackground(Color.white);
 	       setOpaque(true);
 	       setDoubleBuffered(true);
@@ -344,7 +344,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 			}
 			
-			flower.makeDarker();
+			//flower.makeDarker();
+			
 			flower.attraction(repo.flowers, framesPerSecond);
 			flower.repulsion(repo.flowers, framesPerSecond);
 			

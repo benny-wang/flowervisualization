@@ -73,8 +73,12 @@ public class Flower {
 	    		oColor.getGreen(),
 	    		oColor.getBlue(), null );
 		
-	    Color darkerColor = Color.getHSBColor( hsbVals[0], hsbVals[1], 0.99f * hsbVals[2] );
+	    //if(0.99f * hsbVals[1] > 120 ){	    
+	    Color darkerColor = Color.getHSBColor( hsbVals[0], 0.95f * hsbVals[1], hsbVals[2] );	    	    
 	    this.color = darkerColor;
+	    //}
+	    
+	    //System.out.println(hsbVals[1]);
 	}
 
 	public static Flower getCollidedFlower(double x, double y, Map<String, Flower> flowers, double zoom, double zoomX, double zoomY, double draggedX, double draggedY) {
