@@ -41,14 +41,37 @@ public class Visualization extends JFrame {
         setJMenuBar(menuBar);
         addViewMenu();
         addLegendMenu();
+        addInfoMenu();
         setSize(width, height);
         setLocationRelativeTo(null);
        
     }
 
     
-    private void addLegendMenu() {
-    	JMenu legendMenu = new JMenu("Legend");
+    private void addInfoMenu() {
+    	JMenu info = new JMenu("Info");
+        menuBar.add(info);
+		JMenuItem enableInfoMenu = new JMenuItem("Enable");
+		JMenuItem disableInfoMenu = new JMenuItem("Disable");
+		info.add(enableInfoMenu);
+		info.add(disableInfoMenu);
+		enableInfoMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				surface.flowerInfo = true;
+			}
+
+		});
+		disableInfoMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				surface.flowerInfo = false;
+			}
+
+		});
+		
+	}
+
+	private void addLegendMenu() {
+    	JMenu legendMenu = new JMenu("Contributor");
         menuBar.add(legendMenu);
 		JMenuItem enableLegendMenu = new JMenuItem("Enable");
 		JMenuItem disableLegendMenu = new JMenuItem("Disable");
@@ -56,16 +79,13 @@ public class Visualization extends JFrame {
 		legendMenu.add(disableLegendMenu);
 		enableLegendMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frameLegend = new JFrame();
-				frameLegend.setSize(legendWidth, legendHeight);
-				frameLegend.setVisible(true);
-				//surface.setPackageColor = false;
+				surface.contributorLegend = true;
 			}
 
 		});
 		disableLegendMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//surface.setPackageColor = true;
+				surface.contributorLegend = false;
 			}
 
 		});

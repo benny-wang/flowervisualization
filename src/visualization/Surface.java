@@ -32,7 +32,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //	Flower[] flowers  = {flower1, flower2};
 //	
 	int currentFrame = 0;
-	
+	public boolean flowerInfo = true;
+	public boolean contributorLegend = true;
 	int frameRate = 10; //millseconds
 	double framesPerSecond = 1/(((double)frameRate)/1000);
 	int currentTFrame = 0;
@@ -103,38 +104,40 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     }
     
     private void drawContributorLegend (Graphics2D g){
-    	
-    	Font font = Font.decode("Times New Roman");
-    	
-    	int x, y;
-    	x = 10;
-    	y = 10;
-    	
-    	for(Contributor contributor : repo.contributorColor.values()){
-	
+		if (contributorLegend) {
+			Font font = Font.decode("Times New Roman");
 
-    		Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(contributor.name, g);
-    		double nameWidth = nameRect.getWidth();
-    		
-    		if(x+30+15+nameWidth > Visualization.width){
-    			y += 25 + 20;
-    			x = 10;
-    		}
-    		
+			int x, y;
+			x = 10;
+			y = 10;
 
-    		g.setColor(Color.white);
-    	    g.fillRect(x, y,30 + 15 + (int) nameWidth,25);
-    	    
-    		g.setColor(contributor.color);
-    		g.fillRect(x, y, 25,25);
-    		g.setColor(Color.black);
-    		g.drawString(contributor.name, x + 30, y + 25);
-    		
-    		x += 30 + 15 + nameWidth;
+			for (Contributor contributor : repo.contributorColor.values()) {
 
-    	}
+				Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(
+						contributor.name, g);
+				double nameWidth = nameRect.getWidth();
+
+				if (x + 30 + 15 + nameWidth > Visualization.width) {
+					y += 25 + 20;
+					x = 10;
+				}
+
+				g.setColor(Color.white);
+				g.fillRect(x, y, 30 + 15 + (int) nameWidth, 25);
+
+				g.setColor(contributor.color);
+				g.fillRect(x, y, 25, 25);
+				g.setColor(Color.black);
+				g.drawString(contributor.name, x + 30, y + 25);
+
+				x += 30 + 15 + nameWidth;
+
+			}
+		}
     }
     Graphics2D g2;
+
+
     private void doDrawing(Graphics g) {
     	updateFlowerFrame();
 		g2 = (Graphics2D) g;
@@ -203,7 +206,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	}
 
 	private void drawFlowerInformation(Graphics2D g) {
-		if (hitFlower!=null) {
+		
+		if (hitFlower!=null && flowerInfo) {
 			Font font = Font.decode("Times New Roman");
 
 			int x, y;
