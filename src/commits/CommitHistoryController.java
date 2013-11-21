@@ -119,13 +119,14 @@ public class CommitHistoryController {
 	            .iterator();
 		
 		// Do the reverts
+		int countMax = 5;
 		count = 0;
 		Git git = new Git(repository);
-		while(count < 1 && iter.hasNext()) {
+		while(count < countMax && iter.hasNext()) {
 			RevCommit rev = iter.next();
 			int commitDate = rev.getCommitTime();
 			fat.setRefDate(commitDate);
-//			git.revert().include(rev).call();
+			git.revert().include(rev).call();
 			
 			// Flowers
 			File folder = new File("../jitsi/src/net/java/sip/communicator/impl/protocol");
@@ -144,7 +145,7 @@ public class CommitHistoryController {
 					flower.setLastCommitter("N/A");
 				}
 			}
-			XMLwritter2.GenerateXML(flowers,commitDate,count);
+			XMLwritter2.GenerateXML(flowers,commitDate,countMax);
 			for(FlowerObject flower : flowers) {
 				System.out.printf("Committer:  %s Age: %s \n", flower.getLastCommitter(), flower.getAge());
 			}
