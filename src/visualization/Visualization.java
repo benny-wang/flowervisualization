@@ -20,12 +20,12 @@ import javax.swing.SwingUtilities;
 
 public class Visualization extends JFrame {
 
-	public static int width = 800;
+	public static int width = 1000;
 	public static int height = 600;
 	private JMenuBar menuBar;
 	public JFrame frameLegend;
 	private Surface surface;
-    public static int legendWidth = 400;
+    public static int legendWidth = 200;
     public static int legendHeight = 300;
     public Visualization() {
 
@@ -71,7 +71,7 @@ public class Visualization extends JFrame {
 	}
 
 	private void addLegendMenu() {
-    	JMenu legendMenu = new JMenu("Contributor");
+    	JMenu legendMenu = new JMenu("Legend");
         menuBar.add(legendMenu);
 		JMenuItem enableLegendMenu = new JMenuItem("Enable");
 		JMenuItem disableLegendMenu = new JMenuItem("Disable");
@@ -95,7 +95,7 @@ public class Visualization extends JFrame {
 	private void addViewMenu() {
 		JMenu menu = new JMenu("View");
 		menuBar.add(menu);
-		JMenuItem classMenuItem = new JMenuItem("Class");
+		JMenuItem classMenuItem = new JMenuItem("Contributor");
 		JMenuItem classPackageItem = new JMenuItem("Package");
 		menu.add(classMenuItem);
 		menu.add(classPackageItem);

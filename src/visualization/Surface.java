@@ -56,6 +56,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	private int wheelMoved = 0;
 	private double maxZoomX = 25;
 	private double maxZoomY = 25;
+	
+	private double legendTranslateY = 0;
 
 	private int zoomWidth = getWidth();
 
@@ -109,8 +111,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			Font font = Font.decode("Times New Roman");
 
 			int x, y;
-			x = 10;
+			x = Visualization.width - Visualization.legendWidth;
 			y = 10;
+			
+			g.setColor(Color.white);
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+			g.fillRect(x, y-10, Visualization.legendWidth, Visualization.height);
 
 			for (FlowerPackage flowerPackage : repo.packageColor.values()) {
 
@@ -118,21 +124,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 						flowerPackage.name, g);
 				double nameWidth = nameRect.getWidth();
 
-				if (x + 30 + 15 + nameWidth > Visualization.width) {
-					y += 25 + 20;
-					x = 10;
-				}
-				g.setColor(Color.white);
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-				g.fillRect(x, y, 30 + 15 + (int) nameWidth, 25);
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
 				g.setColor(flowerPackage.color);
 				g.fillRect(x, y, 25, 25);
 				g.setColor(Color.black);
 				g.drawString(flowerPackage.name, x + 30, y + 25);
 
-				x += 30 + 15 + nameWidth;
+				y += 25 + 20;
 
 			}
 		}
@@ -143,8 +140,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			Font font = Font.decode("Times New Roman");
 
 			int x, y;
-			x = 10;
+			x = Visualization.width - Visualization.legendWidth;
 			y = 10;
+			
+			g.setColor(Color.white);
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+			g.fillRect(x, y-10, Visualization.legendWidth, Visualization.height);
 
 			for (Contributor contributor : repo.contributorColor.values()) {
 
@@ -152,21 +153,23 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 						contributor.name, g);
 				double nameWidth = nameRect.getWidth();
 
-				if (x + 30 + 15 + nameWidth > Visualization.width) {
-					y += 25 + 20;
-					x = 10;
-				}
-				g.setColor(Color.white);
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-				g.fillRect(x, y, 30 + 15 + (int) nameWidth, 25);
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+//				if (x + 30 + 15 + nameWidth > Visualization.width) {
+//					y += 25 + 20;
+//					x = 10;
+//				}
+				
+//				g.setColor(Color.white);
+//				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+//				g.fillRect(x, y, 30 + 15 + (int) nameWidth, 25);
+//				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
 				g.setColor(contributor.color);
 				g.fillRect(x, y, 25, 25);
 				g.setColor(Color.black);
 				g.drawString(contributor.name, x + 30, y + 25);
 
-				x += 30 + 15 + nameWidth;
+//				x += 30 + 15 + nameWidth;
+				y += 25 + 20;
 
 			}
 		}
@@ -198,6 +201,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		g2.setTransform(at);
 		g2.setTransform(at1);
 
+		g.translate(0, (int) legendTranslateY);
+		
 		if(setPackageColor){
 			drawPackageLegend(g2);
 			g2.setTransform(at1);
@@ -400,7 +405,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 				else
 					g.setColor(flower.color);
 			}else
-				g.setColor(repo.contributorColor.get(flower.contributor).color);
+				g.setColor(flower.color);
 			
 			Ellipse2D.Double flowerShape = new Ellipse2D.Double(flower.x-flower.size/2, flower.y-flower.size/2, flower.size, flower.size);
 //			g.fillOval((int)(flower.x-flower.size/2),(int)(flower.y-flower.size/2),flower.size,flower.size);
@@ -525,9 +530,22 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     		System.out.println("zoomX: " + zoomX + "zoomY: " +  zoomY);
 
 
-        } 
+        }else{
+        	if(e.getX() < Visualization.width && e.getX() > Visualization.width - Visualization.legendWidth){
+        		int notches = e.getWheelRotation();
+        		
+        		if (notches < 0) {
+        			legendTranslateY += 10;
+        		} else if (notches> 0){
+        			legendTranslateY -= 10;
+        		}
+        		
+        	}
+        }
 		
 	}
+	
+	
 	boolean dragged = false;
 	int draggedX;
 	int draggedY;
