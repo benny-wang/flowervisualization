@@ -28,7 +28,7 @@ public class Flower {
 	public double y;
 	public String contributor;
 	public int numMethods;
-	
+	public boolean exist = false;
 	public String packageName;
 	
 	public boolean changed;

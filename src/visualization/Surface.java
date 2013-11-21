@@ -37,7 +37,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	double framesPerSecond = 1/(((double)frameRate)/1000);
 	int currentTFrame = 0;
 	
-	Repository repo;
+	static Repository repo;
 	
 	private Timer timer;
 
@@ -59,7 +59,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 	private int zoomHeight = getHeight();
 	
-	private boolean setPackageColor = true;
+	public boolean setPackageColor = true;
 	
 	public Surface () {
 		Initialize();
@@ -136,6 +136,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     }
     Graphics2D g2;
     private void doDrawing(Graphics g) {
+    	updateFlowerFrame();
 		g2 = (Graphics2D) g;
 		AffineTransform at1 = g2.getTransform();
 		drawDragged(g2);
@@ -167,6 +168,26 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		
     }
 	
+	private void updateFlowerFrame() {
+		Frame frame = repo.frames[currentFrame];
+		Map<String, Flower> flowersMap = repo.flowers;
+		
+		Flower[] currentFlowers = frame.flowers;
+		
+    	for(int i=0;i<currentFlowers.length;i++){
+			Flower frameFlower = currentFlowers[i];
+						
+			Flower flower = flowersMap.get(frameFlower.methodName);
+			
+			
+			flower.size = frameFlower.size;
+			flower.exist = true;
+			flower.numMethods = frameFlower.numMethods;
+			flower.contributor = frameFlower.contributor;
+    	}
+		
+	}
+
 	private void drawDragged(Graphics2D g2) {
 		AffineTransform old = g2.getTransform();
 		AffineTransform tx = new AffineTransform(old);
@@ -262,7 +283,19 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 	private void drawDependencies(Graphics2D g2) {
 		if(hitFlower != null){
-			drawLinesToDependencies(hitFlower, g2);
+			Map<String, Integer> dependencies = hitFlower.dependencies;
+			
+			Flower flower;
+			
+			for (Map.Entry<String, Integer> entry : dependencies.entrySet()) {
+			    String methodName = entry.getKey();
+
+				flower = repo.flowers.get(methodName);
+				g2.setColor(Color.black);
+				if(flower != null && flower.exist == true){				
+					g2.draw(new Line2D.Double(hitFlower.x,hitFlower.y,flower.x,flower.y));
+				}
+			}
 		}		
 	}
 	
@@ -292,7 +325,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //			} else {
 //				flower.size = size;
 //			}
-			
+			flower.exist = true;
 			flower.numMethods = frameFlower.numMethods;
 			flower.contributor = frameFlower.contributor;
 			
@@ -377,22 +410,6 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 	}
 
-	private void drawLinesToDependencies(Flower hitFlower, Graphics2D g2) {
-		Map<String, Integer> dependencies = hitFlower.dependencies;
-		
-		Flower flower;
-		
-		for (Map.Entry<String, Integer> entry : dependencies.entrySet()) {
-		    String methodName = entry.getKey();
-		    int callCount = entry.getValue();
-
-			flower = repo.flowers.get(methodName);
-					
-			if(flower != null){				
-			g2.draw(new Line2D.Double(hitFlower.x,hitFlower.y,flower.x,flower.y));
-			}
-		}
-	}
 	
 	private Flower checkHit(int xpos, int ypos) {
 		return Flower.getCollidedFlower(xpos, ypos, repo.flowers, preZoom, preZoomX, preZoomY, draggedX, draggedY);
@@ -474,21 +491,20 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		
 		if((e.getModifiers() & KeyEvent.CTRL_MASK) == KeyEvent.CTRL_MASK ){
 			 //hitFlower = checkHit(e.getX(),e.getY());
+			// increment last offset to last processed by drag event.
+			pressedX += newX;
+			pressedY += newY;
+			
+			// update the canvas locations
+			draggedY += newY;
+			draggedX += newX;
+			
+			//repaint();
+		}else{		
 			if(hitFlower != null){
 				hitFlower.x = (e.getX() - draggedX - preZoomX)/preZoom;
 				hitFlower.y = (e.getY() - draggedY - preZoomY)/preZoom;
 			}
-		}else{		
-
-		// increment last offset to last processed by drag event.
-		pressedX += newX;
-		pressedY += newY;
-
-		// update the canvas locations
-		draggedX += newX;
-		draggedY += newY;
-
-		//repaint();
 		}
 	}
 
