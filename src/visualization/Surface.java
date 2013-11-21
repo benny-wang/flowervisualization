@@ -400,7 +400,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 				else
 					g.setColor(flower.color);
 			}else
-				g.setColor(flower.color);
+				g.setColor(repo.contributorColor.get(flower.contributor).color);
 			
 			Ellipse2D.Double flowerShape = new Ellipse2D.Double(flower.x-flower.size/2, flower.y-flower.size/2, flower.size, flower.size);
 //			g.fillOval((int)(flower.x-flower.size/2),(int)(flower.y-flower.size/2),flower.size,flower.size);
