@@ -35,7 +35,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	int currentFrame = 0;
 	public boolean flowerInfo = true;
 	public boolean contributorLegend = true;
-	int frameRate = 10; //millseconds
+	int frameRate = 50; //millseconds
 	double framesPerSecond = 1/(((double)frameRate)/1000);
 	int currentTFrame = 0;
 	
@@ -95,9 +95,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //		    //System.out.println("Darker");
 //    	}
     	
-    	if(currentTFrame > framesPerSecond){
-    		currentTFrame = 0;
-    		
+    	if(currentTFrame % framesPerSecond == 0){
+   		
     		if(currentFrame < repo.frames.length-1)
     		currentFrame++;
     	}
@@ -390,8 +389,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			
 			//flower.makeDarker();
 			
-			flower.attraction(repo.flowers, framesPerSecond);
-			flower.repulsion(repo.flowers, framesPerSecond);
+			flower.attraction(repo.flowers);
+			flower.repulsion(repo.flowers);
 			
 //			g.setColor(Color.black);
 //			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
@@ -459,8 +458,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		int xpos = e.getX(); 
 		int ypos = e.getY();
 		System.out.println(xpos+ "  -  " + ypos);
-		hitFlower = checkHit(xpos,ypos);
-
+		//hitFlower = checkHit(xpos,ypos);
 	}
 
 	
@@ -504,6 +502,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //		      pressOut = true;
 //		    }
 //		}
+			
+			hitFlower = checkHit(e.getX(),e.getY());
 		
 	}
 
@@ -556,7 +556,6 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		int newY = e.getY() - pressedY;
 		
 		if((e.getModifiers() & KeyEvent.CTRL_MASK) == KeyEvent.CTRL_MASK ){
-			 //hitFlower = checkHit(e.getX(),e.getY());
 			// increment last offset to last processed by drag event.
 			pressedX += newX;
 			pressedY += newY;
@@ -567,6 +566,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			
 			//repaint();
 		}else{		
+			//hitFlower = checkHit(e.getX(),e.getY());
 			if(hitFlower != null){
 				hitFlower.x = (e.getX() - draggedX - preZoomX)/preZoom;
 				hitFlower.y = (e.getY() - draggedY - preZoomY)/preZoom;
