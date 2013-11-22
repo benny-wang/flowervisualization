@@ -156,7 +156,7 @@ public class Flower {
 	    return Math.sqrt((target.y - y) * (target.y - y) + (target.x - x) * (target.x - x));
 	}
 	
-	public void repulsion(Map<String, Flower> flowers, double framesPerSecond ){
+	public void repulsion(Map<String, Flower> flowers){
 		
 		Flower flower = this;
 		
@@ -204,8 +204,8 @@ public class Flower {
 			}
 			
 			
-			double x = flower.x - speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
-			double y = flower.y - speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
+			double x = flower.x - speed * Math.cos(getAngle(attrFlower)) / 100;
+			double y = flower.y - speed * Math.sin(getAngle(attrFlower)) / 100;
 			
 			//System.out.println(speed * Math.cos(Math.toRadians(getAngle(attrFlower))) / framesPerSecond);
 			
@@ -220,7 +220,7 @@ public class Flower {
 		
 	}
 	
-	public void biDirectionAttraction (Flower attrFlower, int callCount, double framesPerSecond){
+	public void biDirectionAttraction (Flower attrFlower, int callCount){
 		Flower flower = this;
 		
 		double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
@@ -231,15 +231,15 @@ public class Flower {
 		
 		double speed = distance * (attrMass/mass) * Math.sqrt(callCount);
 		
-		double x = flower.x + speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
-		double y = flower.y + speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
+		double x = flower.x + speed * Math.cos(getAngle(attrFlower)) / 100;
+		double y = flower.y + speed * Math.sin(getAngle(attrFlower)) / 100;
 		
 		flower.x = x;
 		flower.y = y;
 		
 	}
 	
-	public void attraction(Map<String, Flower> flowers, double framesPerSecond){
+	public void attraction(Map<String, Flower> flowers){
 		
 		Flower flower = this;
 		
@@ -274,8 +274,8 @@ public class Flower {
 //				if(attrFlower.packageName == flower.packageName)
 //					speed *= 5;
 				
-				double x = attrFlower.x - speed * Math.cos(getAngle(attrFlower)) / framesPerSecond;
-				double y = attrFlower.y - speed * Math.sin(getAngle(attrFlower)) / framesPerSecond;
+				double x = attrFlower.x - speed * Math.cos(getAngle(attrFlower)) / 100;
+				double y = attrFlower.y - speed * Math.sin(getAngle(attrFlower)) / 100;
 				
 				
 				
@@ -288,7 +288,7 @@ public class Flower {
 					attrFlower.y = y;
 				//}
 					
-					biDirectionAttraction(attrFlower,callCount,framesPerSecond);
+					biDirectionAttraction(attrFlower,callCount);
 			}			
 		}
 		

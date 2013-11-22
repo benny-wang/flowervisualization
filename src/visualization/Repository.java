@@ -202,7 +202,6 @@ public class Repository {
 		
 		setFlowerSize(combinedflowerArea);
 		setFlowerPosition();
-		String i = "3";
 	}
 	
 	private void setFlowerSize(double combinedArea) {
@@ -236,6 +235,11 @@ public class Repository {
 				
 				flower.size = (int)(.5 * Math.sqrt(flower.size));
 				
+				flower.color = contributorColor.get(flower.contributor).color;
+				
+				if(i == 0){
+					flowers.get(flower.methodName).color = flower.color;
+				}
 				
 				
 				System.out.println(flower.methodName + "---" + flower.size + "---Ratio---" + maxFlowerSize);
@@ -261,7 +265,7 @@ public class Repository {
 			
 		int x,y;
 		do{
-			x = (int)(Math.random() * Visualization.width);
+			x = (int)(Math.random() * Visualization.width) - Visualization.legendWidth;
 			y = (int)(Math.random() * (Visualization.height)); // + legend
 			
 			//System.out.println("Flower :" + flower.methodName + "---Diameter--" + flower.size + "--RealSize:" + frameFlower.size);
