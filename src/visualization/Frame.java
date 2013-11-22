@@ -2,7 +2,7 @@ package visualization;
 
 public class Frame {
 	public Flower[] flowers;
-	public int time;
+	public long time;
 	public int id;
 	
 	public Frame (int id, int time, Flower[] flowers){
