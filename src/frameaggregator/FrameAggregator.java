@@ -49,7 +49,7 @@ public class FrameAggregator {
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(new File("result-merged.xml"));
+		StreamResult result = new StreamResult(new File("result-merged2.xml"));
 		transformer.transform(source, result);
 	}
 	
