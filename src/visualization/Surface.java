@@ -1,5 +1,6 @@
 package visualization;
 
+
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +13,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
@@ -28,6 +30,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.File;
 import java.util.Date;
 import java.util.Map;
 
@@ -72,26 +75,19 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	
 	public JSlider frameSlider;
 	
-	
+    
+    //Create a file chooser
+    public JFileChooser fc;
 	
 	public Surface () {
+
 		Initialize();
 	}
 	
 	private void Initialize () {
-	       timer = new Timer(frameRate, this);
-	       timer.start(); 
-	       addMouseListener(this);
-	       addMouseWheelListener(this);
-	       addMouseMotionListener(this);
-	       repo = new Repository("result-merged.xml");
-	       setBackground(Color.white);
-	       setOpaque(true);
-	       setDoubleBuffered(true);
-	       
 	       
 	       frameSlider = new JSlider(JSlider.HORIZONTAL,
-                   0, repo.frames.length-1, 0);
+                   0, 0, 0);
 	       frameSlider.addChangeListener(this);
 
 	       //Turn on labels at major tick marks.
@@ -103,8 +99,22 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       Dimension d = frameSlider.getPreferredSize();  
 	       frameSlider.setPreferredSize(new Dimension((int) (Visualization.width * .8),d.height)); 
 	       
-	       
 	       add(frameSlider);
+	       
+	       addMouseListener(this);
+	       addMouseWheelListener(this);
+	       addMouseMotionListener(this);
+	       setBackground(Color.white);
+	       setOpaque(true);
+	       setDoubleBuffered(true);      
+	       
+
+	       fc = new JFileChooser();
+	       fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	       fc.setSelectedFile(fc.getCurrentDirectory());
+	       fc.setDialogTitle("Directory Chooser");
+	       fc.setMultiSelectionEnabled(false);
+
 	}
 	
     @Override
@@ -133,6 +143,33 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     	
     	currentTFrame++;
     	
+    }
+
+    
+    public void openFile (){
+    	int returnVal = fc.showOpenDialog(Surface.this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+                        
+            //This is where a real application would open the file.
+            System.out.println("Opening: " + file.getName() + ".");
+            
+ 	       repo = new Repository(file.getPath());
+ 	       
+
+
+        } else {
+        	System.out.println("Open command cancelled by user.");
+        }
+    }
+    
+    public void resetSurface(){
+	       frameSlider.setMaximum(repo.frames.length-1);
+	       frameSlider.setValue(0);
+ 	       
+	       timer = new Timer(frameRate, this);
+	       timer.start();
     }
     
     private void drawPackageLegend (Graphics2D g){
@@ -500,6 +537,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
+        if(repo != null)
         doDrawing(g);
     }
 

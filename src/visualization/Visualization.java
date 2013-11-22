@@ -38,12 +38,26 @@ public class Visualization extends JFrame {
         setTitle("Flower Visualization");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(surface);
+        
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem openMenu = new JMenuItem("Open");
+        menuBar.add(fileMenu);
+        fileMenu.add(openMenu);
+        
+        openMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				surface.openFile();
+			}
+		});
+        
         setJMenuBar(menuBar);
         addViewMenu();
         addLegendMenu();
         addInfoMenu();
         setSize(width, height);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);      
+        
+        
        
     }
 
