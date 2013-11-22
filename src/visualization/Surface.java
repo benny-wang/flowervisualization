@@ -62,7 +62,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	private double maxZoomX = 25;
 	private double maxZoomY = 25;
 	
-	private double legendTranslateY = 0;
+	private double legendTranslateY = 50;
 
 	private int zoomWidth = getWidth();
 
@@ -149,17 +149,18 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 			for (FlowerPackage flowerPackage : repo.packageColor.values()) {
 				
-				String[] castedName = flowerPackage.name.split("\\.");
+				int index = flowerPackage.name.indexOf("protocol") + 9;
+				String castedName = flowerPackage.name.substring(index);
 				
 				
-				Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(
-						castedName[castedName.length-1], g);
-				double nameWidth = nameRect.getWidth();
+//				Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(
+//						castedName, g);
+//				double nameWidth = nameRect.getWidth();
 
 				g.setColor(flowerPackage.color);
 				g.fillRect(x, y, 25, 25);
 				g.setColor(Color.black);
-				g.drawString(castedName[castedName.length-1], x + 30, y + 25);
+				g.drawString(castedName, x + 30, y + 25);
 
 				y += 25 + 20;
 
@@ -583,7 +584,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
         	if(e.getX() < Visualization.width && e.getX() > Visualization.width - Visualization.legendWidth){
         		int notches = e.getWheelRotation();
         		
-        		if (notches < 0) {
+        		if (notches < 0 && legendTranslateY < 50) {
         			legendTranslateY += 10;
         		} else if (notches> 0){
         			legendTranslateY -= 10;
@@ -634,5 +635,9 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	    //if (!source.getValueIsAdjusting()) {
 	        currentFrame = (int)source.getValue();	        
 	    //}
+	}
+	
+	public void resetLegend() {
+		legendTranslateY = 50;
 	}
 }

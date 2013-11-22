@@ -108,24 +108,28 @@ public class Visualization extends JFrame {
 		contributorMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				surface.viewState = 3;
+				surface.resetLegend();
 			}
 		});
 		
 		classMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				surface.viewState = 1;
+				surface.resetLegend();
 			}
 
 		});
 		classPackageItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				surface.viewState = 0;
+				surface.resetLegend();
 			}
 
 		});
 		classAgeItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				surface.viewState = 2;
+				surface.resetLegend();
 			}
 
 		});
