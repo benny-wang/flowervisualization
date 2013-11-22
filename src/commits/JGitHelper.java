@@ -17,7 +17,7 @@ import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 public class JGitHelper {
     public static Repository openRepository() throws IOException {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = builder.setGitDir(new File("C:/Users/WANG/Documents/GitHub/jitsi/.git"))
+        Repository repository = builder.setGitDir(new File("../jitsi/.git"))
           .readEnvironment() // scan environment GIT_* variables
 //          .findGitDir() // scan up the file system tree
           .build();

@@ -121,21 +121,31 @@ public class CommitHistoryController {
 	            .iterator();
 		
 		// Do the reverts
-		int countMax = 5;
+		int countMax = 10;
+		int increment = 10;
 		count = 0;
 		Git git = new Git(repository);
-		
 		while(count < countMax && iter.hasNext()) {
 			RevCommit rev = iter.next();
+			if (count != 0) {
+				for(int i = 1; i<increment; i++) {
+					if (iter.hasNext()) {
+						rev = iter.next();
+//						fat.setRefDate(lastCommitDate);
+//						git.revert().include(rev).call();
+//						System.out.println("Reverted: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
+					}
+				}
+			}
+			git.checkout().setStartPoint(rev).addPath("src/net/java/sip/communicator/impl/protocol").call();
+			System.out.println("Checked-out: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
 			int commitDate = rev.getCommitTime();
 			fat.setRefDate(commitDate);
-			git.revert().include(rev).call();
-			
 			// Flowers
 			File folder = new File("../jitsi/src/net/java/sip/communicator/impl/protocol");
+			System.out.println("Parsing");
 			ArrayList<FlowerObject> flowers = ParseMethod.parseFlowers(folder);
 			for(FlowerObject flower : flowers) {
-//				String path = flower.getName().replaceAll("\\","/");
 				String path = flower.getName();
 				Commit commit = fat.getCommit(path);
 				
@@ -148,13 +158,12 @@ public class CommitHistoryController {
 					flower.setLastCommitter("N/A");
 				}
 			}
-			XMLwritter2.GenerateXML(flowers,commitDate,countMax);
-			for(FlowerObject flower : flowers) {
-				System.out.printf("Committer:  %s Age: %s \n", flower.getLastCommitter(), flower.getAge());
-			}
-			
+			XMLwritter2.GenerateXML(flowers,commitDate,countMax-count-1);
+			System.out.println("Frame Written: " + (countMax-count-1));
+//			for(FlowerObject flower : flowers) {
+//				System.out.printf("Committer:  %s Age: %s \n", flower.getLastCommitter(), flower.getAge());
+//			}
 			count++;
-			System.out.println("Reverted: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
 		}
 		
 		for(int i = 0; i<countMax; i++){

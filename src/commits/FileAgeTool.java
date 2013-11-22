@@ -28,6 +28,16 @@ public class FileAgeTool {
 		refDate = date;
 	}
 	
+//	public int getRefDate(int date) {
+//		for(Commit commit : commits) {
+//			int commitDate = commit.getDate();
+//			if (commitDate < date) {
+//				return commitDate;
+//			}
+//		}
+//		return 0;
+//	}
+	
 	public int getAge(String file) {
 		Iterator<Commit> iter = commits.iterator();
 		while(iter.hasNext()) {
