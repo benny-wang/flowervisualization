@@ -62,8 +62,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	private int zoomWidth = getWidth();
 
 	private int zoomHeight = getHeight();
-	
-	public boolean setPackageColor = false;
+
+	public int viewState = 2;
 	
 	public Surface () {
 		Initialize();
@@ -95,8 +95,9 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //		    //System.out.println("Darker");
 //    	}
     	
-    	if(currentTFrame % framesPerSecond == 0){
-   		
+    	if(currentTFrame % framesPerSecond == 0){   		
+    		
+    		
     		if(currentFrame < repo.frames.length-1)
     		currentFrame++;
     	}
@@ -202,7 +203,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 		g.translate(0, (int) legendTranslateY);
 		
-		if(setPackageColor){
+		if(viewState == 0){
 			drawPackageLegend(g2);
 			g2.setTransform(at1);
 		}else{
@@ -379,15 +380,19 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			flower.exist = true;
 			flower.numMethods = frameFlower.numMethods;
 			flower.contributor = frameFlower.contributor;
+			flower.age = frameFlower.age;
 			
-			
-			if(frameFlower.changed){
+			if(frameFlower.age == 0){
 				flower.color = frameFlower.color;
 				frameFlower.changed = false;
 
 			}
 			
-			//flower.makeDarker();
+			if(viewState == 1){
+				flower.makeDarker();
+			}else if(viewState == 2 ){
+				flower.makeAgeColor();
+			}
 			
 			flower.attraction(repo.flowers);
 			flower.repulsion(repo.flowers);
@@ -395,7 +400,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //			g.setColor(Color.black);
 //			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
 			
-			if(setPackageColor){
+			if(viewState == 0){
 				
 				FlowerPackage fPackage = repo.packageColor.get(flower.packageName);			
 				
@@ -403,8 +408,13 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 					g.setColor(fPackage.color);
 				else
 					g.setColor(flower.color);
-			}else
+			}else if(viewState == 3){
+				Contributor contributor = repo.contributorColor.get(flower.contributor);
+				
+				g.setColor(contributor.color);
+			}else{
 				g.setColor(flower.color);
+			}
 			
 			Ellipse2D.Double flowerShape = new Ellipse2D.Double(flower.x-flower.size/2, flower.y-flower.size/2, flower.size, flower.size);
 //			g.fillOval((int)(flower.x-flower.size/2),(int)(flower.y-flower.size/2),flower.size,flower.size);

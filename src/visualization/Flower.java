@@ -30,6 +30,9 @@ public class Flower {
 	public int numMethods;
 	public boolean exist = false;
 	public String packageName;
+	public int age = 0;
+	final static float age_con = 3600*120*24;
+	
 	
 	public boolean changed;
 	
@@ -38,7 +41,7 @@ public class Flower {
 	public Map<String, Integer> dependencies;
 	
 	
-	public Flower(String methodName, Color color, int size, int x, int y, int numMethods, String contributor, Map<String, Integer> dependencies){
+	public Flower(String methodName, Color color, int size, int x, int y, int numMethods, String contributor, Map<String, Integer> dependencies, int age){
 		this.color = color;
 		this.size = size;
 		this.x = x;
@@ -48,6 +51,7 @@ public class Flower {
 		this.methodName = methodName;
 		this.changed = false;
 		this.dependencies = dependencies;
+		this.age = age;
 	}
 	
 	public Flower(Flower flower){
@@ -74,11 +78,29 @@ public class Flower {
 	    		oColor.getBlue(), null );
 		
 	    //if(0.99f * hsbVals[1] > 120 ){	    
-	    Color darkerColor = Color.getHSBColor( hsbVals[0], 0.95f * hsbVals[1], hsbVals[2] );	    	    
+	    Color darkerColor = Color.getHSBColor( hsbVals[0], 0.985f * hsbVals[1], hsbVals[2] );	    	    
 	    this.color = darkerColor;
 	    //}
 	    
 	    //System.out.println(hsbVals[1]);
+	}
+	
+	public void makeAgeColor(){
+		Color oColor = this.color;
+		
+	    float hsbVals[] = Color.RGBtoHSB( oColor.getRed(),
+	    		oColor.getGreen(),
+	    		oColor.getBlue(), null );
+	    
+	    //float tempage = (float) Math.pow(0.99,Math.sqrt(this.age));
+	    float tempage = (float) 0.1;
+	   // System.out.println("this age is: " + this.age);
+		if(this.age<age_con)
+			tempage = (float)( Math.pow(age_con-this.age,2)/Math.pow(age_con,2));
+	    
+	    //System.out.println(tempage);
+	    Color ageColor = Color.getHSBColor( hsbVals[0], tempage, hsbVals[2] );	    	    
+	    this.color = ageColor;
 	}
 
 	public static Flower getCollidedFlower(double x, double y, Map<String, Flower> flowers, double zoom, double zoomX, double zoomY, double draggedX, double draggedY) {

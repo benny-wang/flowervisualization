@@ -98,6 +98,9 @@ public class Repository {
 					String packageName = eElement.getElementsByTagName("package").item(0).getTextContent();
 					System.out.println("Package : " + packageName);
 					
+					int age = Integer.parseInt(eElement.getElementsByTagName("age").item(0).getTextContent());
+					System.out.println("Age : " + age);
+					
 //					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
 //					Boolean changed = (strChanged.equals("true"))? true: false;					
 //					System.out.println("Changed : " + changed);
@@ -134,7 +137,7 @@ public class Repository {
 						packageColor.put(packageName, new FlowerPackage(packageName, new Color(R,G,B)));
 					}
 					
-					Flower flower = new Flower(methodName, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies);
+					Flower flower = new Flower(methodName, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies, age);
 					flower.changed = false;
 					flower.packageName = packageName;
 					this.frames[i].flowers[j] = flower;				
@@ -156,20 +159,20 @@ public class Repository {
 		classNum = lastFrame.flowers.length;
 		maxClassLines = 0;
 		maxDependenciesNumber = 0;
-		double combinedflowerArea = 0;
-				
-		for(int i = 0; i<lastFrame.flowers.length; i++){
-			Flower flower = lastFrame.flowers[i];
-			
-			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
-			//maxDependenciesNumber = Math.max(maxDependenciesNumber, lastFrame.flowers[i].dependencies.size());
-			if(this.flowers.get(lastFrame.flowers[i].methodName) == null){
-				this.flowers.put(lastFrame.flowers[i].methodName, new Flower(lastFrame.flowers[i]));
-			}
-			
-			combinedflowerArea = Math.PI * Math.pow(flower.size * 3, 2);
-			
-		}
+//		double combinedflowerArea = 0;
+//				
+//		for(int i = 0; i<lastFrame.flowers.length; i++){
+//			Flower flower = lastFrame.flowers[i];
+//			
+//			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
+//			//maxDependenciesNumber = Math.max(maxDependenciesNumber, lastFrame.flowers[i].dependencies.size());
+//			if(this.flowers.get(lastFrame.flowers[i].methodName) == null){
+//				this.flowers.put(lastFrame.flowers[i].methodName, new Flower(lastFrame.flowers[i]));
+//			}
+//			
+//			combinedflowerArea = Math.PI * Math.pow(flower.size * 3, 2);
+//			
+//		}
 		
 		int contributorSize = contributorColor.size();	
 		float contributorCount = 0;
@@ -200,20 +203,16 @@ public class Repository {
 		maxGridX = Visualization.width / (int)Math.ceil(Math.sqrt(classNum));
 		maxGridY = Visualization.height / (int) Math.ceil(Math.sqrt(classNum));
 		
-		setFlowerSize(combinedflowerArea);
+		setFlowerSize();
 		setFlowerPosition();
 	}
 	
-	private void setFlowerSize(double combinedArea) {
+	private void setFlowerSize() {
 		
 		double ratio;
 		double panelArea = ((Visualization.width * Visualization.height)*.9 );
 		
-		if(combinedArea > panelArea){
-			ratio = panelArea/combinedArea;
-		}else{
-			ratio = combinedArea/panelArea;
-		}
+			ratio = 50/panelArea;
 		
 		double maxFlowerSize = Math.sqrt(panelArea/classNum)/2;
 		
@@ -222,7 +221,7 @@ public class Repository {
 			for (int j = 0; j<frame.flowers.length; j++){
 				Flower flower = frame.flowers[j];
 				
-				flower.size = (int) (flower.size*ratio);
+				flower.size = (int) (flower.size);
 				
 //				int maxFlowerSize = (int) (Visualization.width * .9) / (classNum);
 				double size = ((double)flower.size / (double) maxClassLines) * (maxFlowerSize - maxFlowerSize*0.4) + maxFlowerSize*0.4;
@@ -236,6 +235,10 @@ public class Repository {
 				flower.size = (int)(.5 * Math.sqrt(flower.size));
 				
 				flower.color = contributorColor.get(flower.contributor).color;
+				
+				if(this.flowers.get(flower.methodName) == null){
+					this.flowers.put(flower.methodName, new Flower(flower));
+				}
 				
 				if(i == 0){
 					flowers.get(flower.methodName).color = flower.color;

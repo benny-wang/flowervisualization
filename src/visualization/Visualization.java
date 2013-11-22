@@ -95,21 +95,37 @@ public class Visualization extends JFrame {
 	private void addViewMenu() {
 		JMenu menu = new JMenu("View");
 		menuBar.add(menu);
-		JMenuItem classMenuItem = new JMenuItem("Contributor");
+		JMenuItem contributorMenuItem = new JMenuItem("Contributor");
+		JMenuItem classMenuItem = new JMenuItem("Contributor/Age");
 		JMenuItem classPackageItem = new JMenuItem("Package");
+		JMenuItem classAgeItem = new JMenuItem("Age");
+		
+		menu.add(contributorMenuItem);
 		menu.add(classMenuItem);
 		menu.add(classPackageItem);
+		menu.add(classAgeItem);
+		
+		contributorMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				surface.viewState = 3;
+			}
+		});
+		
 		classMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				surface.setPackageColor = false;
+				surface.viewState = 1;
 			}
 
 		});
 		classPackageItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				surface.viewState = 0;
+			}
 
-				surface.setPackageColor = true;
+		});
+		classAgeItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				surface.viewState = 2;
 			}
 
 		});
