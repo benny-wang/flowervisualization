@@ -148,15 +148,18 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			g.fillRect(x, y-10, Visualization.legendWidth, Visualization.height);
 
 			for (FlowerPackage flowerPackage : repo.packageColor.values()) {
-
+				
+				String[] castedName = flowerPackage.name.split("\\.");
+				
+				
 				Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(
-						flowerPackage.name, g);
+						castedName[castedName.length-1], g);
 				double nameWidth = nameRect.getWidth();
 
 				g.setColor(flowerPackage.color);
 				g.fillRect(x, y, 25, 25);
 				g.setColor(Color.black);
-				g.drawString(flowerPackage.name, x + 30, y + 25);
+				g.drawString(castedName[castedName.length-1], x + 30, y + 25);
 
 				y += 25 + 20;
 
