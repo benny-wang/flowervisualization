@@ -432,7 +432,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		
 		AffineTransform oldXForm = g.getTransform();
 		
-		flower.numMethods = Math.min(flower.numMethods, 10);
+		flower.numMethods = (int) (Math.sqrt(flower.numMethods));
 		
 		for(int i=0;i<flower.numMethods;i++){
 			Ellipse2D.Double petalShape = new Ellipse2D.Double(flower.x-petalSize/2, flower.y + flower.size/2, petalSize, petalSize*2);
