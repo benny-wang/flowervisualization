@@ -3,6 +3,7 @@ package commits;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 
 public class FileAgeTool {
@@ -28,15 +29,6 @@ public class FileAgeTool {
 		refDate = date;
 	}
 	
-//	public int getRefDate(int date) {
-//		for(Commit commit : commits) {
-//			int commitDate = commit.getDate();
-//			if (commitDate < date) {
-//				return commitDate;
-//			}
-//		}
-//		return 0;
-//	}
 	
 	public int getAge(String file) {
 		Iterator<Commit> iter = commits.iterator();

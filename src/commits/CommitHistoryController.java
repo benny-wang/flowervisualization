@@ -121,8 +121,8 @@ public class CommitHistoryController {
 	            .iterator();
 		
 		// Do the reverts
-		int countMax = 50;
-		int increment = 10;
+		int countMax = 10;
+		int increment = 1;
 		count = 0;
 		Git git = new Git(repository);
 		while(count < countMax && iter.hasNext()) {
