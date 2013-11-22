@@ -65,20 +65,27 @@ public class Repository {
 		 
 			NodeList frameList = doc.getElementsByTagName("frame");
 		 
-			System.out.println("----------------------------");
+			
 			
 			this.frames = new Frame[frameList.getLength()];
 		 
 			for (int i = 0; i < frameList.getLength(); i++) {
 		 
 				Element XMLFrame = (Element) frameList.item(i);
-		 
-				System.out.println("\nCurrent Element :" + XMLFrame.getNodeName());
+		
+				System.out.println("----------------------------");
+				
+				int frameID = Integer.parseInt(XMLFrame.getAttribute("id"));
+				System.out.println("Frame: " + frameID);
+				
+				int frameTime = Integer.parseInt(XMLFrame.getElementsByTagName("time").item(0).getTextContent());
+				//System.out.println("Flower id : " + methodName);
 				
 				NodeList flowerList = XMLFrame.getElementsByTagName("flower");  
 	
+
 				
-				this.frames[i] = new Frame(new Flower[flowerList.getLength()]);
+				this.frames[i] = new Frame(frameID, frameTime, new Flower[flowerList.getLength()]);
 				
 				for ( int j = 0; j < flowerList.getLength(); j++ ) {
 					Node flowerNode = flowerList.item(j);													

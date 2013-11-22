@@ -2,6 +2,7 @@ package visualization;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,8 +13,11 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,9 +28,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.Date;
 import java.util.Map;
 
-class Surface extends JPanel implements ActionListener, MouseListener, MouseWheelListener, MouseMotionListener  {
+class Surface extends JPanel implements ActionListener, MouseListener, MouseWheelListener, MouseMotionListener, ChangeListener  {
 	
 //	Flower flower1 = new Flower(Color.BLUE, 50, 300, 250, 10, );
 //	Flower flower2 = new Flower(Color.RED, 25, 500, 350, 10);
@@ -65,6 +70,10 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 	public int viewState = 2;
 	
+	public JSlider frameSlider;
+	
+	
+	
 	public Surface () {
 		Initialize();
 	}
@@ -79,6 +88,23 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       setBackground(Color.white);
 	       setOpaque(true);
 	       setDoubleBuffered(true);
+	       
+	       
+	       frameSlider = new JSlider(JSlider.HORIZONTAL,
+                   0, repo.frames.length-1, 0);
+	       frameSlider.addChangeListener(this);
+
+	       //Turn on labels at major tick marks.
+	       frameSlider.setMajorTickSpacing(10);
+	       //framesPerSecond.setMinorTickSpacing(10);
+	       frameSlider.setPaintTicks(true);
+	       frameSlider.setPaintLabels(true);
+	       
+	       Dimension d = frameSlider.getPreferredSize();  
+	       frameSlider.setPreferredSize(new Dimension((int) (Visualization.width * .8),d.height)); 
+	       
+	       
+	       add(frameSlider);
 	}
 	
     @Override
@@ -98,8 +124,11 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     	if(currentTFrame % framesPerSecond == 0){   		
     		
     		
-    		if(currentFrame < repo.frames.length-1)
+    		if(currentFrame < repo.frames.length-1){
     		currentFrame++;
+    		frameSlider.setValue(currentFrame);
+    		
+    		}
     	}
     	
     	currentTFrame++;
@@ -258,7 +287,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 			int x, y;
 			x = 0;
-			y = getHeight()-30;
+			y = getHeight()-55;
 
 			// for(Contributor contributor : repo.contributorColor.values()){
 
@@ -286,10 +315,17 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			g.drawString("Class: " + hitFlower.methodName,  x,  y+15);
 			//g.drawString(hitFlower.contributor,  x,  y );
 
-			//g.fillRect( x, (int) y, 25, 25);
+			
 			g.setColor(Color.black);
-			//g.drawString(contributor,  x,  y+25);
 			g.drawString("Package: " + hitFlower.packageName,  x,  y+25);
+			
+			g.drawString("Number of Methods: " + hitFlower.numMethods,  x,  y+35);
+			
+			g.drawString("Contributor: " + hitFlower.contributor,  x,  y+45);
+			
+			Date frameDate = new Date(repo.frames[currentFrame].time * 1000);
+			
+			g.drawString("Frame Date: " + frameDate.toLocaleString(),  x,  y+55);
 			
 
 			}
@@ -442,15 +478,15 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		
 		AffineTransform oldXForm = g.getTransform();
 		
-		flower.numMethods = (int) (Math.sqrt(flower.numMethods));
+		int numPetals = (int) (Math.sqrt(flower.numMethods));
 		
-		for(int i=0;i<flower.numMethods;i++){
+		for(int i=0;i<numPetals;i++){
 			Ellipse2D.Double petalShape = new Ellipse2D.Double(flower.x-petalSize/2, flower.y + flower.size/2, petalSize, petalSize*2);
 			//g.fillOval((int)(flower.x-petalSize/2),(int)(flower.y + flower.size/2),petalSize,petalSize*2);
 			g.fill(petalShape);
 			
 //			g.draw(new Ellipse2D.Double(flower.x-petalSize/2,flower.y + flower.size/2,petalSize,petalSize*2));
-			g.rotate(Math.toRadians(360/flower.numMethods),flower.x,flower.y);
+			g.rotate(Math.toRadians(360/numPetals),flower.x,flower.y);
 		}
 		
 		g.setTransform(oldXForm); // Restore transform
@@ -587,5 +623,13 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	@Override
 	public void mouseMoved(MouseEvent e) {
 
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		JSlider source = (JSlider)e.getSource();
+	    //if (!source.getValueIsAdjusting()) {
+	        currentFrame = (int)source.getValue();	        
+	    //}
 	}
 }
