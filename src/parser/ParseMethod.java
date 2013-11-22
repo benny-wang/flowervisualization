@@ -35,21 +35,21 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class ParseMethod {
 
-	public static void main(String args[]) throws Exception
-	{
-		int Mcount=0,MthdLen=0;
-		
-		String FolderPath = "";
-		File folder = new File("../jitsi/src/net/java/sip/communicator/impl/protocol");
-		
-		
-		ArrayList<FlowerObject> objs = parseFlowers(folder);
-		for(FlowerObject flower : objs) {
-			System.out.println(flower.getName());
-		}
-		XMLwritter.GenerateXML(objs);
-
-	}
+//	public static void main(String args[]) throws Exception
+//	{
+//		int Mcount=0,MthdLen=0;
+//		
+//		String FolderPath = "";
+//		File folder = new File("../jitsi/src/net/java/sip/communicator/impl/protocol");
+//		
+//		
+////		ArrayList<FlowerObject> objs = parseFlowers(folder);
+////		for(FlowerObject flower : objs) {
+////			System.out.println(flower.getName());
+////		}
+////		XMLwritter.GenerateXML(objs);
+//
+//	}
 	
 	
 
@@ -176,10 +176,12 @@ public class ParseMethod {
 	        if(cu==null)
 	        	continue;
 	        if(cu.getPackage()!=null) {
-	        String[] temp=cu.getPackage().toString().split("\\.");
-	        pack = temp[temp.length-1];
-	        pack = pack.substring(0,pack.length()-2);
+	        //String[] temp=cu.getPackage().toString().split("\\.");
+	        pack = cu.getPackage().getName().toString();
+
+	        //pack = pack.substring(0,pack.length()-2);
 	        }
+
 	        
 	        name=file.getName().split("\\.")[0]; 
 	        cu.accept(new ASTVisitor() {
