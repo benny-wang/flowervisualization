@@ -31,6 +31,7 @@ Int - current commit number
 public class Repository {
 	public Map<String, Contributor> contributorColor = new HashMap<String, Contributor>();
 	public Map<String, FlowerPackage> packageColor = new HashMap<String, FlowerPackage>();
+	public Map<String, Flower> flowers = new HashMap<String, Flower>();
 	public Frame[] frames;
 	
 	public int classNum;
@@ -38,7 +39,6 @@ public class Repository {
 	public int maxGridX;
 	public int maxGridY;
 	
-	public Map<String, Flower> flowers = new HashMap<String, Flower>();
 	public Contributor[] contributors;
 	private int maxDependenciesNumber;
 	

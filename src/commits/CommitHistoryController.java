@@ -24,6 +24,8 @@ import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 
+import frameaggregator.FrameAggregator;
+
 import parser.FlowerObject;
 import parser.ParseMethod;
 import parser.XMLwritter;
@@ -35,9 +37,9 @@ import parser.XMLwritter2;
   commit was made, and feed it to the frame generator block.
 */
 public class CommitHistoryController {
-
 	public static void main(String args[]) throws Exception
 	{
+		FrameAggregator aggregator = new FrameAggregator();
 		Repository repository = JGitHelper.openRepository();
         System.out.println("Having repository: " + repository.getDirectory());
         
@@ -122,6 +124,7 @@ public class CommitHistoryController {
 		int countMax = 5;
 		count = 0;
 		Git git = new Git(repository);
+		
 		while(count < countMax && iter.hasNext()) {
 			RevCommit rev = iter.next();
 			int commitDate = rev.getCommitTime();
@@ -153,6 +156,11 @@ public class CommitHistoryController {
 			count++;
 			System.out.println("Reverted: " + rev /*+ ", name: " + rev.getName() + ", id: " + rev.getId().getName()*/);
 		}
+		
+		for(int i = 0; i<countMax; i++){
+			aggregator.aggregateToRoot("frames/frame" + i +".xml");
+		}
+		aggregator.endAggregate();
 		System.out.println("Done");
 		repository.close();
 		

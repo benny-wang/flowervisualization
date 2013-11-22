@@ -73,7 +73,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       addMouseListener(this);
 	       addMouseWheelListener(this);
 	       addMouseMotionListener(this);
-	       repo = new Repository("frames/frame0.xml");
+	       repo = new Repository("result-merged.xml");
 	       setBackground(Color.white);
 	       setOpaque(true);
 	       setDoubleBuffered(true);
