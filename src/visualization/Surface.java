@@ -106,10 +106,11 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       addMouseMotionListener(this);
 	       setBackground(Color.white);
 	       setOpaque(true);
-	       setDoubleBuffered(true);      
+	       setDoubleBuffered(true);    
 	       
-
-	       fc = new JFileChooser();
+	       File curr = new File("src");
+	       fc = new JFileChooser(curr);
+	       
 	       fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 	       fc.setSelectedFile(fc.getCurrentDirectory());
 	       fc.setDialogTitle("Directory Chooser");
