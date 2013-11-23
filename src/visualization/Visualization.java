@@ -39,16 +39,29 @@ public class Visualization extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(surface);
         
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem openMenu = new JMenuItem("Open");
-        menuBar.add(fileMenu);
-        fileMenu.add(openMenu);
+        JMenu fileMenu = new JMenu("Visualization");
         
+        JMenuItem openMenu = new JMenuItem("Open");
         openMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				surface.openFile();
 			}
 		});
+        fileMenu.add(openMenu);
+        
+        JMenuItem randomMenu = new JMenuItem("Randomize");
+        randomMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				surface.randomizeFlower();
+			}
+		});
+        fileMenu.add(randomMenu);
+        
+        
+        menuBar.add(fileMenu);
+        
+        
+        
         
         setJMenuBar(menuBar);
         addViewMenu();

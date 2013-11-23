@@ -199,8 +199,23 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		g.setColor(new Color(105,114,216));
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 		g.fillRect(0, 0, Visualization.width, 50);
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));		
+    }
+    
+    public void randomizeFlower() {
+    	
+    	if(repo == null)
+    		return;
+    	
+    	int x, y;
+    	
+    	for (Flower flower : repo.flowers.values()) {
+    	x = (int)(Math.random() * Visualization.width) - Visualization.legendWidth;
+		y = (int)(Math.random() * (Visualization.height)); // + legend
 		
+		flower.x = x;
+		flower.y = y;
+    	}
     }
     
     private void drawPackageLegend (Graphics2D g){
