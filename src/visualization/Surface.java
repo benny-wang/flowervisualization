@@ -115,6 +115,9 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	       frameSlider.setPaintTicks(true);
 	       frameSlider.setPaintLabels(true);
 	       
+	       frameSlider.setOpaque(false);
+	       frameSlider.setBackground(Color.white);
+	       
 	       Dimension d = frameSlider.getPreferredSize();  
 	       frameSlider.setPreferredSize(new Dimension((int) (Visualization.width * .8),d.height)); 
 	       
@@ -150,6 +153,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //			flower.makeDarker();		    
 //		    //System.out.println("Darker");
 //    	}
+    	
     	
     	if(currentTFrame % framesPerSecond == 0){   		
     		
@@ -190,6 +194,14 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
  	       
 	       timer = new Timer(frameRate, this);
 	       timer.start();
+    }
+    
+    public void drawSliderRect(Graphics2D g){
+		g.setColor(new Color(105,114,216));
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+		g.fillRect(0, 0, Visualization.width, 50);
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+		
     }
     
     private void drawPackageLegend (Graphics2D g){
@@ -236,6 +248,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			g.setColor(Color.white);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 			g.fillRect(x, y-10, Visualization.legendWidth, Visualization.height);
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
 			for (Contributor contributor : repo.contributorColor.values()) {
 
@@ -285,7 +298,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		drawDependencies(g2);
 
 		AffineTransform at = g2.getTransform();
-
+		
 		drawFlowers(g2);
 
 		g2.setTransform(at);
@@ -556,9 +569,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     @Override
     public void paintComponent(Graphics g) {
 
-        super.paintComponent(g);
+        super.paintComponent(g);       
+        
         if(repo != null)
         doDrawing(g);
+        
+        drawSliderRect((Graphics2D) g);
     }
 
 	@Override
