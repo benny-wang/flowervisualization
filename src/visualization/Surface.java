@@ -13,6 +13,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -75,7 +76,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	
 	public JSlider frameSlider;
 	
-    
+    private boolean pauseVideo = false;
+	
     //Create a file chooser
     public JFileChooser fc;
 	
@@ -86,6 +88,23 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	
 	private void Initialize () {
 	       
+			JButton playButton = new JButton("Play");
+			playButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					pauseVideo = false;
+				}
+			});
+			
+			JButton pauseButton = new JButton("Pause");
+			pauseButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					pauseVideo = true;
+				}
+			});
+			
+			add(playButton);
+			add(pauseButton);
+		
 	       frameSlider = new JSlider(JSlider.HORIZONTAL,
                    0, 0, 0);
 	       frameSlider.addChangeListener(this);
@@ -134,7 +153,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     	if(currentTFrame % framesPerSecond == 0){   		
     		
     		
-    		if(currentFrame < repo.frames.length-1){
+    		if(currentFrame < repo.frames.length-1 && pauseVideo == false){
     		currentFrame++;
     		frameSlider.setValue(currentFrame);
     		
@@ -157,7 +176,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
             
  	       repo = new Repository(file.getPath());
  	       
-
+ 	       resetSurface();
 
         } else {
         	System.out.println("Open command cancelled by user.");
