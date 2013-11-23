@@ -72,12 +72,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 	private int zoomHeight = getHeight();
 
-	public int viewState = 2;
+	public int viewState = 3;
 	public long lastTimeChecked = 0;
 	
 	public JSlider frameSlider;
 	
-    private boolean pauseVideo = false;
+    private boolean pauseVideo = true;
 	
     //Create a file chooser
     public JFileChooser fc;
