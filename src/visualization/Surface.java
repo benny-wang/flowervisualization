@@ -348,7 +348,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 			int x, y;
 			x = 0;
-			y = getHeight()-55;
+			y = getHeight()-73;
 
 			// for(Contributor contributor : repo.contributorColor.values()){
 
@@ -369,24 +369,24 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 			g.fillRect( x,  y, 60 + (int) width,20 + (int) width);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
+			
 			// g.setColor(contributor.color);
 			g.fillRect( x, (int) y, 25, 25);
 			g.setColor(Color.black);
-			g.drawString("Class: " + hitFlower.methodName,  x,  y+15);
+			g.drawString("Class: " + hitFlower.methodName,  x,  y+18);
 			//g.drawString(hitFlower.contributor,  x,  y );
 
 			
 			g.setColor(Color.black);
-			g.drawString("Package: " + hitFlower.packageName,  x,  y+25);
+			g.drawString("Package: " + hitFlower.packageName,  x,  y+31);
 			
-			g.drawString("Number of Methods: " + hitFlower.numMethods,  x,  y+35);
+			g.drawString("Number of Methods: " + hitFlower.numMethods,  x,  y+44);
 			
-			g.drawString("Contributor: " + hitFlower.contributor,  x,  y+45);
+			g.drawString("Contributor: " + hitFlower.contributor,  x,  y+57);
 			
-			Date frameDate = new Date(repo.frames[currentFrame].time * 1000);
+			Date frameDate = new Date((repo.frames[currentFrame].time - hitFlower.age) * 1000);
 			
-			g.drawString("Frame Date: " + frameDate.toLocaleString(),  x,  y+55);
+			g.drawString("Last Changed: " + frameDate.toLocaleString(),  x,  y+70);
 			
 
 			}
