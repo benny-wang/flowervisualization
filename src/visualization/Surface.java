@@ -73,6 +73,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	private int zoomHeight = getHeight();
 
 	public int viewState = 2;
+	public long lastTimeChecked = 0;
 	
 	public JSlider frameSlider;
 	
@@ -155,17 +156,15 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 //    	}
     	
     	
-    	if(currentTFrame % framesPerSecond == 0){   		
-    		
-    		
-    		if(currentFrame < repo.frames.length-1 && pauseVideo == false){
-    		currentFrame++;
-    		frameSlider.setValue(currentFrame);
-    		
+    	if(System.currentTimeMillis() - lastTimeChecked > 1000) {   		
+    		if(currentFrame < repo.frames.length-1 && pauseVideo == false) {
+	    		currentFrame++;
+	    		frameSlider.setValue(currentFrame);
     		}
+    		lastTimeChecked = System.currentTimeMillis(); 
     	}
     	
-    	currentTFrame++;
+    	
     	
     }
 
