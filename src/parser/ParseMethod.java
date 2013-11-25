@@ -3,15 +3,14 @@ package parser;
 
 
 
-import java.lang.reflect.*;
+
 import java.io.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+
 import java.util.Set;
 
 import org.eclipse.jdt.core.dom.AST;
@@ -34,56 +33,6 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class ParseMethod {
 
-//	public static void main(String args[]) throws Exception
-//	{
-//		int Mcount=0,MthdLen=0;
-//		
-//		String FolderPath = "";
-//		File folder = new File("../jitsi/src/net/java/sip/communicator/impl/protocol");
-//		
-//		
-////		ArrayList<FlowerObject> objs = parseFlowers(folder);
-////		for(FlowerObject flower : objs) {
-////			System.out.println(flower.getName());
-////		}
-////		XMLwritter.GenerateXML(objs);
-//
-//	}
-	
-	
-
-	
-	
-
-	
-	
-
-	
-	public static int getLineNumber(File file)
-	{
-		int lineNumber = 0;
-		
-		 FileReader fr;
-		try {
-			fr = new FileReader(file);
-		    LineNumberReader lnr = new LineNumberReader(fr);
-
-
-	            while (lnr.readLine() != null){
-	        	lineNumber++;
-	            }
-
-	            lnr.close();
-		}
-		catch (IOException e)
-		{
-			return 0;
-		}
-		
-		return lineNumber;
-	}
-
-	
 	
 	private static ArrayList<File> traverseFolder(File targetFolder, ArrayList<File> arr)
 	{
@@ -110,15 +59,7 @@ public class ParseMethod {
 		String sourceDirectory = "";
 		String[] rootPathElements =Directory.getAbsolutePath().split("\\\\");
 		
-		for(String s : rootPathElements)
-		{
-			if(s.equals("src"))
-			{
-				sourceDirectory+=s;
-				break;
-			}
-			sourceDirectory=sourceDirectory+s+"\\";
-		}
+		sourceDirectory = calculateSource(rootPathElements);
 		
 		System.out.println(sourceDirectory);
 
@@ -166,7 +107,7 @@ public class ParseMethod {
 	           parser.setSource(fi.toCharArray());
 	           parser.setKind(ASTParser.K_COMPILATION_UNIT);
 	        
-	   			parser.setResolveBindings(true); // we need bindings later on
+	   			parser.setResolveBindings(true); 
 	   			parser.setUnitName(file.getName());
 	   			String[] srcPath = {sourceDirectory};
 	   			parser.setEnvironment(null, srcPath, new String[] {"UTF-8"}, true);
@@ -175,10 +116,7 @@ public class ParseMethod {
 	        if(cu==null)
 	        	continue;
 	        if(cu.getPackage()!=null) {
-	        //String[] temp=cu.getPackage().toString().split("\\.");
 	        pack = cu.getPackage().getName().toString();
-
-	        //pack = pack.substring(0,pack.length()-2);
 	        }
 
 	        
@@ -293,8 +231,6 @@ public class ParseMethod {
 	       fObj.setMethodNumber(map.get("MethodNumber"));
 	       fObj.setName(name);
 	       map.remove(name);
-	       
-	       
 	       fObj.setPackname(pack);
 	       fObj.setImportClasses(map);
 	       if(map.get("MethodNumber")==0)
@@ -302,18 +238,28 @@ public class ParseMethod {
 	    	   continue;
 	       }
 	       listOfFlowers.add(fObj);
-	       
-//	       System.out.println("Line Number is: "+LineNumber);
-//	       System.out.println(map.get("MethodNumber"));
-//	       System.out.println("Name is : "+name);
-//	       System.out.println("Package is: "+pack);
-//	       System.out.println("Depenedency: ");
-//	       for(Map.Entry<String, Integer> entry : map.entrySet())
-//	    	   System.out.println(entry.getKey()+" "+entry.getValue());
-	       
+
 		}	
-//		System.out.println(filePaths.size());
-//		System.out.println((new Date()).getTime()-date.getTime());
+
 		return listOfFlowers;
+	}
+
+
+
+
+	private static String calculateSource(
+			String[] rootPathElements) {
+		String sourceDirectory = "";
+		
+		for(String s : rootPathElements)
+		{
+			if(s.equals("src"))
+			{
+				sourceDirectory+=s;
+				break;
+			}
+			sourceDirectory=sourceDirectory+s+"\\";
+		}
+		return sourceDirectory;
 	}
 }
