@@ -61,14 +61,6 @@ public class XMLwritter {
 					size.appendChild(doc.createTextNode(""+temp.getLineNumber()));
 					flower.appendChild(size);
 					
-					Element x = doc.createElement("x");
-					x.appendChild(doc.createTextNode(""));
-					flower.appendChild(x);
-					
-					Element y = doc.createElement("y");
-					y.appendChild(doc.createTextNode(""));
-					flower.appendChild(y);
-					
 					Element committer = doc.createElement("committer");
 					committer.appendChild(doc.createTextNode(""+temp.getLastCommitter()));
 					flower.appendChild(committer);

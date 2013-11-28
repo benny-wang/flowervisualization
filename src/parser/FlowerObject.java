@@ -6,29 +6,22 @@ import java.util.HashMap;
 
 public class FlowerObject {
 
-	
+	//The number of methods in a Class
 	private int methodNumber;
+	//The number of lines in a Class
 	private int lineNumber;
+	//The name of the Class
 	private String name;
+	//The Package of the class
 	private String packname;
+	//Dependencies of the Class
 	private HashMap<String,Integer> importClasses = new HashMap<String,Integer>();
-	private double xCoord;
-	private double yCoord;
+	//Age of the Class since last changed
 	private int	age;
+	//The Contributor that changed last
 	private String lastCommitter;
 	
-	public double getxCoord() {
-		return xCoord;
-	}
-	public void setxCoord(double xCoord) {
-		this.xCoord = xCoord;
-	}
-	public double getyCoord() {
-		return yCoord;
-	}
-	public void setyCoord(double yCoord) {
-		this.yCoord = yCoord;
-	}
+
 	public String getName() {
 		return name;
 	}
