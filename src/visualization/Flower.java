@@ -7,20 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/*
- * method - updateColor (updates color based on time elapsed since last commit)
-Object[Color] - RBG
-Object[Class node] - Class
-Int - size of the flower
-Int - x on the plane
-Int - y on the plane
-Int - last commit time
-Int - average code age?
-Object[Contributor] - last contributor
-Object[Commit] - last commit
-Int - number of methods
-*/
-
 public class Flower {
 	public Color color;
 	public int size;
@@ -31,7 +17,7 @@ public class Flower {
 	public boolean exist = false;
 	public String packageName;
 	public int age = 0;
-	final static float age_con = 3600*120*24;
+	final static float sixMonthsTime = 3600*120*24;
 	
 	
 	public boolean changed;
@@ -67,38 +53,28 @@ public class Flower {
 		this.packageName = flower.packageName;
 	}
 	
-	public void makeDarker(){
-		//Make darker
-		//HSB/HSV (Hue-Saturation-Brightness/Value )
+	public void desaturateColor(){
+		//HSB/HSV (Hue-Saturation-Brightness/Value )		
 		
-		Color oColor = this.color;
-		
-	    float hsbVals[] = Color.RGBtoHSB( oColor.getRed(),
-	    		oColor.getGreen(),
-	    		oColor.getBlue(), null );
-		
-	    //if(0.99f * hsbVals[1] > 120 ){	    
+	    float hsbVals[] = Color.RGBtoHSB( this.color.getRed(),
+	    		this.color.getGreen(),
+	    		this.color.getBlue(), null );
+    
 	    Color darkerColor = Color.getHSBColor( hsbVals[0], 0.985f * hsbVals[1], hsbVals[2] );	    	    
 	    this.color = darkerColor;
-	    //}
-	    
-	    //System.out.println(hsbVals[1]);
 	}
 	
-	public void makeAgeColor(){
-		Color oColor = this.color;
-		
-	    float hsbVals[] = Color.RGBtoHSB( oColor.getRed(),
-	    		oColor.getGreen(),
-	    		oColor.getBlue(), null );
+	public void desaturateColorByAge(){
+
+	    float hsbVals[] = Color.RGBtoHSB( this.color.getRed(),
+	    		this.color.getGreen(),
+	    		this.color.getBlue(), null );
 	    
-	    //float tempage = (float) Math.pow(0.99,Math.sqrt(this.age));
 	    float tempage = (float) 0.1;
-	   // System.out.println("this age is: " + this.age);
-		if(this.age<age_con)
-			tempage = (float)( Math.pow(age_con-this.age,2)/Math.pow(age_con,2));
-	    
-	    //System.out.println(tempage);
+
+		if(this.age< sixMonthsTime)
+			tempage = (float)( Math.pow(sixMonthsTime-this.age,2)/Math.pow(sixMonthsTime,2));
+
 	    Color ageColor = Color.getHSBColor( hsbVals[0], tempage, hsbVals[2] );	    	    
 	    this.color = ageColor;
 	}
@@ -120,32 +96,13 @@ public class Flower {
 	}
 	public static boolean checkFlowerCollision (int x, int y, int diameter, Map<String, Flower> flowers){
 		
-//		for (Flower flower : flowers.values()) {
-////			Flower flower = flowers[i];
-//			
-//			System.out.println("Checking radius: " + radius + " ---Size:" + flower.size/2 * 3 + "--x: " + flower.x + " y: " + flower.y);
-//			
-//			if(flower != null && !(flower.x == 0 && flower.y == 0)){
-//			
-//				double flower2Radius = flower.size/2 * 3;
-//				
-//				
-//			if(checkCollision(x,y, radius,flower.x,flower.y, flower2Radius)){				
-//				return true;
-//			}
-//			
-//			}
-//		}
-		
 	    Iterator it = flowers.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        Flower flower = (Flower) pairs.getValue();
 	        
 			if(flower != null && !(flower.x == 0 && flower.y == 0)){
-				
-				
-				
+
 			if(checkCollision(x,y, ((double)diameter)/2*3,flower.x,flower.y, ((double)flower.size)/2*3)){				
 				return true;
 			}
@@ -161,17 +118,12 @@ public class Flower {
 	
 	public double getAngle(Flower target) {
 	    double theta = Math.atan2(target.y - y, target.x - x);
-	    
-	    //theta += Math.PI/2.0;
 	    double angle = Math.toDegrees(theta);
+	    
 	    if (angle < 0) {
 	        angle += 360;
-	    }
-	    
-	    //System.out.println(angle);
-	    
+	    }	    
 	    return theta;
-	    //return angle;
 	}
 	
 	public double getDistance(Flower target) {
@@ -182,33 +134,20 @@ public class Flower {
 		
 		Flower flower = this;
 		
-		for (Flower attrFlower : flowers.values()) {
+		for (Flower repulFlower : flowers.values()) {
 		
-		if(flower != null && !flower.methodName.equals(attrFlower.methodName)){
-//			if(flower.dependencies.get(attrFlower.methodName) != null)
-//				return;
-			
-			double attrFlowerRadius = attrFlower.size/2 * 3;
+		if(flower != null && !flower.methodName.equals(repulFlower.methodName)){
 			
 			int mass = flower.dependencies.size() + 1;			
-			int repulMass = attrFlower.dependencies.size() + 1;
-			
-//			if(mass > repulMass)
-//				continue;
+			int repulMass = repulFlower.dependencies.size() + 1;
 
-			double xDiff = flower.x - attrFlower.x;
-			double yDiff = flower.y - attrFlower.y;	
+			double xDiff = flower.x - repulFlower.x;
+			double yDiff = flower.y - repulFlower.y;	
 			
-			double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
-			double distance = getDistance(attrFlower);
+			double bflowerRadius = flower.size / 2 * 3 + repulFlower.size / 2 * 3;
+			double distance = getDistance(repulFlower);
 			
 			double speed = 1 * ( flower.size / 2 * 3  * 3 - distance) * (repulMass/mass);
-			
-//			if(attrFlower.packageName != flower.packageName)
-//				speed *= 15;
-			
-			//speed = speed * speed;
-			//System.out.println( speed);
 			
 			double xRepul = flower.size/2 * 3 - xDiff;
 			double yRepul = flower.size/2 * 3 - yDiff;
@@ -224,17 +163,9 @@ public class Flower {
 			if(speed < 0){
 				speed = 0;
 			}
-			
-			
-			double x = flower.x - speed * Math.cos(getAngle(attrFlower)) / 100;
-			double y = flower.y - speed * Math.sin(getAngle(attrFlower)) / 100;
-			
-			//System.out.println(speed * Math.cos(Math.toRadians(getAngle(attrFlower))) / framesPerSecond);
-			
-			//if(inSurface (x, y, flower.size)){			
-			flower.x = x;
-			flower.y = y;
-			//}
+	
+			flower.x = flower.x - speed * Math.cos(getAngle(repulFlower)) / 100;
+			flower.y = flower.y - speed * Math.sin(getAngle(repulFlower)) / 100;
 		}
 		
 		}
@@ -279,54 +210,17 @@ public class Flower {
 				double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
 				double distance = getDistance(attrFlower) - bflowerRadius;
 				
-
-				
-				double xDiff = flower.x - attrFlower.x;
-				double yDiff = flower.y - attrFlower.y;			
-				
 				int mass = flower.dependencies.size() + 1;			
 				int attrMass = attrFlower.dependencies.size() + 1;
 				
-//				if(attrMass > mass){
-//				continue;
-//			}
-				
 				double speed = distance * (mass/attrMass) * Math.sqrt(callCount);
 				
-//				if(attrFlower.packageName == flower.packageName)
-//					speed *= 5;
-				
-				double x = attrFlower.x - speed * Math.cos(getAngle(attrFlower)) / 100;
-				double y = attrFlower.y - speed * Math.sin(getAngle(attrFlower)) / 100;
-				
-				
-				
-				//System.out.println("X: " + speed * xDiff / framesPerSecond + " Y: " + speed * yDiff / framesPerSecond);
-								
-				double flower2Radius = attrFlower.size/2 * 3;				
-				
-				///if(!checkEveryCollision(x,y, flower.size,flower,flowers)){	
-					attrFlower.x = x;
-					attrFlower.y = y;
-				//}
+					attrFlower.x = attrFlower.x - speed * Math.cos(getAngle(attrFlower)) / 100;
+					attrFlower.y = attrFlower.y - speed * Math.sin(getAngle(attrFlower)) / 100;
 					
 					biDirectionAttraction(attrFlower,callCount);
 			}			
 		}
-		
-//		for (Flower attrFlower : flowers.values()) {
-//			
-//			if(flower != null && !(flower.x == 0 && flower.y == 0)){
-//			
-//				double flower2Radius = attrFlower.size/2 * 3;
-//				
-//				
-//			if(checkCollision(flower.x,flower.y, flower.size/2 * 3,attrFlower.x,attrFlower.y, flower2Radius)){				
-//				return;
-//			}
-//			
-//			}
-//		}
 	}
 	
 	public static boolean checkCollision (double x1,double y1,double radius1,double x2,double y2,double radius2){
@@ -351,12 +245,9 @@ public class Flower {
 	}
 	
 	public static boolean inSurface (double x, double y, int radius){
-//		System.out.println("inSurface: "+(x+radius*5 < Visualization.width && x-radius*5 > 0
-//				&& y+radius*5 < Visualization.height && y-radius*5 > 0) + " x:" + x + " y:"+y + " radius:" + radius);
+		int wholeFlowerRadius = (int)(radius*1.5);
 		
-		int wholeRadius = (int)(radius*1.5);
-		
-		return x+wholeRadius < Visualization.width && x-wholeRadius > 0
-				&& y+wholeRadius < Visualization.height && y-wholeRadius > 0;
+		return x+wholeFlowerRadius < Visualization.width && x-wholeFlowerRadius > 0
+				&& y+wholeFlowerRadius < Visualization.height && y-wholeFlowerRadius > 0;
 	}
 }
