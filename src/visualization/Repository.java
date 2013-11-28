@@ -116,7 +116,7 @@ public class Repository {
 					Flower flower = new Flower(className, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies, age);
 					flower.changed = false;
 					flower.packageName = packageName;
-					this.frames[i].flowers[j] = flower;
+					this.frames[i].getFlowers()[j] = flower;
 				}	 
 			}
 			
@@ -157,8 +157,8 @@ public class Repository {
 		
 		for (int i = 0; i<frames.length; i++){
 			Frame frame = frames[i];
-			for (int j = 0; j<frame.flowers.length; j++){
-				Flower flower = frame.flowers[j];
+			for (int j = 0; j<frame.getFlowers().length; j++){
+				Flower flower = frame.getFlowers()[j];
 				
 				flower.size = (int)(.5 * Math.sqrt(flower.size));				
 				flower.color = contributorColor.get(flower.contributor).color;

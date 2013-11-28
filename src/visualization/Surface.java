@@ -278,7 +278,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		Frame frame = repo.frames[currentFrame];
 		Map<String, Flower> flowersMap = repo.flowers;
 		
-		Flower[] currentFlowers = frame.flowers;
+		Flower[] currentFlowers = frame.getFlowers();
 		
     	for(int i=0;i<currentFlowers.length;i++){
 			Flower frameFlower = currentFlowers[i];
@@ -351,7 +351,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			
 			g.drawString("Contributor: " + hitFlower.contributor,  x,  y+57);
 			
-			Date frameDate = new Date((repo.frames[currentFrame].time - hitFlower.age) * 1000);
+			Date frameDate = new Date((repo.frames[currentFrame].getTime() - hitFlower.age) * 1000);
 			
 			g.drawString("Last Changed: " + frameDate.toLocaleString(),  x,  y+70);
 			
@@ -418,7 +418,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	private void updateFlowers(){
 		Frame frame = repo.frames[currentFrame];
 		Map<String, Flower> flowersMap = repo.flowers;
-		Flower[] currentFlowers = frame.flowers;
+		Flower[] currentFlowers = frame.getFlowers();
 		
     	for(int i=0;i<currentFlowers.length;i++){
     		Flower frameFlower = currentFlowers[i];
@@ -434,7 +434,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		Frame frame = repo.frames[currentFrame];
 		Map<String, Flower> flowersMap = repo.flowers;
 		
-		Flower[] currentFlowers = frame.flowers;
+		Flower[] currentFlowers = frame.getFlowers();
 		
     	for(int i=0;i<currentFlowers.length;i++){
 			Flower frameFlower = currentFlowers[i];
