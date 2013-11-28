@@ -7,7 +7,6 @@ package parser;
 import java.io.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -55,7 +54,6 @@ public class ParseMethod {
 	
 	public static ArrayList<FlowerObject> parseFlowers(File Directory)
 	{
-		Date date = new Date();
 		String sourceDirectory = "";
 		String[] rootPathElements =Directory.getAbsolutePath().split("\\\\");
 		

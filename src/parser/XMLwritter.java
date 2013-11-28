@@ -18,7 +18,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class XMLwritter {
-	public static void GenerateXML(ArrayList<FlowerObject> flor)
+	
+	public static void GenerateXML(ArrayList<FlowerObject> flor, int date, int frameNum)
 	{
 		 try {
 			 
@@ -36,10 +37,11 @@ public class XMLwritter {
 		 
 
 				Attr attr = doc.createAttribute("id");
-				attr.setValue("0");
+				attr.setValue(""+frameNum);
 				frame.setAttributeNode(attr);
 				
 				Element time = doc.createElement("time");
+				time.appendChild(doc.createTextNode(""+date));
 				frame.appendChild(time);
 				
 				for(int i = 0; i<flor.size();i++)
@@ -73,6 +75,14 @@ public class XMLwritter {
 					y.appendChild(doc.createTextNode(""));
 					flower.appendChild(y);
 					
+					Element committer = doc.createElement("committer");
+					committer.appendChild(doc.createTextNode(""+temp.getLastCommitter()));
+					flower.appendChild(committer);
+					
+					Element age = doc.createElement("age");
+					age.appendChild(doc.createTextNode(""+temp.getAge()));
+					flower.appendChild(age);
+					
 					Element numMethods = doc.createElement("numMethods");
 					numMethods.appendChild(doc.createTextNode(""+temp.getMethodNumber()));
 					flower.appendChild(numMethods);
@@ -105,7 +115,7 @@ public class XMLwritter {
 				TransformerFactory transformerFactory = TransformerFactory.newInstance();
 				Transformer transformer = transformerFactory.newTransformer();
 				DOMSource source = new DOMSource(doc);
-				StreamResult result = new StreamResult(new File("result.xml"));
+				StreamResult result = new StreamResult(new File("frames/frame" + frameNum +".xml"));
 		 
 
 		 

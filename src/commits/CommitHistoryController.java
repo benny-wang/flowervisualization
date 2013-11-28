@@ -1,35 +1,24 @@
 package commits;
 
 import java.io.File;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Date;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.RevertCommand;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
-import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
-import org.eclipse.jgit.api.ResetCommand.ResetType;
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.diff.RawTextComparator;
-import org.eclipse.jgit.diff.DiffEntry.ChangeType;
-
-import frameaggregator.FrameAggregator;
 
 import parser.FlowerObject;
 import parser.ParseMethod;
 import parser.XMLwritter;
-import parser.XMLwritter2;
+import frameaggregator.FrameAggregator;
 
 /* placeholder class for the commit history controller/iterator
   This class is supposed to iterate through a list of commits,
@@ -158,7 +147,7 @@ public class CommitHistoryController {
 					flower.setLastCommitter("N/A");
 				}
 			}
-			XMLwritter2.GenerateXML(flowers,commitDate,countMax-count-1);
+			XMLwritter.GenerateXML(flowers,commitDate,countMax-count-1);
 			System.out.println("Frame Written: " + (countMax-count-1));
 //			for(FlowerObject flower : flowers) {
 //				System.out.printf("Committer:  %s Age: %s \n", flower.getLastCommitter(), flower.getAge());
