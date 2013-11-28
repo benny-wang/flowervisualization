@@ -166,26 +166,12 @@ public class Repository {
 		classNum = lastFrame.flowers.length;
 		maxClassLines = 0;
 		maxDependenciesNumber = 0;
-//		double combinedflowerArea = 0;
-//				
-//		for(int i = 0; i<lastFrame.flowers.length; i++){
-//			Flower flower = lastFrame.flowers[i];
-//			
-//			maxClassLines = Math.max(maxClassLines, lastFrame.flowers[i].size);
-//			//maxDependenciesNumber = Math.max(maxDependenciesNumber, lastFrame.flowers[i].dependencies.size());
-//			if(this.flowers.get(lastFrame.flowers[i].methodName) == null){
-//				this.flowers.put(lastFrame.flowers[i].methodName, new Flower(lastFrame.flowers[i]));
-//			}
-//			
-//			combinedflowerArea = Math.PI * Math.pow(flower.size * 3, 2);
-//			
-//		}
+
 		
 		int contributorSize = contributorColor.size();	
 		float contributorCount = 0;
 		
 		for (Map.Entry<String, Contributor> entry : contributorColor.entrySet()) {
-		    String contributorName = entry.getKey();
 		    Contributor contributor = entry.getValue();
 		    
 		    contributor.color = new Color(Color.HSBtoRGB(contributorCount/contributorSize, 1.0f, 1.0f));
@@ -197,7 +183,6 @@ public class Repository {
 		float packageCount = 0;
 		
 		for (Map.Entry<String, FlowerPackage> entry : packageColor.entrySet()) {
-		    String contributorName = entry.getKey();
 		    FlowerPackage flowerPackage = entry.getValue();
 		    
 		    flowerPackage.color = new Color(Color.HSBtoRGB(packageCount/packageSize, 1.0f, (float) (Math.random() * (1 - .5) + .5)));
@@ -272,42 +257,13 @@ public class Repository {
 						
 			Flower flower = this.flowers.get(frameFlower.methodName);
 			flower.size = frameFlower.size;
-			
-		int x,y;
-		do{
-			x = (int)(Math.random() * Visualization.width) - Visualization.legendWidth;
-			y = (int)(Math.random() * (Visualization.height)); // + legend
-			
-			//System.out.println("Flower :" + flower.methodName + "---Diameter--" + flower.size + "--RealSize:" + frameFlower.size);
-			
-		}while(false);
+
+		int	x = (int)(Math.random() * Visualization.width) - Visualization.legendWidth;
+		int	y = (int)(Math.random() * (Visualization.height)); // + legend
 		
 		flower.x = x;
 		flower.y = y;		
 		}
-	}
-
-	private Flower mostDependencies (Flower[] flowers){
-		int highest = 0;
-		int highestIndex = -1;
-		
-		for(int i = 0; i<flowers.length; i++){
-			Flower flower = flowers[i];
-			
-//			System.out.println("Dependencies length: " + flower.dependencies.length );
-			
-			if(flower.dependencies.size() > highest){
-				highest = flower.dependencies.size();
-				highestIndex = i;
-			}
-		}
-		
-		if(highestIndex == -1)
-			return null;
-		
-		return flowers[highestIndex];
-		
-	}
-	
+	}	
 	
 }
