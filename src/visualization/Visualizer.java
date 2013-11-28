@@ -452,9 +452,9 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			}
 			
 			if(viewState == 1){
-				flower.makeDarker();
+				flower.desaturateColor();
 			}else if(viewState == 2 ){
-				flower.makeAgeColor();
+				flower.desaturateColorByAge();
 			}
 		
 			

@@ -244,10 +244,10 @@ public class Flower {
 		return false;
 	}
 	
-	public static boolean inSurface (double x, double y, int radius){
+	public static boolean inSurface (double x, double y, int radius, double width, double height){
 		int wholeFlowerRadius = (int)(radius*1.5);
 		
-		return x+wholeFlowerRadius < Visualization.width && x-wholeFlowerRadius > 0
-				&& y+wholeFlowerRadius < Visualization.height && y-wholeFlowerRadius > 0;
+		return x+wholeFlowerRadius < width && x-wholeFlowerRadius > 0
+				&& y+wholeFlowerRadius < height && y-wholeFlowerRadius > 0;
 	}
 }
