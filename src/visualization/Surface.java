@@ -291,12 +291,10 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			}
 		}
     }
-    Graphics2D g2;
-
 
     private void doDrawing(Graphics g) {
     	updateFlowerFrame();
-		g2 = (Graphics2D) g;
+    	Graphics2D g2 = (Graphics2D) g;
 		AffineTransform at1 = g2.getTransform();
 		drawDragged(g2);
 
@@ -309,6 +307,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		g.fillRect(0, 0, Visualization.width, Visualization.height);
 		g.setColor(Color.BLACK);
 
+		updateFlowers();
 		drawDependencies(g2);
 
 		AffineTransform at = g2.getTransform();
@@ -475,6 +474,20 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		}		
 	}
 	
+	private void updateFlowers(){
+		Frame frame = repo.frames[currentFrame];
+		Map<String, Flower> flowersMap = repo.flowers;
+		Flower[] currentFlowers = frame.flowers;
+		
+    	for(int i=0;i<currentFlowers.length;i++){
+    		Flower frameFlower = currentFlowers[i];
+    		Flower flower = flowersMap.get(frameFlower.methodName);
+    		
+			flower.attraction(repo.flowers);
+			flower.repulsion(repo.flowers);
+    	}
+	}
+	
 	private void drawFlowers(Graphics2D g) {
 		
 		Frame frame = repo.frames[currentFrame];
@@ -490,17 +503,6 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			
 			flower.size = frameFlower.size;
 			
-//			if(flower.size > maxFlowerSize){
-//				flower.size = maxFlowerSize;
-//			}else if(flower.size < maxFlowerSize*.3){
-//				flower.size = (int) Math.ceil( maxFlowerSize * .3);
-//			}
-//			int size = (int) ((int) ((flower.size / repo.maxClassLines) * (maxFlowerSize - maxFlowerSize*0.4)) + maxFlowerSize*0.4);
-//			if (size > maxFlowerSize) {
-//				flower.size = maxFlowerSize;
-//			} else {
-//				flower.size = size;
-//			}
 			flower.exist = true;
 			flower.numMethods = frameFlower.numMethods;
 			flower.contributor = frameFlower.contributor;
@@ -517,9 +519,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			}else if(viewState == 2 ){
 				flower.makeAgeColor();
 			}
-			
-			flower.attraction(repo.flowers);
-			flower.repulsion(repo.flowers);
+		
 			
 //			g.setColor(Color.black);
 //			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
@@ -547,16 +547,6 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			
 			drawPetals(g, flower);
     	}
-    	
-    	
-		
-//		for(int i=0;i<flowers.length;i++){
-//			Flower flower = flowers[i];
-//			
-//			g.setColor(flower.color);
-//			g.fillOval(flower.x-flower.size/2,flower.y-flower.size/2,flower.size,flower.size);
-//			drawPetals(g, flower);
-//		}
 		
 	}
 	
@@ -617,29 +607,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	int pressedY;
 	@Override
 	public void mousePressed(MouseEvent e) {
-		//if(e.getModifiers() == 14 ){
-			
 			pressedX = e.getX();
 			pressedY = e.getY();
-			//System.out.println("Pressed  "+e.getX() + "   " + e.getY());
-
-			//repaint();
-	//	}
-//		if((SwingUtilities.isRightMouseButton(e) & KeyEvent.CTRL_MASK) == KeyEvent.CTRL_MASK ){
-//			last_x = rect.x - e.getX();
-//		    last_y = rect.y - e.getY();
-//		 
-//		    // Checks whether or not the cursor is inside of the rectangle while the
-//		    // user is pressing the mouse.
-//		    if (rect.contains(e.getX(), e.getY())) {
-//		      pressOut = false;
-//		      updateLocation(e);
-//		    } else {
-//		      ShapeMover.label.setText("First position the cursor on the rectangle "
-//		        + "and then drag.");
-//		      pressOut = true;
-//		    }
-//		}
 			
 			hitFlower = checkHit(e.getX(),e.getY());
 		
