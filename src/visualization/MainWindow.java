@@ -10,16 +10,16 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
 
-public class Visualization extends JFrame {
+public class MainWindow extends JFrame {
 
 	public static int width = 1000;
 	public static int height = 600;
 	private JMenuBar menuBar;
-	private Surface surface;
+	private Visualizer surface;
     public static int legendWidth = 200;
     public static int legendHeight = 300;
-    public Visualization() {
-        surface = new Surface();
+    public MainWindow() {
+        surface = new Visualizer();
         menuBar = new JMenuBar();
         addFileMenu();
         addViewMenu();
@@ -151,7 +151,7 @@ public class Visualization extends JFrame {
             @Override
             public void run() {
 
-                Visualization ps = new Visualization();
+                MainWindow ps = new MainWindow();
                 ps.setVisible(true);
             }
         });

@@ -176,8 +176,8 @@ public class Repository {
 					Flower repoFlower = this.flowers.get(flower.methodName);
 					repoFlower.size = flower.size;
 				
-					repoFlower.x = (int)(Math.random() * Visualization.width) - Visualization.legendWidth;
-					repoFlower.y = (int)(Math.random() * (Visualization.height));
+					repoFlower.x = (int)(Math.random() * MainWindow.width) - MainWindow.legendWidth;
+					repoFlower.y = (int)(Math.random() * (MainWindow.height));
 				}
 
 			}

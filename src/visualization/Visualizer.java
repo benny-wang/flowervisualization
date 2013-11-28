@@ -35,7 +35,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Map;
 
-class Surface extends JPanel implements ActionListener, MouseListener, MouseWheelListener, MouseMotionListener, ChangeListener  {
+class Visualizer extends JPanel implements ActionListener, MouseListener, MouseWheelListener, MouseMotionListener, ChangeListener  {
 	int currentFrame = 0;
 	public boolean flowerInfo = true;
 	public boolean contributorLegend = true;
@@ -72,7 +72,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     //Create a file chooser
     public JFileChooser fc;
 	
-	public Surface () {
+	public Visualizer () {
 		//this adds listeners/Jslider component/File chooser to the Jframe
 		addJSliderComponent();
 		addMouseListener(this);
@@ -85,7 +85,6 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	}
 
 	private void addFileChooserComponent() {
-		//this file choose's is default at src
 		File curr = new File("src");
 		fc = new JFileChooser(curr);
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -95,23 +94,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	}
 
 	private void addJSliderComponent() {
-		JButton playButton = new JButton("Play");
-		playButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pauseVideo = false;
-			}
-		});
-
-		JButton pauseButton = new JButton("Pause");
-		pauseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pauseVideo = true;
-			}
-		});
-
-		add(playButton);
-		add(pauseButton);
-
+		addJSliderButtons();
 		frameSlider = new JSlider(JSlider.HORIZONTAL, 0, 0, 0);
 		frameSlider.addChangeListener(this);
 
@@ -124,9 +107,28 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		frameSlider.setBackground(Color.white);
 
 		Dimension d = frameSlider.getPreferredSize();
-		frameSlider.setPreferredSize(new Dimension((int) (Visualization.width * .8), d.height));
+		frameSlider.setPreferredSize(new Dimension((int) (MainWindow.width * .8), d.height));
 
 		add(frameSlider);
+	}
+
+	private void addJSliderButtons() {
+		JButton playButton = new JButton("Play");
+		playButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pauseVideo = false;
+			}
+		});
+		add(playButton);
+
+		JButton pauseButton = new JButton("Pause");
+		pauseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pauseVideo = true;
+			}
+		});
+
+		add(pauseButton);
 	}
 	
 	@Override
@@ -143,18 +145,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
     
     public void openFile (){
-    	int returnVal = fc.showOpenDialog(Surface.this);
-
+    	int returnVal = fc.showOpenDialog(Visualizer.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-                        
             //This is where a real application would open the file.
-            System.out.println("Opening: " + file.getName() + ".");
-            
  	       repo = new Repository(file.getPath());
- 	       
  	       resetSurface();
-
         } else {
         	System.out.println("Open command cancelled by user.");
         }
@@ -171,7 +167,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     public void drawSliderRect(Graphics2D g){
 		g.setColor(new Color(105,114,216));
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-		g.fillRect(0, 0, Visualization.width, 50);
+		g.fillRect(0, 0, MainWindow.width, 50);
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));		
     }
     
@@ -183,8 +179,8 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     	int x, y;
     	
     	for (Flower flower : repo.flowers.values()) {
-    	x = (int)(Math.random() * Visualization.width) - Visualization.legendWidth;
-		y = (int)(Math.random() * (Visualization.height)); // + legend
+    	x = (int)(Math.random() * MainWindow.width) - MainWindow.legendWidth;
+		y = (int)(Math.random() * (MainWindow.height)); // + legend
 		
 		flower.x = x;
 		flower.y = y;
@@ -194,11 +190,11 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     private void drawPackageLegend (Graphics2D g){
 		if (contributorLegend) {
 			int x, y;
-			x = Visualization.width - Visualization.legendWidth;
+			x = MainWindow.width - MainWindow.legendWidth;
 			y = 10;
 			g.setColor(Color.white);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-			g.fillRect(x, y-10, Visualization.legendWidth, Visualization.height);
+			g.fillRect(x, y-10, MainWindow.legendWidth, MainWindow.height);
 
 			for (FlowerPackage flowerPackage : repo.packageColor.values()) {
 				
@@ -216,12 +212,12 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     private void drawContributorLegend(Graphics2D g){
 		if (contributorLegend) {
 			int x, y;
-			x = Visualization.width - Visualization.legendWidth;
+			x = MainWindow.width - MainWindow.legendWidth;
 			y = 10;
 			
 			g.setColor(Color.white);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-			g.fillRect(x, y-10, Visualization.legendWidth, Visualization.height);
+			g.fillRect(x, y-10, MainWindow.legendWidth, MainWindow.height);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
 			for (Contributor contributor : repo.contributorColor.values()) {
@@ -245,7 +241,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		drawZoomIn(g2);
 
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, Visualization.width, Visualization.height);
+		g.fillRect(0, 0, MainWindow.width, MainWindow.height);
 		g.setColor(Color.BLACK);
 
 		updateFlowers();
@@ -579,7 +575,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 
 
         }else{
-        	if(e.getX() < Visualization.width && e.getX() > Visualization.width - Visualization.legendWidth){
+        	if(e.getX() < MainWindow.width && e.getX() > MainWindow.width - MainWindow.legendWidth){
         		int notches = e.getWheelRotation();
         		
         		if (notches < 0 && legendTranslateY < 50) {
