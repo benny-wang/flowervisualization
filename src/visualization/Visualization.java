@@ -1,20 +1,12 @@
 package visualization;
 
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Ellipse2D;
-import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 
@@ -23,23 +15,26 @@ public class Visualization extends JFrame {
 	public static int width = 1000;
 	public static int height = 600;
 	private JMenuBar menuBar;
-	public JFrame frameLegend;
 	private Surface surface;
     public static int legendWidth = 200;
     public static int legendHeight = 300;
     public Visualization() {
-
-        initUI();
-    }
-
-    private void initUI() {
         surface = new Surface();
         menuBar = new JMenuBar();
-        setTitle("Flower Visualization");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addFileMenu();
+        addViewMenu();
+        addLegendMenu();
+        addInfoMenu();
+        setSize(width, height);
+        setJMenuBar(menuBar);
         add(surface);
-        
-        JMenu fileMenu = new JMenu("Visualization");
+        setLocationRelativeTo(null);      
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Flower Visualization");
+    }
+
+	private void addFileMenu() {
+		JMenu fileMenu = new JMenu("Visualization");
         
         JMenuItem openMenu = new JMenuItem("Open");
         openMenu.addActionListener(new ActionListener() {
@@ -59,20 +54,7 @@ public class Visualization extends JFrame {
         
         
         menuBar.add(fileMenu);
-        
-        
-        
-        
-        setJMenuBar(menuBar);
-        addViewMenu();
-        addLegendMenu();
-        addInfoMenu();
-        setSize(width, height);
-        setLocationRelativeTo(null);      
-        
-        
-       
-    }
+	}
 
     
     private void addInfoMenu() {
