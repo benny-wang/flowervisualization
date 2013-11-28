@@ -36,24 +36,15 @@ import java.util.Date;
 import java.util.Map;
 
 class Surface extends JPanel implements ActionListener, MouseListener, MouseWheelListener, MouseMotionListener, ChangeListener  {
-	
-//	Flower flower1 = new Flower(Color.BLUE, 50, 300, 250, 10, );
-//	Flower flower2 = new Flower(Color.RED, 25, 500, 350, 10);
-//	Flower[] flowers  = {flower1, flower2};
-//	
 	int currentFrame = 0;
 	public boolean flowerInfo = true;
 	public boolean contributorLegend = true;
 	int frameRate = 50; //millseconds
 	double framesPerSecond = 1/(((double)frameRate)/1000);
 	int currentTFrame = 0;
-	
 	static Repository repo;
-	
 	private Timer timer;
-
 	private Flower hitFlower;
-
 	private double zoom = 1;
 	private double zoomX = 0;
 	private double zoomY = 0;
@@ -61,7 +52,6 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 	private double preZoomY = 0;
 	private double preZoom = 1;
 	private double maxZoom = .1;
-	
 	private int wheelMoved = 0;
 	private double maxZoomX = 25;
 	private double maxZoomY = 25;
@@ -83,90 +73,73 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     public JFileChooser fc;
 	
 	public Surface () {
+		//this adds listeners/Jslider component/File chooser to the Jframe
+		addJSliderComponent();
+		addMouseListener(this);
+		addMouseWheelListener(this);
+		addMouseMotionListener(this);
+		setBackground(Color.white);
+		setOpaque(true);
+		setDoubleBuffered(true);
+		addFileChooserComponent();
+	}
 
-		Initialize();
+	private void addFileChooserComponent() {
+		//this file choose's is default at src
+		File curr = new File("src");
+		fc = new JFileChooser(curr);
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setSelectedFile(fc.getCurrentDirectory());
+		fc.setDialogTitle("Directory Chooser");
+		fc.setMultiSelectionEnabled(false);
+	}
+
+	private void addJSliderComponent() {
+		JButton playButton = new JButton("Play");
+		playButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pauseVideo = false;
+			}
+		});
+
+		JButton pauseButton = new JButton("Pause");
+		pauseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pauseVideo = true;
+			}
+		});
+
+		add(playButton);
+		add(pauseButton);
+
+		frameSlider = new JSlider(JSlider.HORIZONTAL, 0, 0, 0);
+		frameSlider.addChangeListener(this);
+
+		// Turn on labels at major tick marks.
+		frameSlider.setMajorTickSpacing(10);
+		frameSlider.setPaintTicks(true);
+		frameSlider.setPaintLabels(true);
+
+		frameSlider.setOpaque(false);
+		frameSlider.setBackground(Color.white);
+
+		Dimension d = frameSlider.getPreferredSize();
+		frameSlider.setPreferredSize(new Dimension((int) (Visualization.width * .8), d.height));
+
+		add(frameSlider);
 	}
 	
-	private void Initialize () {
-	       
-			JButton playButton = new JButton("Play");
-			playButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					pauseVideo = false;
-				}
-			});
-			
-			JButton pauseButton = new JButton("Pause");
-			pauseButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					pauseVideo = true;
-				}
-			});
-			
-			add(playButton);
-			add(pauseButton);
-		
-	       frameSlider = new JSlider(JSlider.HORIZONTAL,
-                   0, 0, 0);
-	       frameSlider.addChangeListener(this);
-
-	       //Turn on labels at major tick marks.
-	       frameSlider.setMajorTickSpacing(10);
-	       //framesPerSecond.setMinorTickSpacing(10);
-	       frameSlider.setPaintTicks(true);
-	       frameSlider.setPaintLabels(true);
-	       
-	       frameSlider.setOpaque(false);
-	       frameSlider.setBackground(Color.white);
-	       
-	       Dimension d = frameSlider.getPreferredSize();  
-	       frameSlider.setPreferredSize(new Dimension((int) (Visualization.width * .8),d.height)); 
-	       
-	       add(frameSlider);
-	       
-	       addMouseListener(this);
-	       addMouseWheelListener(this);
-	       addMouseMotionListener(this);
-	       setBackground(Color.white);
-	       setOpaque(true);
-	       setDoubleBuffered(true);    
-	       
-	       File curr = new File("src");
-	       fc = new JFileChooser(curr);
-	       
-	       fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-	       fc.setSelectedFile(fc.getCurrentDirectory());
-	       fc.setDialogTitle("Directory Chooser");
-	       fc.setMultiSelectionEnabled(false);
-
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		repaint();
+		if (System.currentTimeMillis() - lastTimeChecked > 1000) {
+			if (currentFrame < repo.frames.length - 1 && pauseVideo == false) {
+				currentFrame++;
+				frameSlider.setValue(currentFrame);
+			}
+			lastTimeChecked = System.currentTimeMillis();
+		}
 	}
-	
-    @Override
-    public void actionPerformed (ActionEvent e) {    	
-    	    	
-    	   	
-    	repaint();
-    	
-    	
-//    	for(int i=0;i<flowers.length;i++){
-//			Flower flower = flowers[i];
-//						
-//			flower.makeDarker();		    
-//		    //System.out.println("Darker");
-//    	}
-    	
-    	
-    	if(System.currentTimeMillis() - lastTimeChecked > 1000) {   		
-    		if(currentFrame < repo.frames.length-1 && pauseVideo == false) {
-	    		currentFrame++;
-	    		frameSlider.setValue(currentFrame);
-    		}
-    		lastTimeChecked = System.currentTimeMillis(); 
-    	}
-    	
-    	
-    	
-    }
 
     
     public void openFile (){
@@ -220,12 +193,9 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
     
     private void drawPackageLegend (Graphics2D g){
 		if (contributorLegend) {
-			Font font = Font.decode("Times New Roman");
-
 			int x, y;
 			x = Visualization.width - Visualization.legendWidth;
 			y = 10;
-			
 			g.setColor(Color.white);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 			g.fillRect(x, y-10, Visualization.legendWidth, Visualization.height);
@@ -234,27 +204,17 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 				
 				int index = flowerPackage.name.indexOf("protocol") + 9;
 				String castedName = flowerPackage.name.substring(index);
-				
-				
-//				Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(
-//						castedName, g);
-//				double nameWidth = nameRect.getWidth();
-
 				g.setColor(flowerPackage.color);
 				g.fillRect(x, y, 25, 25);
 				g.setColor(Color.black);
 				g.drawString(castedName, x + 30, y + 25);
-
 				y += 25 + 20;
-
 			}
 		}
     }
     
-    private void drawContributorLegend (Graphics2D g){
+    private void drawContributorLegend(Graphics2D g){
 		if (contributorLegend) {
-			Font font = Font.decode("Times New Roman");
-
 			int x, y;
 			x = Visualization.width - Visualization.legendWidth;
 			y = 10;
@@ -265,29 +225,11 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
 			for (Contributor contributor : repo.contributorColor.values()) {
-
-				Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds(
-						contributor.name, g);
-				double nameWidth = nameRect.getWidth();
-
-//				if (x + 30 + 15 + nameWidth > Visualization.width) {
-//					y += 25 + 20;
-//					x = 10;
-//				}
-				
-//				g.setColor(Color.white);
-//				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-//				g.fillRect(x, y, 30 + 15 + (int) nameWidth, 25);
-//				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
 				g.setColor(contributor.color);
 				g.fillRect(x, y, 25, 25);
 				g.setColor(Color.black);
 				g.drawString(contributor.name, x + 30, y + 25);
-
-//				x += 30 + 15 + nameWidth;
 				y += 25 + 20;
-
 			}
 		}
     }
@@ -298,8 +240,7 @@ class Surface extends JPanel implements ActionListener, MouseListener, MouseWhee
 		AffineTransform at1 = g2.getTransform();
 		drawDragged(g2);
 
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		drawZoomIn(g2);
 
