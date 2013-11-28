@@ -274,7 +274,7 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
     	for(int i=0;i<currentFlowers.length;i++){
 			Flower frameFlower = currentFlowers[i];
 						
-			Flower flower = flowersMap.get(frameFlower.methodName);
+			Flower flower = flowersMap.get(frameFlower.className);
 			
 			
 			flower.size = frameFlower.size;
@@ -310,7 +310,7 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 
 			// for(Contributor contributor : repo.contributorColor.values()){
 
-			Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds("Class name: " + hitFlower.methodName, g);
+			Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds("Class name: " + hitFlower.className, g);
 			double nameWidth = nameRect.getWidth();
 			String contributor = "Dependency: ";
 			boolean first = true;
@@ -331,7 +331,7 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			// g.setColor(contributor.color);
 			g.fillRect( x, (int) y, 25, 25);
 			g.setColor(Color.black);
-			g.drawString("Class: " + hitFlower.methodName,  x,  y+18);
+			g.drawString("Class: " + hitFlower.className,  x,  y+18);
 			//g.drawString(hitFlower.contributor,  x,  y );
 
 			
@@ -413,7 +413,7 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 		
     	for(int i=0;i<currentFlowers.length;i++){
     		Flower frameFlower = currentFlowers[i];
-    		Flower flower = flowersMap.get(frameFlower.methodName);
+    		Flower flower = flowersMap.get(frameFlower.className);
     		
 			flower.attraction(repo.flowers);
 			flower.repulsion(repo.flowers);
@@ -430,7 +430,7 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
     	for(int i=0;i<currentFlowers.length;i++){
 			Flower frameFlower = currentFlowers[i];
 						
-			Flower flower = flowersMap.get(frameFlower.methodName);
+			Flower flower = flowersMap.get(frameFlower.className);
 			
 			
 			flower.size = frameFlower.size;
@@ -442,8 +442,6 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			
 			if(frameFlower.age == 0){
 				flower.color = frameFlower.color;
-				frameFlower.changed = false;
-
 			}
 			
 			if(viewState == 1){

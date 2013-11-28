@@ -1,9 +1,5 @@
 package visualization;
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -20,9 +16,7 @@ public class Flower {
 	final static float sixMonthsTime = 3600*120*24;
 	
 	
-	public boolean changed;
-	
-	public String methodName;
+	public String className;
 	
 	public Map<String, Integer> dependencies;
 	
@@ -34,8 +28,7 @@ public class Flower {
 		this.y = y;
 		this.numMethods = numMethods;
 		this.contributor = contributor;
-		this.methodName = methodName;
-		this.changed = false;
+		this.className = methodName;
 		this.dependencies = dependencies;
 		this.age = age;
 	}
@@ -47,9 +40,8 @@ public class Flower {
 		this.y = flower.y;
 		this.numMethods = flower.numMethods;
 		this.contributor = flower.contributor;
-		this.methodName = flower.methodName;
+		this.className = flower.className;
 		this.dependencies = flower.dependencies;
-		this.changed = false;
 		this.packageName = flower.packageName;
 	}
 	
@@ -136,7 +128,7 @@ public class Flower {
 		
 		for (Flower repulFlower : flowers.values()) {
 		
-		if(flower != null && !flower.methodName.equals(repulFlower.methodName)){
+		if(flower != null && !flower.className.equals(repulFlower.className)){
 			
 			int mass = flower.dependencies.size() + 1;			
 			int repulMass = repulFlower.dependencies.size() + 1;
@@ -206,7 +198,7 @@ public class Flower {
 
 			attrFlower = flowers.get(methodName);
 					
-			if(attrFlower != null && !flower.methodName.equals(attrFlower.methodName)){
+			if(attrFlower != null && !flower.className.equals(attrFlower.className)){
 				double bflowerRadius = flower.size / 2 * 3 + attrFlower.size / 2 * 3;
 				double distance = getDistance(attrFlower) - bflowerRadius;
 				
@@ -235,7 +227,7 @@ public class Flower {
 	public static boolean checkEveryCollision (double x1,double y1,double radius1, Flower currentFlower, Map<String, Flower> flowers){
 		
 		for (Flower attrFlower : flowers.values()) {
-			if(!attrFlower.methodName.equals(currentFlower.methodName)){
+			if(!attrFlower.className.equals(currentFlower.className)){
 				
 			if(checkCollision(x1,y1,radius1/2*3,attrFlower.x,attrFlower.y,attrFlower.size/2*3))
 				return true;

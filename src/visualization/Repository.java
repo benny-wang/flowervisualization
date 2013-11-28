@@ -114,7 +114,6 @@ public class Repository {
 					}
 					
 					Flower flower = new Flower(className, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies, age);
-					flower.changed = false;
 					flower.packageName = packageName;
 					this.frames[i].getFlowers()[j] = flower;
 				}	 
@@ -163,17 +162,17 @@ public class Repository {
 				flower.size = (int)(.5 * Math.sqrt(flower.size));				
 				flower.color = contributorColor.get(flower.contributor).color;
 				
-				if(this.flowers.get(flower.methodName) == null){
-					this.flowers.put(flower.methodName, new Flower(flower));
+				if(this.flowers.get(flower.className) == null){
+					this.flowers.put(flower.className, new Flower(flower));
 				}
 				
 				if(i == 0){
-					flowers.get(flower.methodName).color = flower.color;
+					flowers.get(flower.className).color = flower.color;
 				}
 				
 				if(i == frames.length -1){
 					
-					Flower repoFlower = this.flowers.get(flower.methodName);
+					Flower repoFlower = this.flowers.get(flower.className);
 					repoFlower.size = flower.size;
 				
 					repoFlower.x = (int)(Math.random() * MainWindow.width) - MainWindow.legendWidth;
