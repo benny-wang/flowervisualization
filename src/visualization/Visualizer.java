@@ -52,15 +52,10 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 	private double preZoomY = 0;
 	private double preZoom = 1;
 	private double maxZoom = .1;
-	private int wheelMoved = 0;
 	private double maxZoomX = 25;
 	private double maxZoomY = 25;
 	
 	private double legendTranslateY = 50;
-
-	private int zoomWidth = getWidth();
-
-	private int zoomHeight = getHeight();
 
 	public int viewState = 3;
 	public long lastTimeChecked = 0;
@@ -560,7 +555,6 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 	public void mouseWheelMoved(MouseWheelEvent e) {
 
 		if((e.getModifiers() & KeyEvent.CTRL_MASK) == KeyEvent.CTRL_MASK ){
-			wheelMoved  = 1;
 			zoomX = e.getX();
 			zoomY = e.getY();
 			int notches = e.getWheelRotation();
