@@ -32,7 +32,8 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class ParseMethod {
 
-	
+	//Traverse the files in the folder including subfolders.
+	//Return an ArrayList of all the files.
 	private static ArrayList<File> traverseFolder(File targetFolder, ArrayList<File> arr)
 	{
 		for (File file : targetFolder.listFiles())
@@ -51,33 +52,34 @@ public class ParseMethod {
 	
 
 	
-	
+	//Parses all the java files in side the directory and returns an ArrayList of Flower Objects
+	//Argument: a File Directory Pointing to the Part of Source Code Interested
+	//Return: ArrayList of Flower Objects with AST information Filled in.
 	public static ArrayList<FlowerObject> parseFlowers(File Directory)
 	{
 		String sourceDirectory = "";
 		String[] rootPathElements =Directory.getAbsolutePath().split("\\\\");
-		
-		sourceDirectory = calculateSource(rootPathElements);
-		
-		System.out.println(sourceDirectory);
-
 		ArrayList<FlowerObject> listOfFlowers = new ArrayList<FlowerObject>();
+		ArrayList<File> filePaths = new ArrayList<File>();	
+		final Set<String> releventDependencies = new HashSet<String>();			
+		final HashMap<String, Integer> dependencyMap = new HashMap<String,Integer>(25); 
 		
-		ArrayList<File> filePaths = new ArrayList<File>();
 		
+		//Calculate the Path for the Source Directory
+		sourceDirectory = calculateSource(rootPathElements);
+		//Traverse and Store all the files in side the Source Directory
 		filePaths = traverseFolder(Directory, filePaths);
-		System.out.println(filePaths.size());
-
-		final Set<String> dependencies = new HashSet<String>();	
+		//Add a temporary variable to Store the Method Number. 
+		dependencyMap.put("MethodNumber", 0);
 		
-		
-		
+		//Calculate the relevent dependency ie. All classes that is with in the selected top level package
 		for(File file : filePaths)
 		{
-			dependencies.add(file.getName().split("\\.")[0]);
+			releventDependencies.add(file.getName().split("\\.")[0]);
 		}
 		
 		
+		//Traverse Each File
 		for(File file : filePaths)
 		{
 		
@@ -87,16 +89,18 @@ public class ParseMethod {
 		int LineNumber = 0;
 		BufferedReader in=null;
 
-		final HashMap<String, Integer> map = new HashMap<String,Integer>(25); 
-		map.put("MethodNumber", 0);
+
 		
 		 
 		try {
+				//Build An AST Tree with AST Parser
 	        	ASTParser parser = ASTParser.newParser(AST.JLS3);
 	        	in = new BufferedReader(new FileReader(file));
 	            // parse the file
 	        	String fi = "";
 	        	String sCurrentLine;
+	        	
+	        	//Take note how many lines are there inside each file and stores it.
 	        	while ((sCurrentLine = in.readLine()) != null) {
 					fi=fi+"\n"+sCurrentLine;
 					LineNumber++;
@@ -110,7 +114,11 @@ public class ParseMethod {
 	   			String[] srcPath = {sourceDirectory};
 	   			parser.setEnvironment(null, srcPath, new String[] {"UTF-8"}, true);
 	      
-	         final CompilationUnit cu = (CompilationUnit) parser.createAST(null); 
+	   			
+	   		//Build the Syntax tree	
+	        final CompilationUnit cu = (CompilationUnit) parser.createAST(null); 
+	        
+	        //Check if the file is indeed a java source.
 	        if(cu==null)
 	        	continue;
 	        if(cu.getPackage()!=null) {
@@ -119,28 +127,30 @@ public class ParseMethod {
 
 	        
 	        name=file.getName().split("\\.")[0]; 
+	        
+	        //Implement A visitor for the AST to retrieve all the relevent information
 	        cu.accept(new ASTVisitor() {
 	        	
 	   			public boolean visit(FieldDeclaration node){
 	   				String value = node.getType().toString();
-	   				if(!dependencies.contains(value))
+	   				if(!releventDependencies.contains(value))
 	   					return true;
-	   				if(map.containsKey(value))
+	   				if(dependencyMap.containsKey(value))
 	   				{
-	   					map.put(value,map.get(value)+1);
+	   					dependencyMap.put(value,dependencyMap.get(value)+1);
 	   				}
 	   				else
 	   				{
-	   					map.put(value, 1);
+	   					dependencyMap.put(value, 1);
 	   				}
 	   				return true;
 	   			}
 	   			
 	   			public boolean visit(MethodDeclaration node){
 	   				
-	   				if(map.containsKey("MethodNumber"))
+	   				if(dependencyMap.containsKey("MethodNumber"))
 	   				{
-	   					map.put("MethodNumber",map.get("MethodNumber")+1);
+	   					dependencyMap.put("MethodNumber",dependencyMap.get("MethodNumber")+1);
 	   				}
 	   
 	   				return true;
@@ -148,15 +158,15 @@ public class ParseMethod {
 	   			
 	   			public boolean visit(TypeLiteral node){
 	   					String value = node.getType().toString();
-	   					if(!dependencies.contains(value))
+	   					if(!releventDependencies.contains(value))
 		   					return true;
-		   				if(map.containsKey(value))
+		   				if(dependencyMap.containsKey(value))
 		   				{
-		   					map.put(value,map.get(value)+1);
+		   					dependencyMap.put(value,dependencyMap.get(value)+1);
 		   				}
 		   				else
 		   				{
-		   					map.put(value, 1);
+		   					dependencyMap.put(value, 1);
 		   				}
 	   				return true;
 	   			}
@@ -164,15 +174,15 @@ public class ParseMethod {
 	   				
 	   			public boolean visit(VariableDeclarationStatement node){
 	   				String value = node.getType().toString();
-	   				if(!dependencies.contains(value))
+	   				if(!releventDependencies.contains(value))
 	   					return true;
-	   				if(map.containsKey(value))
+	   				if(dependencyMap.containsKey(value))
 	   				{
-	   					map.put(value,map.get(value)+1);
+	   					dependencyMap.put(value,dependencyMap.get(value)+1);
 	   				}
 	   				else
 	   				{
-	   					map.put(value, 1);
+	   					dependencyMap.put(value, 1);
 	   				}
 	   				return true;
 	   			}
@@ -184,15 +194,15 @@ public class ParseMethod {
 	                    if (typeBinding != null) {
 	                    	
 	                        String value = typeBinding.getName();
-	                        if(dependencies.contains(value))
+	                        if(releventDependencies.contains(value))
 	                        {
-	    	   				if(map.containsKey(value))
+	    	   				if(dependencyMap.containsKey(value))
 	    	   				{
-	    	   					map.put(value,map.get(value)+1);
+	    	   					dependencyMap.put(value,dependencyMap.get(value)+1);
 	    	   				}
 	    	   				else
 	    	   				{
-	    	   					map.put(value, 1);
+	    	   					dependencyMap.put(value, 1);
 	    	   				}
 	                        }
 	                    }
@@ -223,15 +233,15 @@ public class ParseMethod {
 		
 
 		
-
+			// From the information retrieved build an Flower Object.
 	       FlowerObject fObj = new FlowerObject();
 	       fObj.setLineNumber(LineNumber);
-	       fObj.setMethodNumber(map.get("MethodNumber"));
+	       fObj.setMethodNumber(dependencyMap.get("MethodNumber"));
 	       fObj.setName(name);
-	       map.remove(name);
+	       dependencyMap.remove(name);
 	       fObj.setPackname(pack);
-	       fObj.setImportClasses(map);
-	       if(map.get("MethodNumber")==0)
+	       fObj.setImportClasses(dependencyMap);
+	       if(dependencyMap.get("MethodNumber")==0)
 	       {
 	    	   continue;
 	       }
@@ -244,7 +254,8 @@ public class ParseMethod {
 
 
 
-
+	//Calculate the reletive absolute path of the source folder from "src".
+	//Return string inside it the absolute path.
 	private static String calculateSource(
 			String[] rootPathElements) {
 		String sourceDirectory = "";

@@ -49,12 +49,6 @@ public class XMLwritter {
 					FlowerObject temp = flor.get(i);
 					Element flower = doc.createElement("flower");
 					
-					
-
-					
-					
-					
-					
 					Element name = doc.createElement("name");
 					name.appendChild(doc.createTextNode(temp.getName()));
 					flower.appendChild(name);
