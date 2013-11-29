@@ -3,10 +3,12 @@ package visualization;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 
@@ -30,8 +32,11 @@ public class MainWindow extends JFrame {
         add(surface);
         setLocationRelativeTo(null);      
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Flower Visualization");
+        setTitle("Flower Visualization");       
+        
     }
+    
+
 
 	private void addFileMenu() {
 		JMenu fileMenu = new JMenu("Visualization");
@@ -77,7 +82,26 @@ public class MainWindow extends JFrame {
 
 		});
 		
+		JMenuItem helpInfoMenu = new JMenuItem("Help");
+		
+		info.add(helpInfoMenu);
+		helpInfoMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showHelpMessage();
+			}
+
+		});
+		
+		
 	}
+    
+    private void showHelpMessage(){
+    	JOptionPane.showMessageDialog(this, 
+    			  "Select flower - Mouse left click on flower\n"
+    			+ "Move flower - Mouse left click hold and drag\n"
+    			+ "Move screen - Ctrl + Mouse left click hold and drag\n"
+    			+ "Zoom in/out - Ctrl + Mouse scroll wheels");
+    }
 
 	private void addLegendMenu() {
     	JMenu legendMenu = new JMenu("Legend");
