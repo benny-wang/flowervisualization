@@ -3,23 +3,25 @@ package visualization;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 
-public class Visualization extends JFrame {
+public class MainWindow extends JFrame {
 
 	public static int width = 1000;
 	public static int height = 600;
 	private JMenuBar menuBar;
-	private Surface surface;
+	private Visualizer surface;
     public static int legendWidth = 200;
     public static int legendHeight = 300;
-    public Visualization() {
-        surface = new Surface();
+    public MainWindow() {
+        surface = new Visualizer();
         menuBar = new JMenuBar();
         addFileMenu();
         addViewMenu();
@@ -30,8 +32,11 @@ public class Visualization extends JFrame {
         add(surface);
         setLocationRelativeTo(null);      
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Flower Visualization");
+        setTitle("Flower Visualization");       
+        
     }
+    
+
 
 	private void addFileMenu() {
 		JMenu fileMenu = new JMenu("Visualization");
@@ -77,7 +82,26 @@ public class Visualization extends JFrame {
 
 		});
 		
+		JMenuItem helpInfoMenu = new JMenuItem("Help");
+		
+		info.add(helpInfoMenu);
+		helpInfoMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showHelpMessage();
+			}
+
+		});
+		
+		
 	}
+    
+    private void showHelpMessage(){
+    	JOptionPane.showMessageDialog(this, 
+    			  "Select flower - Mouse left click on flower\n"
+    			+ "Move flower - Mouse left click hold and drag\n"
+    			+ "Move screen - Ctrl + Mouse left click hold and drag\n"
+    			+ "Zoom in/out - Ctrl + Mouse scroll wheels");
+    }
 
 	private void addLegendMenu() {
     	JMenu legendMenu = new JMenu("Legend");
@@ -151,7 +175,7 @@ public class Visualization extends JFrame {
             @Override
             public void run() {
 
-                Visualization ps = new Visualization();
+                MainWindow ps = new MainWindow();
                 ps.setVisible(true);
             }
         });

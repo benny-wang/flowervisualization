@@ -9,24 +9,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.awt.Color;
 
-/*
-String - Repository name
-Array[Contributor class] - Contributors
-Array[Commit Class] - Commits
-Array[Class Node] - Classes
-Array[Method Node] - Methods
-Int - average class life?? (for flower color saturation ratio)
-Int - largest lines of code of class (for flower ratio)
-Int - smallest lines of code
-Int - current commit number
-
- */
 
 public class Repository {
 	public Map<String, Contributor> contributorColor = new HashMap<String, Contributor>();
@@ -34,13 +20,6 @@ public class Repository {
 	public Map<String, Flower> flowers = new HashMap<String, Flower>();
 	public Frame[] frames;
 	
-	public int classNum;
-	public int maxClassLines;
-	public int maxGridX;
-	public int maxGridY;
-	
-	public Contributor[] contributors;
-	private int maxDependenciesNumber;
 	
 	public Repository(String xmlFilename) {
 		readXMLFile(xmlFilename);
@@ -57,8 +36,6 @@ public class Repository {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
 		 
-			//optional, but recommended
-			//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
 			doc.getDocumentElement().normalize();
 		 
 			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
@@ -79,7 +56,7 @@ public class Repository {
 				System.out.println("Frame: " + frameID);
 				
 				int frameTime = Integer.parseInt(XMLFrame.getElementsByTagName("time").item(0).getTextContent());
-				//System.out.println("Flower id : " + methodName);
+				System.out.println("Frame time: " + frameTime);
 				
 				NodeList flowerList = XMLFrame.getElementsByTagName("flower");  
 	
@@ -91,14 +68,15 @@ public class Repository {
 					Node flowerNode = flowerList.item(j);													
 					Element eElement = (Element) flowerNode;					
 										
-					String methodName = eElement.getElementsByTagName("name").item(0).getTextContent();
-					//System.out.println("Flower id : " + methodName);
+					String className = eElement.getElementsByTagName("name").item(0).getTextContent();
+					System.out.println("Class: " + className);
 
 					int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
-					//System.out.println("Size : " + size);	
+					System.out.println("Size : " + size);	
 					
 					int numMethods = Integer.parseInt(eElement.getElementsByTagName("numMethods").item(0).getTextContent());
-					//System.out.println("Number of Methods : " + numMethods);
+					System.out.println("Number of Methods : " + numMethods);
+					
 					String contributor = eElement.getElementsByTagName("committer").item(0).getTextContent();
 					System.out.println("Contributor : " + contributor);
 										
@@ -108,14 +86,11 @@ public class Repository {
 					int age = Integer.parseInt(eElement.getElementsByTagName("age").item(0).getTextContent());
 					System.out.println("Age : " + age);
 					
-//					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
-//					Boolean changed = (strChanged.equals("true"))? true: false;					
-//					System.out.println("Changed : " + changed);
-					
 					NodeList dependencyName = eElement.getElementsByTagName("dependency");
-//					String[] dependencies = new String[dependencyName.getLength()];
+					
 					Map<String, Integer> dependencies = new HashMap<String, Integer>();
 					System.out.println("Dependency : " + dependencyName.getLength());
+					
 					for ( int k = 0; k < dependencyName.getLength(); k++ ) {
 						Node dependencyNameNode = dependencyName.item(k);													
 						Element dependencyNameElement = (Element) dependencyNameNode;
@@ -123,58 +98,38 @@ public class Repository {
 						int callCount = Integer.parseInt(dependencyNameElement.getAttribute("count"));
 						System.out.println("Dependency : " + methods);
 						
-//						dependencies[k].name = methods;
-//						dependencies[k].count = callCount;
-						
 						dependencies.put(methods, new Integer(callCount));
-					}
-					
+					}					
 					
 					if(contributorColor.get(contributor) == null){
-						int R = (int)(Math.random()*256);
-						int G = (int)(Math.random()*256);
-						int B= (int)(Math.random()*256);
-						contributorColor.put(contributor, new Contributor(contributor, new Color(R,G,B)));
+						contributorColor.put(contributor, new Contributor(contributor, Color.white));
 					}
 										
 					if(packageColor.get(packageName) == null){
-						int R = (int)(Math.random()*256);
-						int G = (int)(Math.random()*256);
-						int B= (int)(Math.random()*256);
-						packageColor.put(packageName, new FlowerPackage(packageName, new Color(R,G,B)));
+						packageColor.put(packageName, new FlowerPackage(packageName, Color.white));
 					}
 					
-					Flower flower = new Flower(methodName, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies, age);
-					flower.changed = false;
-					flower.packageName = packageName;
-					this.frames[i].flowers[j] = flower;				
-
-					
+					Flower flower = new Flower(className, contributorColor.get(contributor).getColor(),size,0,0,numMethods, contributor, dependencies, age);
+					flower.setPackageName( packageName);
+					this.frames[i].getFlowers()[j] = flower;
 				}	 
 			}
 			
-			
-			setFields();
+			initFields();
 			
 		    } catch (Exception e) {
 			e.printStackTrace();
 		    }
 		  }
 
-	private void setFields() {
-		Frame lastFrame = this.frames[this.frames.length-1];
-		classNum = lastFrame.flowers.length;
-		maxClassLines = 0;
-		maxDependenciesNumber = 0;
-
-		
+	private void initFields() {
 		int contributorSize = contributorColor.size();	
 		float contributorCount = 0;
 		
 		for (Map.Entry<String, Contributor> entry : contributorColor.entrySet()) {
 		    Contributor contributor = entry.getValue();
 		    
-		    contributor.color = new Color(Color.HSBtoRGB(contributorCount/contributorSize, 1.0f, 1.0f));
+		    contributor.setColor(new Color(Color.HSBtoRGB(contributorCount/contributorSize, 1.0f, 1.0f)));
 		    
 		    contributorCount += 1;
 		}
@@ -185,85 +140,42 @@ public class Repository {
 		for (Map.Entry<String, FlowerPackage> entry : packageColor.entrySet()) {
 		    FlowerPackage flowerPackage = entry.getValue();
 		    
-		    flowerPackage.color = new Color(Color.HSBtoRGB(packageCount/packageSize, 1.0f, (float) (Math.random() * (1 - .5) + .5)));
+		    flowerPackage.setColor(new Color(Color.HSBtoRGB(packageCount/packageSize, 1.0f, (float) (Math.random() * (1 - .5) + .5))));
 		    
 		    packageCount += 1;
 		}
-		
-		//System.out.println("Most dependencies: " + mostDependencies(lastFrame.flowers).methodName);
-		
-		maxGridX = Visualization.width / (int)Math.ceil(Math.sqrt(classNum));
-		maxGridY = Visualization.height / (int) Math.ceil(Math.sqrt(classNum));
-		
 		setFlowerSize();
-		setFlowerPosition();
 	}
 	
 	private void setFlowerSize() {
 		
-		double ratio;
-		double panelArea = ((Visualization.width * Visualization.height)*.9 );
-		
-			ratio = 50/panelArea;
-		
-		double maxFlowerSize = Math.sqrt(panelArea/classNum)/2;
-		
 		for (int i = 0; i<frames.length; i++){
 			Frame frame = frames[i];
-			for (int j = 0; j<frame.flowers.length; j++){
-				Flower flower = frame.flowers[j];
+			for (int j = 0; j<frame.getFlowers().length; j++){
+				Flower flower = frame.getFlowers()[j];
 				
-				flower.size = (int) (flower.size);
+				flower.setSize((int)(.5 * Math.sqrt(flower.getSize())));				
+				flower.setColor(contributorColor.get(flower.getContributor()).getColor());
 				
-//				int maxFlowerSize = (int) (Visualization.width * .9) / (classNum);
-				double size = ((double)flower.size / (double) maxClassLines) * (maxFlowerSize - maxFlowerSize*0.4) + maxFlowerSize*0.4;
-				
-//				if (size >= maxFlowerSize) {
-//					flower.size = (int) maxFlowerSize;
-//				} else {
-//					flower.size = (int) size;
-//				}
-				
-				flower.size = (int)(.5 * Math.sqrt(flower.size));
-				
-				flower.color = contributorColor.get(flower.contributor).color;
-				
-				if(this.flowers.get(flower.methodName) == null){
-					this.flowers.put(flower.methodName, new Flower(flower));
+				if(this.flowers.get(flower.className) == null){
+					this.flowers.put(flower.className, new Flower(flower));
 				}
 				
 				if(i == 0){
-					flowers.get(flower.methodName).color = flower.color;
+					flowers.get(flower.className).setColor(flower.getColor());
 				}
 				
+				if(i == frames.length -1){
+					
+					Flower repoFlower = this.flowers.get(flower.className);
+					repoFlower.setSize(flower.getSize());
 				
-				System.out.println(flower.methodName + "---" + flower.size + "---Ratio---" + maxFlowerSize);
-				
-				
+					repoFlower.setX((int)(Math.random() * MainWindow.width) - MainWindow.legendWidth);
+					repoFlower.setY((int)(Math.random() * (MainWindow.height)));
+				}
 
 			}
 		}
 	}
-	
-	private void setFlowerPosition(){
-		
-		Flower[] lastFlowers = frames[frames.length-1].flowers;
-		
-		if(lastFlowers == null)
-			return;
-		
-		for(int i=0;i<lastFlowers.length;i++){
-			Flower frameFlower = lastFlowers[i];
-						
-			Flower flower = this.flowers.get(frameFlower.methodName);
-			flower.size = frameFlower.size;
-
-		int	x = (int)(Math.random() * Visualization.width) - Visualization.legendWidth;
-		int	y = (int)(Math.random() * (Visualization.height)); // + legend
-		
-		flower.x = x;
-		flower.y = y;		
-		}
-	}	
 	
 }
