@@ -193,9 +193,9 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 
 			for (FlowerPackage flowerPackage : repo.packageColor.values()) {
 				
-				int index = flowerPackage.name.indexOf("protocol") + 9;
-				String castedName = flowerPackage.name.substring(index);
-				g.setColor(flowerPackage.color);
+				int index = flowerPackage.getName().indexOf("protocol") + 9;
+				String castedName = flowerPackage.getName().substring(index);
+				g.setColor(flowerPackage.getColor());
 				g.fillRect(x, y, 25, 25);
 				g.setColor(Color.black);
 				g.drawString(castedName, x + 30, y + 25);
@@ -216,10 +216,10 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
 			for (Contributor contributor : repo.contributorColor.values()) {
-				g.setColor(contributor.color);
+				g.setColor(contributor.getColor());
 				g.fillRect(x, y, 25, 25);
 				g.setColor(Color.black);
-				g.drawString(contributor.name, x + 30, y + 25);
+				g.drawString(contributor.getName(), x + 30, y + 25);
 				y += 25 + 20;
 			}
 		}
@@ -459,13 +459,13 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 				FlowerPackage fPackage = repo.packageColor.get(flower.getPackageName());			
 				
 				if(fPackage != null)
-					g.setColor(fPackage.color);
+					g.setColor(fPackage.getColor());
 				else
 					g.setColor(flower.getColor());
 			}else if(viewState == 3){
 				Contributor contributor = repo.contributorColor.get(flower.getContributor());
 				
-				g.setColor(contributor.color);
+				g.setColor(contributor.getColor());
 			}else{
 				g.setColor(flower.getColor());
 			}

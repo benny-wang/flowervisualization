@@ -109,7 +109,7 @@ public class Repository {
 						packageColor.put(packageName, new FlowerPackage(packageName, Color.white));
 					}
 					
-					Flower flower = new Flower(className, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies, age);
+					Flower flower = new Flower(className, contributorColor.get(contributor).getColor(),size,0,0,numMethods, contributor, dependencies, age);
 					flower.setPackageName( packageName);
 					this.frames[i].getFlowers()[j] = flower;
 				}	 
@@ -129,7 +129,7 @@ public class Repository {
 		for (Map.Entry<String, Contributor> entry : contributorColor.entrySet()) {
 		    Contributor contributor = entry.getValue();
 		    
-		    contributor.color = new Color(Color.HSBtoRGB(contributorCount/contributorSize, 1.0f, 1.0f));
+		    contributor.setColor(new Color(Color.HSBtoRGB(contributorCount/contributorSize, 1.0f, 1.0f)));
 		    
 		    contributorCount += 1;
 		}
@@ -140,11 +140,10 @@ public class Repository {
 		for (Map.Entry<String, FlowerPackage> entry : packageColor.entrySet()) {
 		    FlowerPackage flowerPackage = entry.getValue();
 		    
-		    flowerPackage.color = new Color(Color.HSBtoRGB(packageCount/packageSize, 1.0f, (float) (Math.random() * (1 - .5) + .5)));
+		    flowerPackage.setColor(new Color(Color.HSBtoRGB(packageCount/packageSize, 1.0f, (float) (Math.random() * (1 - .5) + .5))));
 		    
 		    packageCount += 1;
 		}
-		
 		setFlowerSize();
 	}
 	
@@ -156,7 +155,7 @@ public class Repository {
 				Flower flower = frame.getFlowers()[j];
 				
 				flower.setSize((int)(.5 * Math.sqrt(flower.getSize())));				
-				flower.setColor(contributorColor.get(flower.getContributor()).color);
+				flower.setColor(contributorColor.get(flower.getContributor()).getColor());
 				
 				if(this.flowers.get(flower.className) == null){
 					this.flowers.put(flower.className, new Flower(flower));
