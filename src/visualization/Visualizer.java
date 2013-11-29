@@ -17,14 +17,12 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -64,11 +62,9 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 	
     private boolean pauseVideo = true;
 	
-    //Create a file chooser
     public JFileChooser fc;
 	
 	public Visualizer () {
-		//this adds listeners/Jslider component/File chooser to the Jframe
 		addJSliderComponent();
 		addMouseListener(this);
 		addMouseWheelListener(this);
@@ -308,8 +304,6 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			x = 0;
 			y = getHeight()-73;
 
-			// for(Contributor contributor : repo.contributorColor.values()){
-
 			Rectangle2D nameRect = g.getFontMetrics(font).getStringBounds("Class name: " + hitFlower.className, g);
 			double nameWidth = nameRect.getWidth();
 			String contributor = "Dependency: ";
@@ -328,12 +322,9 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			g.fillRect( x,  y, 60 + (int) width,20 + (int) width);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 			
-			// g.setColor(contributor.color);
 			g.fillRect( x, (int) y, 25, 25);
 			g.setColor(Color.black);
 			g.drawString("Class: " + hitFlower.className,  x,  y+18);
-			//g.drawString(hitFlower.contributor,  x,  y );
-
 			
 			g.setColor(Color.black);
 			g.drawString("Package: " + hitFlower.getPackageName(),  x,  y+31);
@@ -351,9 +342,6 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 
 
 		}
-		// x += 30 + 15 + nameWidth;
-
-		// }
 
 	private void drawZoomIn(Graphics2D g2) {
 		
@@ -373,19 +361,13 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			preZoom = preZoom - diffZoom / (framesPerSecond/2);
 		}
 		
-		//zoomX = preZoomX;
-		//zoomY = preZoomY;
-		
 		AffineTransform old = g2.getTransform();
 		AffineTransform tr2 = new AffineTransform(old);
 		
 		tr2.translate(preZoomX, preZoomY);		
 		tr2.scale(preZoom, preZoom);	
 		
-		//System.out.println(preZoomX + " a:" + preZoom);
-		
 		g2.setTransform(tr2);
-
 	}
 
 	private void drawDependencies(Graphics2D g2) {
@@ -450,10 +432,6 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 				flower.desaturateColorByAge();
 			}
 		
-			
-//			g.setColor(Color.black);
-//			g.fillOval(flower.x-(flower.size*3/2),flower.y-(flower.size*3/2),flower.size*3,flower.size*3);
-			
 			if(viewState == 0){
 				
 				FlowerPackage fPackage = repo.packageColor.get(flower.getPackageName());			
@@ -471,7 +449,6 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			}
 			
 			Ellipse2D.Double flowerShape = new Ellipse2D.Double(flower.getX()-flower.getSize()/2, flower.getY()-flower.getSize()/2, flower.getSize(), flower.getSize());
-//			g.fillOval((int)(flower.x-flower.size/2),(int)(flower.y-flower.size/2),flower.size,flower.size);
 			g.fill(flowerShape);
 			
 			
@@ -490,10 +467,8 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 		
 		for(int i=0;i<numPetals;i++){
 			Ellipse2D.Double petalShape = new Ellipse2D.Double(flower.getX()-petalSize/2, flower.getY() + flower.getSize()/2, petalSize, petalSize*2);
-			//g.fillOval((int)(flower.x-petalSize/2),(int)(flower.y + flower.size/2),petalSize,petalSize*2);
-			g.fill(petalShape);
-			
-//			g.draw(new Ellipse2D.Double(flower.x-petalSize/2,flower.y + flower.size/2,petalSize,petalSize*2));
+
+			g.fill(petalShape);			
 			g.rotate(Math.toRadians(360/numPetals),flower.getX(),flower.getY());
 		}
 		
@@ -516,7 +491,6 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 		int xpos = e.getX(); 
 		int ypos = e.getY();
 		System.out.println(xpos+ "  -  " + ypos);
-		//hitFlower = checkHit(xpos,ypos);
 	}
 
 	
@@ -600,9 +574,7 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			draggedY += newY;
 			draggedX += newX;
 			
-			//repaint();
 		}else{		
-			//hitFlower = checkHit(e.getX(),e.getY());
 			if(hitFlower != null){
 				hitFlower.setX((e.getX() - draggedX - preZoomX)/preZoom);
 				hitFlower.setY((e.getY() - draggedY - preZoomY)/preZoom);
@@ -618,9 +590,7 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JSlider source = (JSlider)e.getSource();
-	    //if (!source.getValueIsAdjusting()) {
-	        currentFrame = (int)source.getValue();	        
-	    //}
+	    currentFrame = (int)source.getValue();	        
 	}
 	
 	public void resetLegend() {
