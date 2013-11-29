@@ -220,24 +220,10 @@ public class Flower {
 			
 			int mass = flower.dependencies.size() + 1;			
 			int repulMass = repulFlower.dependencies.size() + 1;
-
-			double xDiff = flower.x - repulFlower.x;
-			double yDiff = flower.y - repulFlower.y;	
 			
 			double distance = getDistance(repulFlower);
 			
 			double speed = 1 * ( flower.size / 2 * 3  * 3 - distance) * (repulMass/mass);
-			
-			double xRepul = flower.size/2 * 3 - xDiff;
-			double yRepul = flower.size/2 * 3 - yDiff;
-			
-			if(xRepul < 0){
-				xRepul = 0;
-			}
-			
-			if(yRepul < 0){
-				xRepul = 0;
-			}
 			
 			if(speed < 0){
 				speed = 0;
