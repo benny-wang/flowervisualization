@@ -136,7 +136,6 @@ public class Flower {
 			double xDiff = flower.x - repulFlower.x;
 			double yDiff = flower.y - repulFlower.y;	
 			
-			double bflowerRadius = flower.size / 2 * 3 + repulFlower.size / 2 * 3;
 			double distance = getDistance(repulFlower);
 			
 			double speed = 1 * ( flower.size / 2 * 3  * 3 - distance) * (repulMass/mass);
@@ -224,7 +223,7 @@ public class Flower {
 		return collision;
 	}
 	
-	public static boolean checkEveryCollision (double x1,double y1,double radius1, Flower currentFlower, Map<String, Flower> flowers){
+	public static boolean checkFlowerCollision (double x1,double y1,double radius1, Flower currentFlower, Map<String, Flower> flowers){
 		
 		for (Flower attrFlower : flowers.values()) {
 			if(!attrFlower.className.equals(currentFlower.className)){

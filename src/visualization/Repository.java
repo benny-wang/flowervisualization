@@ -56,7 +56,7 @@ public class Repository {
 				System.out.println("Frame: " + frameID);
 				
 				int frameTime = Integer.parseInt(XMLFrame.getElementsByTagName("time").item(0).getTextContent());
-				//System.out.println("Flower id : " + methodName);
+				System.out.println("Frame time: " + frameTime);
 				
 				NodeList flowerList = XMLFrame.getElementsByTagName("flower");  
 	
@@ -85,10 +85,6 @@ public class Repository {
 					
 					int age = Integer.parseInt(eElement.getElementsByTagName("age").item(0).getTextContent());
 					System.out.println("Age : " + age);
-					
-//					String strChanged = eElement.getElementsByTagName("changed").item(0).getTextContent();
-//					Boolean changed = (strChanged.equals("true"))? true: false;					
-//					System.out.println("Changed : " + changed);
 					
 					NodeList dependencyName = eElement.getElementsByTagName("dependency");
 					
