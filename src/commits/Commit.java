@@ -3,6 +3,9 @@ package commits;
 import java.util.ArrayList;
 import java.util.Date;
 
+/*
+ * Object for storing commit info
+ */
 public class Commit {
 	
 	private int date; // seconds since epoch

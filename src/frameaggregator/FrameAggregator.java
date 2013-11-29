@@ -45,11 +45,11 @@ public class FrameAggregator {
 
 	}
 	
-	public void endAggregate() throws IOException, TransformerException{
+	public void endAggregate(String path) throws IOException, TransformerException{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(new File("result-merged2.xml"));
+		StreamResult result = new StreamResult(new File(path));
 		transformer.transform(source, result);
 	}
 	

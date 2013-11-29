@@ -6,8 +6,17 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 
+
+/*
+ * A tool that to help determine the age of the files in the
+ *  repository at different revisions.
+ */
 public class FileAgeTool {
+	
+	// Set of commits to be finalized at object instantiation
 	private final ArrayList<Commit> commits;
+	
+	// Reference date to determine the age of the files
 	private int refDate;
 	
 	public FileAgeTool(ArrayList<Commit> commits) {
@@ -21,15 +30,11 @@ public class FileAgeTool {
 		refDate = commits.get(0).getDate();
 	}
 	
-//	public void addCommit(Commit commit) {
-//		commits.add(commit);
-//	}
-	
 	public void setRefDate(int date) {
 		refDate = date;
 	}
 	
-	
+	// get just the age of the specified file
 	public int getAge(String file) {
 		Iterator<Commit> iter = commits.iterator();
 		while(iter.hasNext()) {
@@ -41,7 +46,9 @@ public class FileAgeTool {
 		}
 		return -1;
 	}
-	
+
+	// get the commit that corresponds to the file's last revision
+	//  (capped by the reference date)
 	public Commit getCommit(String file) {
 		Iterator<Commit> iter = commits.iterator();
 		while(iter.hasNext()) {

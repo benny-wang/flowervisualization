@@ -15,14 +15,11 @@ import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 
 // derived from jgit cookbook
 public class JGitHelper {
-    public static Repository openRepository() throws IOException {
+    public static Repository openRepository(String path) throws IOException {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = builder.setGitDir(new File("../jitsi/.git"))
-          .readEnvironment() // scan environment GIT_* variables
-//          .findGitDir() // scan up the file system tree
+        Repository repository = builder.setGitDir(new File(path))
+          .readEnvironment()
           .build();
-
         return repository;
 	}
-		
 }

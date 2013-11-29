@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Visualization>
+   <frame id="0">
+      <time />
+      <flower id="0">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\ContactDictImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>332</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>18</numMethods>
+         <contributor>Benny Wang</contributor>
+         <dependencies>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\ContactGroupDictImpl.java</dependency>
+         </dependencies>
+      </flower>
+      <flower id="1">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\ContactGroupDictImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>577</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>29</numMethods>
+         <dependencies>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\DictAccountID.java</dependency>
+         </dependencies>
+      </flower>
+      <flower id="2">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\DictAccountID.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>59</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>3</numMethods>
+         <dependencies>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\DictActivator.java</dependency>
+         </dependencies>
+      </flower>
+      <flower id="3">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\DictActivator.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>135</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>5</numMethods>
+         <dependencies>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\DictStatusEnum.java</dependency>
+         </dependencies>
+      </flower>
+      <flower id="4">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\DictStatusEnum.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>77</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>1</numMethods>
+         <dependencies>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\OperationSetBasicInstantMessagingDictImpl.java</dependency>
+         </dependencies>
+      </flower>
+      <flower id="5">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\OperationSetBasicInstantMessagingDictImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>401</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>15</numMethods>
+         <dependencies>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\OperationSetPersistentPresenceDictImpl.java</dependency>
+      	</dependencies>
+      </flower>
+      <flower id="6">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\OperationSetPersistentPresenceDictImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>977</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>31</numMethods>
+         <dependencies>
+            <dependency count="4">\src\net\java\sip\communicator\impl\protocol\dict\ProtocolIconDictImpl.java</dependency>
+         </dependencies>
+      </flower>
+      <flower id="7">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\ProtocolIconDictImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>122</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>1</numMethods>
+         <dependencies>
+         </dependencies>
+      </flower>
+      <flower id="8">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\ProtocolProviderFactoryDictImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>189</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>6</numMethods>
+         <dependencies>
+         </dependencies>
+      </flower>
+      <flower id="9">
+         <name>\src\net\java\sip\communicator\impl\protocol\dict\ProtocolProviderServiceDictImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.dict</package>
+         <size>353</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>14</numMethods>
+         <dependencies>
+         </dependencies>
+      </flower>
+      <flower id="10">
+         <name>\src\net\java\sip\communicator\impl\protocol\gibberish\CallGibberishImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.gibberish</package>
+         <size>178</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>10</numMethods>
+         <dependencies>         
+         </dependencies>
+      </flower>
+      <flower id="11">
+         <name>\src\net\java\sip\communicator\impl\protocol\gibberish\CallPeerGibberishImpl.java</name>
+         <package>net.java.sip.communicator.impl.protocol.gibberish</package>
+         <size>304</size>
+         <x /><contributor>Benny Wang</contributor>
+         <y />
+         <numMethods>14</numMethods>
+         <dependencies>         
+         </dependencies>
+      </flower>
+   </frame>
+</Visualization>
+      
