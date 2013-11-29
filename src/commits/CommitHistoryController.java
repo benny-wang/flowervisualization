@@ -3,17 +3,17 @@ package commits;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+//import java.util.List;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.diff.RawTextComparator;
+//import org.eclipse.jgit.diff.DiffEntry;
+//import org.eclipse.jgit.diff.DiffFormatter;
+//import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.util.io.DisabledOutputStream;
+//import org.eclipse.jgit.revwalk.RevWalk;
+//import org.eclipse.jgit.treewalk.TreeWalk;
+//import org.eclipse.jgit.util.io.DisabledOutputStream;
 
 import parser.FlowerObject;
 import parser.ParseMethod;
@@ -35,13 +35,14 @@ public class CommitHistoryController {
 	// main function that eventually produces an XML file that collects 
 	//  multiple snapshots of the target code-base.
 	public static void main(String args[]) throws Exception
-	{
+	{	
+		// repository expected to be in same directory as this project
 		Repository repository = JGitHelper.openRepository("../jitsi/.git");
 		System.out.println("Having repository: " + repository.getDirectory());
 		
 		String subPath = "src/net/java/sip/communicator/impl/protocol";
 		
-		ArrayList<Commit> commits = retrieveCommits(repository,subPath);
+		ArrayList<Commit> commits = JGitHelper.retrieveCommits(repository,subPath);
 		FileAgeTool fat = new FileAgeTool(commits);
 		
 		generateFrames(repository, subPath, fat);
@@ -57,89 +58,6 @@ public class CommitHistoryController {
 		System.out.println("Done");
 	}
 	
-	// Walks through the commit tree of the target git repository
-	//  that involves all files in the given sub-path. Returns a collection
-	//  of the relevant commits.
-	private static ArrayList<Commit> retrieveCommits(Repository repository, String subPath)
-			throws Exception
-	{
-        // for the result
-        ArrayList<Commit> commits = new ArrayList<Commit>();
-        
-        Iterator<RevCommit> iter = new Git(repository).log()
-	              .addPath(subPath)
-	              .call()
-	              .iterator();
-        
-		int count = 0;
-		while(iter.hasNext()) {
-			ArrayList<String> files = new ArrayList<String>();
-			RevCommit rev = iter.next();
-			
-			int commitDate = rev.getCommitTime();
-			String hash = rev.getName();
-			String author = rev.getCommitterIdent().getName();
-			
-			// Walk the commit tree to determine affected files
-	        RevWalk rw = new RevWalk(repository);
-	        if (rev.getParentCount() == 0) {
-		        // If the commit does not have a parent,
-	        	//  all files are newly added
-	        	TreeWalk tw = new TreeWalk(repository);
-				tw.reset();
-				tw.setRecursive(true);
-				tw.addTree(rev.getTree());
-				while (tw.next()) {
-					String path = tw.getPathString();
-					int start = path.lastIndexOf('/');
-					int end = path.lastIndexOf(".java");
-	    			if (start > 0 && end > 0) {
-	    				path = path.substring(path.lastIndexOf('/')+1,end);
-	    			}
-	    			files.add(path);
-				}
-				tw.release();
-	        } else {
-		        // If the commit does have a parent,
-	        	//  check diffs to determine file changes
-	        	RevCommit parent = rw.parseCommit(rev.getParent(0).getId());
-	        	DiffFormatter df = new DiffFormatter(DisabledOutputStream.INSTANCE);
-	        	
-	        	df.setRepository(repository);
-	        	df.setDiffComparator(RawTextComparator.DEFAULT);
-	        	df.setDetectRenames(true);
-	        	List<DiffEntry> diffs = df.scan(parent.getTree(), rev.getTree());
-	        	for (DiffEntry diff : diffs) {
-	        		// treat add modify and rename as having changed the file
-	        		switch (diff.getChangeType()) {
-	        		case ADD:
-	        		case MODIFY:
-	        		case RENAME:
-	        			String path = diff.getNewPath();
-	    				int start = path.lastIndexOf('/');
-	    				int end = path.lastIndexOf(".java");
-	        			if (start > 0 && end > 0) {
-	        				path = path.substring(path.lastIndexOf('/')+1,end);
-	        			}
-	    				files.add(path);
-	        			break;
-	        		default:
-	        			break;
-	        		}
-	        	}
-	        }
-	        commits.add(new Commit(commitDate,hash,author,files));
-	        count++;
-	        rw.dispose();
-		}
-		System.out.println("Had " + count + " commits overall on current branch");
-		// Print out list of retrieved commits.
-		for(Commit commit : commits) {
-			commit.print();
-		}
-		return commits;
-	}
-	
 	// iterate backwards through the most recent set of commits on the subPath,
 	//  revert the code-base and generating snapshots at each step
 	private static void generateFrames(Repository repository, String subPath, FileAgeTool fat)
@@ -153,7 +71,6 @@ public class CommitHistoryController {
 	            .iterator();
 			
 		int count = 0;
-		Git git = new Git(repository);
 		while(count < countMax && iter.hasNext()) {
 			RevCommit rev = iter.next();
 			if (count != 0) {
@@ -163,7 +80,8 @@ public class CommitHistoryController {
 					}
 				}
 			}
-			git.checkout().setStartPoint(rev).addPath(subPath).call();
+			// Checkout this version of the repository
+			JGitHelper.checkoutRepository(repository, rev, subPath);
 			System.out.println("Checked-out: " + rev);
 			
 			// frame date = date of last revision on the reverted git repo
@@ -171,9 +89,12 @@ public class CommitHistoryController {
 			fat.setRefDate(commitDate);
 			
 			// Generating nodes for the frame
-			File folder = new File("../jitsi/src/net/java/sip/communicator/impl/protocol");
+			File folder = new File(subPath);
 			System.out.println("Parsing");
+			
+			// Parse source-code into nodes (flowers)
 			ArrayList<FlowerObject> flowers = ParseMethod.parseFlowers(folder);
+			// Get age of the nodes with the FileAgeTool
 			for(FlowerObject flower : flowers) {
 				String path = flower.getName();
 				Commit commit = fat.getCommit(path);
