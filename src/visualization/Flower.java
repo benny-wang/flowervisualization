@@ -4,18 +4,106 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class Flower {
-	public Color color;
-	public int size;
-	public double x;
-	public double y;
-	public String contributor;
-	public int numMethods;
-	public boolean exist = false;
-	public String packageName;
-	public int age = 0;
+	private Color color;
+	private int size;
+	private double x;
+	private double y;
+	private String contributor;
+	private int numMethods;
+	private boolean exist = false;
+	private String packageName;
+	private int age = 0;
 	final static float sixMonthsTime = 3600*120*24;
 	
 	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public String getContributor() {
+		return contributor;
+	}
+
+	public void setContributor(String contributor) {
+		this.contributor = contributor;
+	}
+
+	public int getNumMethods() {
+		return numMethods;
+	}
+
+	public void setNumMethods(int numMethods) {
+		this.numMethods = numMethods;
+	}
+
+	public boolean isExist() {
+		return exist;
+	}
+
+	public void setExist(boolean exist) {
+		this.exist = exist;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public Map<String, Integer> getDependencies() {
+		return dependencies;
+	}
+
+	public void setDependencies(Map<String, Integer> dependencies) {
+		this.dependencies = dependencies;
+	}
+
 	public String className;
 	
 	public Map<String, Integer> dependencies;

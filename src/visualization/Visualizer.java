@@ -177,8 +177,8 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
     	x = (int)(Math.random() * MainWindow.width) - MainWindow.legendWidth;
 		y = (int)(Math.random() * (MainWindow.height)); // + legend
 		
-		flower.x = x;
-		flower.y = y;
+		flower.setX(x);
+		flower.setY(y);
     	}
     }
     
@@ -277,10 +277,10 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			Flower flower = flowersMap.get(frameFlower.className);
 			
 			
-			flower.size = frameFlower.size;
-			flower.exist = true;
-			flower.numMethods = frameFlower.numMethods;
-			flower.contributor = frameFlower.contributor;
+			flower.setSize(frameFlower.getSize());
+			flower.setExist(true);
+			flower.setNumMethods(frameFlower.getNumMethods());
+			flower.setContributor(frameFlower.getContributor());
     	}
 		
 	}
@@ -336,13 +336,13 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 
 			
 			g.setColor(Color.black);
-			g.drawString("Package: " + hitFlower.packageName,  x,  y+31);
+			g.drawString("Package: " + hitFlower.getPackageName(),  x,  y+31);
 			
-			g.drawString("Number of Methods: " + hitFlower.numMethods,  x,  y+44);
+			g.drawString("Number of Methods: " + hitFlower.getNumMethods(),  x,  y+44);
 			
-			g.drawString("Contributor: " + hitFlower.contributor,  x,  y+57);
+			g.drawString("Contributor: " + hitFlower.getContributor(),  x,  y+57);
 			
-			Date frameDate = new Date((repo.frames[currentFrame].getTime() - hitFlower.age) * 1000);
+			Date frameDate = new Date((repo.frames[currentFrame].getTime() - hitFlower.getAge()) * 1000);
 			
 			g.drawString("Last Changed: " + frameDate.toLocaleString(),  x,  y+70);
 			
@@ -399,8 +399,8 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 
 				flower = repo.flowers.get(methodName);
 				g2.setColor(Color.black);
-				if(flower != null && flower.exist == true){				
-					g2.draw(new Line2D.Double(hitFlower.x,hitFlower.y,flower.x,flower.y));
+				if(flower != null && flower.isExist() == true){				
+					g2.draw(new Line2D.Double(hitFlower.getX(),hitFlower.getY(),flower.getX(),flower.getY()));
 				}
 			}
 		}		
@@ -433,15 +433,15 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			Flower flower = flowersMap.get(frameFlower.className);
 			
 			
-			flower.size = frameFlower.size;
+			flower.setSize(frameFlower.getSize());
 			
-			flower.exist = true;
-			flower.numMethods = frameFlower.numMethods;
-			flower.contributor = frameFlower.contributor;
-			flower.age = frameFlower.age;
+			flower.setExist(true);
+			flower.setNumMethods(frameFlower.getNumMethods());
+			flower.setContributor(frameFlower.getContributor());
+			flower.setAge(frameFlower.getAge());
 			
-			if(frameFlower.age == 0){
-				flower.color = frameFlower.color;
+			if(frameFlower.getAge() == 0){
+				flower.setColor(frameFlower.getColor());
 			}
 			
 			if(viewState == 1){
@@ -456,21 +456,21 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 			
 			if(viewState == 0){
 				
-				FlowerPackage fPackage = repo.packageColor.get(flower.packageName);			
+				FlowerPackage fPackage = repo.packageColor.get(flower.getPackageName());			
 				
 				if(fPackage != null)
 					g.setColor(fPackage.color);
 				else
-					g.setColor(flower.color);
+					g.setColor(flower.getColor());
 			}else if(viewState == 3){
-				Contributor contributor = repo.contributorColor.get(flower.contributor);
+				Contributor contributor = repo.contributorColor.get(flower.getContributor());
 				
 				g.setColor(contributor.color);
 			}else{
-				g.setColor(flower.color);
+				g.setColor(flower.getColor());
 			}
 			
-			Ellipse2D.Double flowerShape = new Ellipse2D.Double(flower.x-flower.size/2, flower.y-flower.size/2, flower.size, flower.size);
+			Ellipse2D.Double flowerShape = new Ellipse2D.Double(flower.getX()-flower.getSize()/2, flower.getY()-flower.getSize()/2, flower.getSize(), flower.getSize());
 //			g.fillOval((int)(flower.x-flower.size/2),(int)(flower.y-flower.size/2),flower.size,flower.size);
 			g.fill(flowerShape);
 			
@@ -482,19 +482,19 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 	
 	private void drawPetals(Graphics2D g, Flower flower){			
 		
-		int petalSize = flower.size/2;
+		int petalSize = flower.getSize()/2;
 		
 		AffineTransform oldXForm = g.getTransform();
 		
-		int numPetals = (int) (Math.sqrt(flower.numMethods));
+		int numPetals = (int) (Math.sqrt(flower.getNumMethods()));
 		
 		for(int i=0;i<numPetals;i++){
-			Ellipse2D.Double petalShape = new Ellipse2D.Double(flower.x-petalSize/2, flower.y + flower.size/2, petalSize, petalSize*2);
+			Ellipse2D.Double petalShape = new Ellipse2D.Double(flower.getX()-petalSize/2, flower.getY() + flower.getSize()/2, petalSize, petalSize*2);
 			//g.fillOval((int)(flower.x-petalSize/2),(int)(flower.y + flower.size/2),petalSize,petalSize*2);
 			g.fill(petalShape);
 			
 //			g.draw(new Ellipse2D.Double(flower.x-petalSize/2,flower.y + flower.size/2,petalSize,petalSize*2));
-			g.rotate(Math.toRadians(360/numPetals),flower.x,flower.y);
+			g.rotate(Math.toRadians(360/numPetals),flower.getX(),flower.getY());
 		}
 		
 		g.setTransform(oldXForm); // Restore transform
@@ -604,8 +604,8 @@ class Visualizer extends JPanel implements ActionListener, MouseListener, MouseW
 		}else{		
 			//hitFlower = checkHit(e.getX(),e.getY());
 			if(hitFlower != null){
-				hitFlower.x = (e.getX() - draggedX - preZoomX)/preZoom;
-				hitFlower.y = (e.getY() - draggedY - preZoomY)/preZoom;
+				hitFlower.setX((e.getX() - draggedX - preZoomX)/preZoom);
+				hitFlower.setY((e.getY() - draggedY - preZoomY)/preZoom);
 			}
 		}
 	}

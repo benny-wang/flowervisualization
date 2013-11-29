@@ -110,7 +110,7 @@ public class Repository {
 					}
 					
 					Flower flower = new Flower(className, contributorColor.get(contributor).color,size,0,0,numMethods, contributor, dependencies, age);
-					flower.packageName = packageName;
+					flower.setPackageName( packageName);
 					this.frames[i].getFlowers()[j] = flower;
 				}	 
 			}
@@ -155,24 +155,24 @@ public class Repository {
 			for (int j = 0; j<frame.getFlowers().length; j++){
 				Flower flower = frame.getFlowers()[j];
 				
-				flower.size = (int)(.5 * Math.sqrt(flower.size));				
-				flower.color = contributorColor.get(flower.contributor).color;
+				flower.setSize((int)(.5 * Math.sqrt(flower.getSize())));				
+				flower.setColor(contributorColor.get(flower.getContributor()).color);
 				
 				if(this.flowers.get(flower.className) == null){
 					this.flowers.put(flower.className, new Flower(flower));
 				}
 				
 				if(i == 0){
-					flowers.get(flower.className).color = flower.color;
+					flowers.get(flower.className).setColor(flower.getColor());
 				}
 				
 				if(i == frames.length -1){
 					
 					Flower repoFlower = this.flowers.get(flower.className);
-					repoFlower.size = flower.size;
+					repoFlower.setSize(flower.getSize());
 				
-					repoFlower.x = (int)(Math.random() * MainWindow.width) - MainWindow.legendWidth;
-					repoFlower.y = (int)(Math.random() * (MainWindow.height));
+					repoFlower.setX((int)(Math.random() * MainWindow.width) - MainWindow.legendWidth);
+					repoFlower.setY((int)(Math.random() * (MainWindow.height)));
 				}
 
 			}
