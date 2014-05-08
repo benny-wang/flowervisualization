@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-
+//asdfasdfasdfasdf
 public class MainWindow extends JFrame {
 
 	public static int width = 1000;
